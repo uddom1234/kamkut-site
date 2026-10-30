@@ -1,0 +1,14 @@
+{
+  "name": "KamKut",
+  "short_name": "KamKut",
+  "description": "Free, offline video editor for iPhone and Android. Coming soon.",
+  "start_url": "./",
+  "display": "browser",
+  "background_color": "#0F0F10",
+  "theme_color": "#0F0F10",
+  "icons": [
+    {"src": "assets/brand/favicon.png", "sizes": "64x64", "type": "image/png"},
+    {"src": "assets/brand/apple-touch-icon.png", "sizes": "180x180", "type": "image/png"},
+    {"src": "assets/brand/kamkut-logo-512.webp", "sizes": "512x512", "type": "image/webp", "purpose": "any"}
+  ]
+}

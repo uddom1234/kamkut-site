@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- NOTE: https://uddom1234.github.io/kamkut-site (GitHub Pages) is the base URL; update if you move to your own domain. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://uddom1234.github.io/kamkut-site/</loc></url>
+  <url><loc>https://uddom1234.github.io/kamkut-site/how-its-built.html</loc></url>
+  <url><loc>https://uddom1234.github.io/kamkut-site/privacy.html</loc></url>
+  <url><loc>https://uddom1234.github.io/kamkut-site/terms.html</loc></url>
+  <url><loc>https://uddom1234.github.io/kamkut-site/support.html</loc></url>
+  <url><loc>https://uddom1234.github.io/kamkut-site/licenses.html</loc></url>
+</urlset>

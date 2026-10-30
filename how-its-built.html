@@ -1,0 +1,1319 @@
+<!doctype html>
+<html lang="km" data-lang="km">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script>(function(){var d=document.documentElement,t,l;try{var q=new URLSearchParams(location.search);t=q.get("theme")||localStorage.getItem("kk-theme");l=q.get("lang")||localStorage.getItem("kk-lang")}catch(e){}if(t!=="light"&&t!=="dark")t=window.matchMedia&&matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";if(l!=="en"&&l!=="km")l="km";d.setAttribute("data-theme",t);d.setAttribute("data-lang",l);d.setAttribute("lang",l);d.classList.add("js")})()</script>
+<title>របៀបដែលយើងបង្កើត KamKut | How KamKut is built — native Swift and Kotlin</title>
+<meta name="description" content="KamKut ជាកម្មវិធី native ពីរ៖ Swift/SwiftUI លើ iOS និង Kotlin/Compose លើ Android។ គ្មានអ៊ីនធឺណិត គ្មានគណនី។ / KamKut is two fully native apps: Swift and SwiftUI on iOS, Kotlin and Jetpack Compose on Android. Offline-only, one shared JSON project format.">
+<meta name="theme-color" content="#0F0F10">
+<meta name="color-scheme" content="dark light">
+<!-- NOTE: https://uddom1234.github.io/kamkut-site (GitHub Pages) is the base URL. Replace in canonical and sitemap.xml if you move to your own domain. -->
+<link rel="canonical" href="https://uddom1234.github.io/kamkut-site/how-its-built.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="KamKut">
+<meta property="og:title" content="របៀបដែលយើងបង្កើត KamKut | How KamKut is built">
+<meta property="og:url" content="https://uddom1234.github.io/kamkut-site/how-its-built.html">
+<meta property="og:image" content="https://uddom1234.github.io/kamkut-site/assets/og-image.png">
+<link rel="icon" type="image/png" href="assets/brand/favicon.png">
+<link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
+<link rel="stylesheet" href="assets/css/site.css">
+<script defer src="assets/js/site.js"></script>
+</head>
+<body>
+<a class="skip" href="#main"><span data-l="km">រំលងទៅមាតិកា</span><span data-l="en">Skip to content</span></a>
+
+<header class="nav" id="top">
+  <div class="wrap nav__in">
+    <a class="brand" href="index.html"><img src="assets/brand/kamkut-logo-192.webp" width="34" height="34" alt="">KamKut</a>
+    <nav class="nav__links" aria-label="Primary"><a href="index.html#features"><span data-l="km">លក្ខណៈពិសេស</span><span data-l="en">Features</span></a><a href="index.html#platforms"><span data-l="km">វេទិកា</span><span data-l="en">Platforms</span></a><a href="how-its-built.html" aria-current="page"><span data-l="km">របៀបដែលយើងបង្កើត</span><span data-l="en">How It's Built</span></a><a href="privacy.html"><span data-l="km">ឯកជនភាព</span><span data-l="en">Privacy</span></a></nav>
+    <div class="nav__tools">
+      <a class="spons" href="https://kamsophy.com" target="_blank" rel="noopener"><img src="assets/brand/kamsophy-logo-256.png" width="26" height="26" alt=""><span><span class="sp__pre"><span data-l="km">ឧបត្ថម្ភដោយ</span><span data-l="en">Sponsored By</span> </span><b>KamSophy</b></span></a>
+      <button class="tbtn" id="lang-toggle" type="button" aria-label="ប្តូរទៅភាសាអង់គ្លេស" data-aria-km="ប្តូរទៅភាសាអង់គ្លេស" data-aria-en="Switch to Khmer"><span data-l="km">EN</span><span data-l="en">ខ្មែរ</span></button>
+      <button class="tbtn" id="theme-toggle" type="button" aria-label="ប្តូរពន្លឺ ភ្លឺ/ងងឹត" data-aria-km="ប្តូរពន្លឺ ភ្លឺ/ងងឹត" data-aria-en="Toggle light and dark theme"><svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+      <button class="tbtn tbtn--menu" id="menu-toggle" type="button" aria-expanded="false" aria-controls="nav-panel" aria-label="Menu" data-aria-km="ម៉ឺនុយ" data-aria-en="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+    <div class="nav__panel" id="nav-panel"><a href="index.html#features"><span data-l="km">លក្ខណៈពិសេស</span><span data-l="en">Features</span></a><a href="index.html#platforms"><span data-l="km">វេទិកា</span><span data-l="en">Platforms</span></a><a href="how-its-built.html" aria-current="page"><span data-l="km">របៀបដែលយើងបង្កើត</span><span data-l="en">How It's Built</span></a><a href="privacy.html"><span data-l="km">ឯកជនភាព</span><span data-l="en">Privacy</span></a></div>
+  </div>
+</header>
+
+<main id="main" class="doc doc--built">
+<header class="page-hero">
+  <p class="kicker"><span data-l="km">របៀបដែលយើងបង្កើត</span><span data-l="en">How it's built</span></p>
+  <h1><span data-l="km" class="disp">គ្មាន wrapper។ គ្មាន web view។ មានតែ native សុទ្ធ។</span><span data-l="en">No wrapper. No web view. Just the metal.</span></h1>
+  <p class="lede"><span data-l="km">KamKut គឺជាកម្មវិធី native ពីរដាច់ដោយឡែក មិនមែនគម្របតែមួយដែលប្រើលើគ្រប់ប្រព័ន្ធទេ។ ដូច្នេះបើកលឿន ទំហំតូច រុញខ្សែពេលវេលារលូន និងសន្សំថ្មជាង។</span><span data-l="en">KamKut is two fully native apps, not one cross-platform shell. That means fast startup, small installs, smooth 60 fps scrubbing and kinder battery life.</span></p>
+</header>
+
+<div class="built">
+  <nav class="toc toc--side" aria-labelledby="toc-title">
+  <p class="toc__title" id="toc-title"><span data-l="km">មាតិកា</span><span data-l="en">Contents</span></p>
+  <ol>
+    <li><a href="#stack"><span data-l="km">បច្ចេកវិទ្យា</span><span data-l="en">The stack</span></a></li>
+    <li><a href="#philosophy"><span data-l="km">Offline ដោយការរចនា</span><span data-l="en">Offline by construction</span></a></li>
+    <li><a href="#architecture"><span data-l="km">ស្ថាបត្យកម្មនៃកម្មវិធីទាំងពីរ</span><span data-l="en">Two apps, side by side</span></a></li>
+    <li><a href="#format"><span data-l="km">ទ្រង់ទ្រាយគម្រោង project.json</span><span data-l="en">The shared project format</span></a></li>
+    <li><a href="#timeline"><span data-l="km">Timeline៖ គណិតវិទ្យា និងកាយវិការ</span><span data-l="en">The timeline: math and gestures</span></a></li>
+    <li><a href="#pipeline-ios"><span data-l="km">Pipeline render លើ iOS</span><span data-l="en">Rendering on iOS</span></a></li>
+    <li><a href="#pipeline-android"><span data-l="km">Pipeline render លើ Android</span><span data-l="en">Rendering on Android</span></a></li>
+    <li><a href="#text"><span data-l="km">ប្រព័ន្ធអត្ថបទ និង font ខ្មែរ</span><span data-l="en">The text system and Khmer fonts</span></a></li>
+    <li><a href="#cutout"><span data-l="km">ការលុបផ្ទៃខាងក្រោយ</span><span data-l="en">Background removal</span></a></li>
+    <li><a href="#audio"><span data-l="km">សំឡេង និងការលាយ</span><span data-l="en">Audio and mixing</span></a></li>
+    <li><a href="#export"><span data-l="km">Export</span><span data-l="en">Export</span></a></li>
+    <li><a href="#design"><span data-l="km">ប្រព័ន្ធរចនា</span><span data-l="en">The design system</span></a></li>
+    <li><a href="#limits"><span data-l="km">ការធ្វើតេស្ត ដែនកំណត់ និងការដោះដូរដោយស្មោះត្រង់</span><span data-l="en">Testing, limits and honest trade-offs</span></a></li>
+  </ol>
+</nav>
+
+<article class="built__body">
+    <!-- LONG-FORM BODY: add <section id="..."> blocks here. Heading pattern: <h2 id="x">Title <a class="anchor" href="#x" aria-label="Link to this section">#</a></h2>.
+         Helpers in site.css: .flow>.step (pipeline with arrows), .cmp (comparison table in .table-wrap), figure.fig>figcaption, .callout, pre>code with .c .k .s .n spans, .hib/.hcard grids. Add each section to the TOC above. -->
+    <section id="stack" aria-labelledby="stack-h">
+      <h2 id="stack-h"><span data-l="km">ពីរកម្មវិធី មួយទ្រង់ទ្រាយ</span><span data-l="en">Two apps, one project format</span> <a class="anchor" href="#stack" aria-label="Link to this section">#</a></h2>
+      <div class="term rv" role="group" aria-label="Tech stack" data-aria-km="បច្ចេកវិទ្យាដែលប្រើ" data-aria-en="Tech stack">
+      <div class="term__bar"><span class="d r"></span><span class="d y"></span><span class="d g"></span><b>kamkut ~ build</b></div>
+      <div class="term__body">
+        <p class="cmd"><span class="ps">$</span> build --native</p>
+        <div class="cols">
+          <div class="col">
+            <h3>iOS <small>iOS 17+</small></h3>
+            <div class="tchips"><span class="tchip"><i aria-hidden="true">Sw</i>Swift</span><span class="tchip"><i aria-hidden="true">UI</i>SwiftUI</span><span class="tchip"><i aria-hidden="true">AV</i>AVFoundation</span><span class="tchip"><i aria-hidden="true">CI</i>Core Image + Metal</span><span class="tchip"><i aria-hidden="true">Vi</i>Vision</span></div>
+            <p class="note"><span data-l="km">AVFoundation ដាក់ផ្គុំ និងនាំចេញ។ Metal CIKernel shader គូរ VHS និង vignette។ Vision កាត់មនុស្សចេញពីផ្ទៃខាងក្រោយក្នុងទូរស័ព្ទផ្ទាល់។</span><span data-l="en">AVFoundation composes and exports. Custom Metal CIKernel shaders draw VHS and vignette. Vision cuts people out on-device.</span></p>
+          </div>
+          <div class="col">
+            <h3>Android <small>Android 9+ &middot; API 28 &middot; target 36</small></h3>
+            <div class="tchips"><span class="tchip"><i aria-hidden="true">Kt</i>Kotlin</span><span class="tchip"><i aria-hidden="true">Jc</i>Jetpack Compose</span><span class="tchip"><i aria-hidden="true">M3</i>Media3 Transformer</span><span class="tchip"><i aria-hidden="true">GL</i>OpenGL ES</span><span class="tchip"><i aria-hidden="true">ML</i>ML Kit Selfie Segmentation</span></div>
+            <p class="note"><span data-l="km">Media3 Transformer បង្ហាញ និងនាំចេញ។ OpenGL ES shader ឲ្យរូបរាងដូច iOS។ ម៉ូដែលក្នុងកម្មវិធីធ្វើការកាត់ផ្ទៃខាងក្រោយ ដោយមិនបាច់មានអ៊ីនធឺណិត។</span><span data-l="en">Media3 Transformer renders the export. OpenGL ES shaders match the iOS looks. A bundled model handles segmentation offline.</span></p>
+          </div>
+        </div>
+        <p class="cmd"><span class="ps">$</span> cat shared.txt</p>
+        <ul class="ticks shared">
+          <li><span data-l="km">ទ្រង់ទ្រាយគម្រោង JSON តែមួយ លើទាំងពីរប្រព័ន្ធ។</span><span data-l="en">One JSON project format on both platforms.</span></li>
+          <li><span data-l="km">នាំចេញ H.264 MP4 គុណភាព 720p ឬ 1080p។</span><span data-l="en">H.264 MP4 export at 720p or 1080p.</span></li>
+          <li><span data-l="km">គ្មានសិទ្ធិប្រើបណ្តាញ៖ Android manifest ដក INTERNET ចេញ។</span><span data-l="en">Zero network permission: the Android manifest removes INTERNET.</span></li>
+          <li><span data-l="km">ពុម្ពអក្សរ ៥០+ ក្នុងកម្មវិធី ភាគច្រើនជាខ្មែរ។</span><span data-l="en">50+ fonts bundled, many of them Khmer.</span></li>
+        </ul>
+      </div>
+    </div>
+    </section>
+<section id="philosophy" aria-labelledby="philosophy-h">
+  <h2 id="philosophy-h"><span data-l="km">Offline ដោយការរចនា មិនមែនដោយពាក្យសន្យា</span><span data-l="en">Offline by construction, not by promise</span> <a class="anchor" href="#philosophy" aria-label="Link to this section">#</a></h2>
+
+  <p data-l="km">ឯកសារ SPEC.md របស់ KamKut ចាប់ផ្តើមដោយច្បាប់មួយឃ្លា៖ កម្មវិធីកាត់តវីដេអូ offline ប៉ុណ្ណោះ គ្មានគណនី គ្មានអ៊ីនធឺណិត និងគ្មាន database សោះ (សូម្បីតែ Room, SQLite ឬ SwiftData)។ គម្រោងនីមួយៗគ្រាន់តែជាឯកសារ JSON ធម្មតានៅក្នុងទីផ្ទុកឯកជនរបស់កម្មវិធី។ ទំព័រនេះពន្យល់ពីរបៀបដែលច្បាប់នោះត្រូវបានអនុវត្តជាក់ស្តែងក្នុងកូដ ហើយមិនមែនគ្រាន់តែសរសេរក្នុងគោលការណ៍ឯកជនភាពនោះទេ។</p>
+  <p data-l="en">The first thing <code>SPEC.md</code> says about KamKut is a rule: offline-only, no accounts, no network, no database (not even Room, SQLite or SwiftData). A project is a plain JSON file in the app's private storage. This page is about how that rule is enforced in the code, rather than only stated in a privacy policy.</p>
+
+  <h3 id="philosophy-android"><span data-l="km">Android៖ ប្រព័ន្ធប្រតិបត្តិការជាអ្នកអនុវត្តច្បាប់</span><span data-l="en">Android: the OS enforces it</span></h3>
+  <p data-l="km">នៅក្នុង <code>AndroidManifest.xml</code> កម្មវិធីលុបការអនុញ្ញាតបណ្តាញចេញពី manifest ដែលត្រូវបាន merge ដោយប្រើ <code>tools:node="remove"</code>។ ទោះបី library ណាមួយព្យាយាមបញ្ចូល <code>INTERNET</code> មកក៏ដោយ លទ្ធផលចុងក្រោយនឹងមិនមានវាទេ។ ការអនុញ្ញាតតែមួយគត់ដែលកម្មវិធីសុំគឺ <code>RECORD_AUDIO</code> សម្រាប់ថតសំឡេងរៀបរាប់ និង <code>WRITE_EXTERNAL_STORAGE</code> ដែលកំណត់ត្រឹម <code>maxSdkVersion="28"</code> សម្រាប់ Android 9 ប៉ុណ្ណោះ។</p>
+  <p data-l="en">In <code>AndroidManifest.xml</code> the app strips the network permissions from the merged manifest with <code>tools:node="remove"</code>. Even if a library tries to merge <code>INTERNET</code> in, the final manifest will not contain it. The only permissions the app asks for are <code>RECORD_AUDIO</code> (voiceovers) and <code>WRITE_EXTERNAL_STORAGE</code> capped at <code>maxSdkVersion="28"</code>, which only matters on Android 9.</p>
+
+  <figure class="code"><figcaption><code>android/app/src/main/AndroidManifest.xml:5-7,21-24</code> <span data-l="km">manifest របស់ Android លុបការអនុញ្ញាតបណ្តាញ ហើយមិនឱ្យ ML Kit ប្រកាសការទាញយក model</span><span data-l="en">The Android manifest removes the network permissions, and keeps ML Kit from declaring any model download.</span></figcaption><pre><code class="lang-xml">&lt;!-- Kamkut is 100% offline: strip any network permission a library might merge in. --&gt;
+&lt;uses-permission android:name="android.permission.INTERNET" tools:node="remove" /&gt;
+&lt;uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" tools:node="remove" /&gt;
+&lt;!-- … --&gt;
+&lt;!-- Keep ML Kit fully local: no model download service, bundled model only. --&gt;
+&lt;meta-data
+    android:name="com.google.mlkit.vision.DEPENDENCIES"
+    android:value="" /&gt;</code></pre></figure>
+
+  <p data-l="km">វិន័យដូចគ្នានេះអនុវត្តលើ dependency ផងដែរ។ ការកាត់ផ្ទៃខាងក្រោយប្រើ ML Kit Selfie Segmentation ដែល model ត្រូវបានបង្កប់ក្នុងកម្មវិធី (<code>com.google.mlkit:segmentation-selfie:16.0.0-beta6</code>) ហើយ <code>meta-data</code> ទទេ <code>com.google.mlkit.vision.DEPENDENCIES</code> មានន័យថា គ្មានសេវាទាញយក model ណាត្រូវបានចុះឈ្មោះទេ។ បញ្ជី dependency ក្នុង <code>build.gradle.kts</code> មានតែ Media3, Compose/AndroidX, kotlinx (serialization, coroutines) និង ML Kit segmentation ប៉ុណ្ណោះ គ្មានអ្វីផ្សេងទៀតទេ។</p>
+  <p data-l="en">The same discipline covers dependencies. Background removal uses the ML Kit Selfie Segmentation model bundled inside the app (<code>com.google.mlkit:segmentation-selfie:16.0.0-beta6</code>), and the empty <code>com.google.mlkit.vision.DEPENDENCIES</code> meta-data means no model-download service is registered. The dependency list in <code>build.gradle.kts</code> is Media3, Compose and AndroidX, kotlinx (serialization, coroutines) and ML Kit segmentation, and nothing else.</p>
+
+  <h3 id="philosophy-ios"><span data-l="km">iOS៖ ដោយការរចនា និងការត្រួតពិនិត្យ</span><span data-l="en">iOS: by construction and by audit</span></h3>
+  <p data-l="km">iOS មិនមានកុងតាក់ដូច manifest ទេ ដូច្នេះការធានាមកពីអ្វីដែលកម្មវិធីភ្ជាប់ជាមួយ។ ឯកសារ <code>project.pbxproj</code> មិនមាន Swift package ណាមួយទេ (ចំនួនយោង package ស្មើសូន្យ) ហើយ source ទាំងអស់ក្នុង <code>ios/Kamkut/</code> មិនប្រើ <code>URLSession</code>, <code>URLRequest</code>, <code>NWConnection</code> ឬ <code>WKWebView</code> សោះ។ មានតែ framework របស់ Apple ប៉ុណ្ណោះ៖ AVFoundation, Core Image, Metal, Vision, Speech និង Photos។ ឯ <code>PrivacyInfo.xcprivacy</code> ប្រកាស <code>NSPrivacyTracking = false</code> គ្មានទិន្នន័យដែលប្រមូល គ្មាន tracking domain និងប្រើតែ UserDefaults (ហេតុផល <code>CA92.1</code>)។</p>
+  <p data-l="en">iOS has no manifest switch, so the guarantee comes from what the app links. The <code>project.pbxproj</code> contains no Swift packages at all (zero package references), and a search of <code>ios/Kamkut/</code> finds no use of <code>URLSession</code>, <code>URLRequest</code>, <code>NWConnection</code> or <code>WKWebView</code>. Only Apple frameworks are used: AVFoundation, Core Image, Metal, Vision, Speech and Photos. <code>PrivacyInfo.xcprivacy</code> declares <code>NSPrivacyTracking = false</code>, no collected data types, no tracking domains, and a single required-reason API: UserDefaults (reason <code>CA92.1</code>).</p>
+  <p data-l="km">កន្លែងតែមួយដែលអ៊ីនធឺណិតអាចលួចចូលបានគឺ speech។ ការបង្កើត captions ស្វ័យប្រវត្តិប្រើ <code>SFSpeechRecognizer</code> ជាមួយ <code>requiresOnDeviceRecognition = true</code> ហើយបើឧបករណ៍មិនអាចធ្វើបាន កម្មវិធីបង្ហាញសារ ជាជាងធ្លាក់ទៅប្រើបណ្តាញ (អត្ថបទកំហុសសរសេរត្រង់ៗថា "KamKut never uses the network for this")។ ភាសាខ្មែរត្រូវបានបង្ហាញជាជម្រើសដែលបិទ ពេលឧបករណ៍គ្មាន recogniser ខ្មែរសម្រាប់ដំណើរការ offline។</p>
+  <p data-l="en">The one place where a network could creep in is speech. Auto captions use <code>SFSpeechRecognizer</code> with <code>requiresOnDeviceRecognition = true</code>, and if the device cannot do it the app shows a message instead of falling back to the network (the error text literally says "KamKut never uses the network for this"). Khmer is listed as a disabled option when the device has no offline Khmer recogniser.</p>
+
+  <aside class="callout">
+    <p data-l="km"><strong>និយាយឱ្យច្បាស់៖</strong> លើ Android ការធានានេះកើតពីប្រព័ន្ធប្រតិបត្តិការផ្ទាល់ (វារារាំងបណ្តាញ) ចំណែកលើ iOS វាកើតពីការរចនា រួមជាមួយការត្រួតពិនិត្យ source (គ្មាន API បណ្តាញក្នុងកូដ)។ មានតែតំណពីរប៉ុណ្ណោះដែលបើក browser របស់ប្រព័ន្ធ គឺ "Sponsored by kamsophy.com" និង "Get more fonts"។ កម្មវិធីខ្លួនឯងមិនផ្ញើសំណើអ្វីសោះ។</p>
+    <p data-l="en"><strong>Being precise:</strong> on Android the guarantee is mechanical (the OS blocks it); on iOS it is design plus an audit of the source (no networking API in the code). Exactly two links open the system browser, "Sponsored by kamsophy.com" and "Get more fonts". The app itself sends no request.</p>
+  </aside>
+
+  <h3 id="philosophy-files"><span data-l="km">ការរក្សាទុកដោយឯកសារតែប៉ុណ្ណោះ</span><span data-l="en">Persistence is just files</span></h3>
+  <p data-l="km">គ្រប់យ៉ាងរស់នៅក្នុងថតមួយក្នុងទីផ្ទុកឯកជន៖ <code>projects/&lt;projectId&gt;/project.json</code>, ថត <code>media/</code> (clip ដែលនាំចូល ភ្លេង សំឡេងរៀបរាប់ និងឯកសារ cutout) និង <code>thumb.jpg</code> ជាជម្រើស។ លើ iOS ថតនោះនៅក្នុង <code>Application Support/projects/</code> ហើយលើ Android នៅក្នុង <code>files/projects/</code>។ ការកំណត់ដូចជា appearance និងជម្រើស export ត្រូវបានរក្សាក្នុង UserDefaults / SharedPreferences ។ font ដែលអ្នកប្រើនាំចូលរស់នៅក្នុងថត <code>fonts/</code> កម្រិតកម្មវិធី មិនមែនក្នុងគម្រោងនីមួយៗទេ។ ការ export (ទៅ Photos, ទៅ MediaStore ឬតាម share sheet របស់ iOS) គឺជាផ្លូវដែលទិន្នន័យចេញពីទីផ្ទុកឯកជន ហើយវាតែងតែជាសកម្មភាពរបស់អ្នកប្រើ។</p>
+  <p data-l="en">Everything lives in one folder tree in private storage: <code>projects/&lt;projectId&gt;/project.json</code>, a <code>media/</code> folder (imported clips, music, voiceovers, cutouts) and an optional <code>thumb.jpg</code>. On iOS that tree is under <code>Application Support/projects/</code>; on Android under <code>files/projects/</code>. Settings such as appearance and export options live in UserDefaults / SharedPreferences. Fonts the user imports live in an app-wide <code>fonts/</code> folder, not per project. Exporting (to Photos, to MediaStore, or through the iOS share sheet) is how data leaves private storage, and it is always a user action.</p>
+</section>
+
+<section id="architecture" aria-labelledby="architecture-h">
+  <h2 id="architecture-h"><span data-l="km">កម្មវិធី native ពីរ ស្រទាប់ដូចគ្នា</span><span data-l="en">Two native apps, the same layers</span> <a class="anchor" href="#architecture" aria-label="Link to this section">#</a></h2>
+
+  <p data-l="km">KamKut មិនមែនជា shell តែមួយដែលដំណើរការលើគ្រប់ប្រព័ន្ធទេ។ វាជាកូដពីរដាច់ដោយឡែក៖ Swift + SwiftUI លើ iOS និង Kotlin + Jetpack Compose លើ Android។ អ្វីដែលចែករំលែកមានតែ <code>SPEC.md</code> ដែលជាកិច្ចសន្យា (spec សរសេរថាមុខងារលើកម្មវិធីទាំងពីរ "MUST implement identically") និងទ្រង់ទ្រាយ project.json។ តម្លៃនៃជម្រើសនេះគឺរាល់មុខងារត្រូវសរសេរពីរដង ប៉ុន្តែអត្ថប្រយោជន៍គឺអាចប្រើ AVFoundation, Core Image និង Metal បានពេញលេញនៅម្ខាង ហើយ Media3 ជាមួយ GLSL នៅម្ខាងទៀត។</p>
+  <p data-l="en">KamKut is not one cross-platform shell. It is two separate codebases: Swift and SwiftUI on iOS, Kotlin and Jetpack Compose on Android. The only things they share are <code>SPEC.md</code>, the contract (the spec says features on both platforms "MUST implement identically"), and the <code>project.json</code> format. The cost is that every feature is written twice. The payoff is full access to AVFoundation, Core Image and Metal on one side, and Media3 with GLSL on the other.</p>
+
+  <p data-l="km">កម្មវិធីទាំងពីរមានស្រទាប់ទាំងប្រាំដូចគ្នា។ ពីក្រោមឡើងលើ៖</p>
+  <p data-l="en">Both apps have the same five layers. From the bottom up:</p>
+
+  <ol class="pipeline">
+    <li><span data-l="km"><strong>Model</strong>៖ ប្រភេទតម្លៃសុទ្ធ។ iOS: <code>Model/Project.swift</code> (struct ជា <code>Codable</code>)។ Android: <code>data/Models.kt</code> (data class ជា <code>@Serializable</code>)</span><span data-l="en"><strong>Model:</strong> pure value types. iOS: <code>Model/Project.swift</code> (<code>Codable</code> structs). Android: <code>data/Models.kt</code> (<code>@Serializable</code> data classes).</span></li>
+    <li><span data-l="km"><strong>Store</strong>៖ អាន/សរសេរ project.json។ iOS: <code>ProjectStore</code>។ Android: <code>ProjectStore</code></span><span data-l="en"><strong>Store:</strong> reads and writes <code>project.json</code>. iOS: <code>ProjectStore</code>. Android: <code>ProjectStore</code>.</span></li>
+    <li><span data-l="km"><strong>Editor state</strong>៖ គម្រោងដែលកំពុងបើក + undo + autosave។ iOS: <code>EditorModel</code> (<code>@MainActor ObservableObject</code>)។ Android: <code>EditorViewModel</code> (<code>StateFlow&lt;Project&gt;</code>)</span><span data-l="en"><strong>Editor state:</strong> the open project plus undo and autosave. iOS: <code>EditorModel</code> (<code>@MainActor ObservableObject</code>). Android: <code>EditorViewModel</code> (<code>StateFlow&lt;Project&gt;</code>).</span></li>
+    <li><span data-l="km"><strong>Render engine</strong>៖ បម្លែង Project ទៅជា composition។ iOS: <code>CompositionBuilder</code> + <code>LayerCompositor</code>។ Android: <code>CompositionBuilder</code> + <code>ClipShader</code> + <code>TransitionRenderer</code></span><span data-l="en"><strong>Render engine:</strong> turns a Project into a composition. iOS: <code>CompositionBuilder</code> + <code>LayerCompositor</code>. Android: <code>CompositionBuilder</code> + <code>ClipShader</code> + <code>TransitionRenderer</code>.</span></li>
+    <li><span data-l="km"><strong>UI</strong>៖ SwiftUI (<code>Views/</code>) និង Compose (<code>ui/</code>)</span><span data-l="en"><strong>UI:</strong> SwiftUI (<code>Views/</code>) and Compose (<code>ui/</code>).</span></li>
+  </ol>
+
+  <p data-l="km">ដោយសារ model ជាតម្លៃដែលមិនកែនៅនឹងកន្លែងដើម (immutable) ការកែប្រែមួយគឺគ្រាន់តែជាការជំនួស Project ទាំងមូលដោយ Project ថ្មី។ នេះធ្វើឱ្យ undo, autosave និងការ rebuild preview សាមញ្ញ ព្រោះ UI សង្កេត Project តែមួយ ហើយអ្វីៗផ្សេងទៀតកើតចេញពីវា។</p>
+  <p data-l="en">Because the model is made of immutable values, an edit is just "replace the whole Project with a new one". That keeps undo, autosave and preview rebuilds simple: the UI observes one Project and everything else derives from it.</p>
+
+  <div class="table-wrap">
+  <table>
+    <caption><span data-l="km">iOS ប្រៀបធៀប Android (ទាញចេញពី source, build settings និង README)</span><span data-l="en">iOS compared with Android (from the source, build settings and READMEs)</span></caption>
+    <thead>
+      <tr><th scope="col"><span data-l="km">ប្រធានបទ</span><span data-l="en">Topic</span></th><th scope="col">iOS</th><th scope="col">Android</th></tr>
+    </thead>
+    <tbody>
+      <tr><th scope="row"><span data-l="km">ភាសា</span><span data-l="en">Language</span></th><td>Swift (<code>SWIFT_VERSION = 5.0</code>)</td><td>Kotlin 2.2.21, JVM 17</td></tr>
+      <tr><th scope="row">UI</th><td>SwiftUI</td><td>Jetpack Compose + Material 3 (BOM 2025.10.00)</td></tr>
+      <tr><th scope="row"><span data-l="km">OS អប្បបរមា</span><span data-l="en">Minimum OS</span></th><td>iOS 17.0</td><td>Android API 28 (target/compile 36)</td></tr>
+      <tr><th scope="row"><span data-l="km">Framework វីដេអូ</span><span data-l="en">Video framework</span></th><td>AVFoundation: <code>AVMutableComposition</code> + custom <code>AVVideoCompositing</code></td><td>Media3 1.10.0: Transformer, <code>CompositionPlayer</code>, effects</td></tr>
+      <tr><th scope="row"><span data-l="km">Effects / shader</span><span data-l="en">Effects and shaders</span></th><td>Core Image + custom Metal <code>CIKernel</code></td><td>GLSL ES 1.00 fragment shaders via Media3 <code>GlEffect</code></td></tr>
+      <tr><th scope="row"><span data-l="km">កាត់ផ្ទៃខាងក្រោយ</span><span data-l="en">Segmentation</span></th><td>Vision <code>VNGeneratePersonSegmentationRequest</code></td><td>ML Kit Selfie Segmentation (bundled model)</td></tr>
+      <tr><th scope="row"><span data-l="km">Render អត្ថបទ</span><span data-l="en">Text rendering</span></th><td>CoreText → <code>CGImage</code></td><td><code>StaticLayout</code> + <code>Canvas</code></td></tr>
+      <tr><th scope="row">Fonts</th><td><code>CTFontManager</code> (process scope)</td><td><code>Typeface</code> from assets, Compose <code>FontFamily</code></td></tr>
+      <tr><th scope="row"><span data-l="km">ការផ្ទុក</span><span data-l="en">Storage</span></th><td><code>Application Support/projects/</code>, <code>Codable</code></td><td><code>files/projects/</code>, kotlinx.serialization</td></tr>
+      <tr><th scope="row"><span data-l="km">Encoder export</span><span data-l="en">Export encoder</span></th><td><code>AVAssetReader</code> → <code>AVAssetWriter</code></td><td>Media3 <code>Transformer</code> + <code>DefaultEncoderFactory</code></td></tr>
+      <tr><th scope="row"><span data-l="km">រក្សាទុក export</span><span data-l="en">Saving exports</span></th><td>Photos (<code>PHPhotoLibrary</code>, add-only)</td><td>MediaStore <code>Movies/KamKut</code></td></tr>
+      <tr><th scope="row"><span data-l="km">ថតសំឡេង</span><span data-l="en">Voiceover</span></th><td><code>AVAudioEngine</code> → AAC <code>.m4a</code></td><td><code>MediaRecorder</code> AAC</td></tr>
+      <tr><th scope="row">Captions</th><td><code>SFSpeechRecognizer</code>, on-device only</td><td><code>createOnDeviceSpeechRecognizer</code>, API 33+</td></tr>
+      <tr><th scope="row"><span data-l="km">ដំណោះស្រាយ preview</span><span data-l="en">Preview resolution</span></th><td><span data-l="km">ចំហៀងខ្លី 720</span><span data-l="en">720 short side</span></td><td><span data-l="km">ចំហៀងខ្លី 540</span><span data-l="en">540 short side</span></td></tr>
+      <tr><th scope="row">Undo</th><td><span data-l="km">snapshot 60 ជំហាន</span><span data-l="en">60 snapshots</span></td><td><span data-l="km">snapshot 50 ជំហាន</span><span data-l="en">50 snapshots</span></td></tr>
+      <tr><th scope="row">Autosave</th><td><span data-l="km">debounce 600 ms</span><span data-l="en">600 ms debounce</span></td><td><span data-l="km">រាល់ការកែប្រែ</span><span data-l="en">after every edit</span></td></tr>
+      <tr><th scope="row"><span data-l="km">Transition overlap</span><span data-l="en">Overlap transitions</span></th><td><span data-l="km">compositor ពេលវេលាពិត</span><span data-l="en">real-time custom compositor</span></td><td><span data-l="km">segment ដែល render ជាមុន ហើយ cache</span><span data-l="en">pre-rendered, cached segments</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section id="format" aria-labelledby="format-h">
+  <h2 id="format-h"><span data-l="km">ទ្រង់ទ្រាយគម្រោងរួម៖ project.json</span><span data-l="en">The shared project format: project.json</span> <a class="anchor" href="#format" aria-label="Link to this section">#</a></h2>
+
+  <p data-l="km">ទ្រង់ទ្រាយត្រូវបានកំណត់ក្នុង <code>SPEC.md</code> ហើយកម្មវិធីទាំងពីរអាន និងសរសេរវាតាមរបៀបដូចគ្នា។ សូមចំណាំថា KamKut គ្មានមុខងារ sync ទេ (វាគ្មានបណ្តាញ)។ ការចែករំលែកទ្រង់ទ្រាយគឺជាវិន័យមួយដែលរក្សាកូដពីរឱ្យដើរតាមគ្នា។ ខាងក្រោមនេះជា project.json ជំនាន់ 1 ដូចដែល spec សរសេរ (spec មានមតិយោបល់ <code>//</code> ដូច្នេះនេះជា JSON ដែលមានចំណារ មិនមែន JSON ត្រឹមត្រូវទាំងស្រុងទេ)៖</p>
+  <p data-l="en">The format is defined in <code>SPEC.md</code> and both apps read and write it the same way. A note: KamKut has no sync feature (it has no network). Sharing a format is a discipline that keeps two codebases moving in lockstep. Here is version 1 as the spec writes it (the <code>//</code> comments are in the spec, so this is annotated JSON, not strictly valid JSON):</p>
+
+  <figure class="code"><figcaption><code>SPEC.md:17-28</code> <span data-l="km">ក្បាលនៃ project.json (ជំនាន់ 1) ដូចដែលសរសេរក្នុង SPEC.md</span><span data-l="en">The head of project.json (version 1) as written in SPEC.md.</span></figcaption><pre><code class="lang-json">{
+  "version": 1,
+  "id": "uuid",
+  "name": "Untitled",
+  "createdAt": 0, "updatedAt": 0,              // epoch ms
+  "aspectRatio": "9:16",                       // 9:16 | 16:9 | 1:1 | 4:5
+  "originalAudioVolume": 1.0,
+  "clips": [{
+    "id": "uuid",
+    "fileName": "clip_x.mp4",                  // relative to media/
+    "durationMs": 0,                           // source duration
+    "trimStartMs": 0, "trimEndMs": 0,          // trimEndMs &lt;= durationMs</code></pre></figure>
+
+  <h3 id="format-versions"><span data-l="km">ការវិវត្តដោយបន្ថែម ដោយមិនប្តូរលេខជំនាន់</span><span data-l="en">Evolving by addition, without bumping the version</span></h3>
+  <p data-l="km">ទ្រង់ទ្រាយបានរីកធំពីរដង (v2 និង v3) ប៉ុន្តែ <code>"version"</code> នៅតែជា <code>1</code>។ ច្បាប់នៅក្នុង SPEC គឺ៖ key ថ្មីទាំងអស់ជាជម្រើស មានតម្លៃលំនាំដើម ហើយគម្រោងចាស់ត្រូវតែបើកដោយមិនប្តូរអ្វី។ ក្នុងការអនុវត្ត៖</p>
+  <p data-l="en">The format grew twice (v2 and v3) yet <code>"version"</code> is still <code>1</code>. The rule in the spec: every new key is optional with a default, and an old project must open unchanged. In practice:</p>
+  <ul>
+    <li><span data-l="km">v2 បន្ថែមលើ overlay៖ <code>fontId</code>, <code>style</code>, <code>strokeColorHex</code>, <code>align</code>, <code>letterSpacing</code>, <code>opacity</code>, <code>rotation</code>, <code>animIn</code>, <code>animOut</code> និងអារេ <code>layers</code> ថ្មី (picture-in-picture)</span><span data-l="en">v2 added to overlays: <code>fontId</code>, <code>style</code>, <code>strokeColorHex</code>, <code>align</code>, <code>letterSpacing</code>, <code>opacity</code>, <code>rotation</code>, <code>animIn</code>, <code>animOut</code>, and a new top-level <code>layers</code> array (picture-in-picture).</span></li>
+    <li><span data-l="km">v3 បន្ថែម <code>transitionMs</code> និង transition id ថ្មី (ឈ្មោះចាស់ <code>fade</code>, <code>flash</code>, <code>zoom</code> នៅតែអានបាន ដោយ map ទៅ <code>dissolve</code>, <code>dipWhite</code>, <code>zoomIn</code>), ឧបករណ៍ clip (<code>reversed</code>, <code>freeze</code>, <code>isImage</code>, <code>rotate</code>, <code>flipH/V</code>, <code>crop</code>, <code>fit</code>, <code>scale</code>, offset, audio fade, <code>filterIntensity</code>, <code>adjust</code>), ផ្ទៃខាងក្រោយ canvas, ផ្លូវ <code>effects</code>, <code>keyframes</code>, blend/mask/chroma key លើ layer, <code>animLoop</code>, ប្រភេទ audio ថ្មី, <code>voiceEffect</code> និង <code>captionGroup</code></span><span data-l="en">v3 added <code>transitionMs</code> and new transition ids (the old <code>fade</code>, <code>flash</code>, <code>zoom</code> still load and map to <code>dissolve</code>, <code>dipWhite</code>, <code>zoomIn</code>), clip tools (<code>reversed</code>, <code>freeze</code>, <code>isImage</code>, <code>rotate</code>, <code>flipH/V</code>, <code>crop</code>, <code>fit</code>, <code>scale</code>, offsets, audio fades, <code>filterIntensity</code>, <code>adjust</code>), a canvas background, an <code>effects</code> track, <code>keyframes</code>, layer blend / mask / chroma key, <code>animLoop</code>, new audio kinds, <code>voiceEffect</code> and <code>captionGroup</code>.</span></li>
+  </ul>
+
+  <h3 id="format-tolerance"><span data-l="km">ការអត់ឱនចំពោះ key មិនស្គាល់ និងតម្លៃមិនត្រឹមត្រូវ</span><span data-l="en">Tolerating unknown keys and bad values</span></h3>
+  <p data-l="km">spec សរសេរថា "Unknown keys must be ignored when decoding"។ Android ធ្វើវាតាមរយៈ configuration នៃ <code>Json</code>៖ <code>ignoreUnknownKeys</code> និង <code>coerceInputValues</code>។ iOS ធ្វើលើសពីនេះបន្តិច៖ <code>Codable</code> មិនអើពើ key ដែលមិនស្គាល់ដោយធម្មជាតិ ហើយ initializer ដែលសរសេរដោយដៃប្រើ helper <code>value(_:_:)</code> ដែលសង់លើ <code>try?</code> ដូច្នេះប្រភេទខុស ឬ key បាត់ នឹងធ្លាក់ទៅតម្លៃលំនាំដើម ជាជាងធ្វើឱ្យគម្រោងទាំងមូលបើកមិនកើត។</p>
+  <p data-l="en">The spec says "Unknown keys must be ignored when decoding". Android does it through the <code>Json</code> configuration: <code>ignoreUnknownKeys</code> and <code>coerceInputValues</code>. iOS goes a step further: <code>Codable</code> ignores unknown keys by nature, and the hand-written initialisers use a <code>value(_:_:)</code> helper built on <code>try?</code>, so a wrong type or a missing key falls back to the default instead of making the whole project unreadable.</p>
+
+  <figure class="code"><figcaption><code>android/app/src/main/java/com/kamkut/app/data/ProjectStore.kt:13,28-34</code> <span data-l="km">Android៖ configuration នៃ Json និងការរក្សាទុកដោយសរសេរ-រួចប្តូរឈ្មោះ</span><span data-l="en">Android: the Json configuration, and a write-then-rename save.</span></figcaption><pre><code class="lang-kotlin">private val json = Json { ignoreUnknownKeys = true; encodeDefaults = true; prettyPrint = true; coerceInputValues = true }
+// …
+fun save(project: Project) {
+    val dir = projectDir(project.id).apply { mkdirs() }
+    // Write-then-rename so a crash mid-save never leaves a corrupt project.
+    val tmp = File(dir, "project.json.tmp")
+    tmp.writeText(json.encodeToString(Project.serializer(), project))
+    tmp.renameTo(File(dir, "project.json"))
+}</code></pre></figure>
+  <figure class="code"><figcaption><code>ios/Kamkut/Model/Project.swift:45-56</code> <span data-l="km">iOS៖ helper សម្រាប់ decode ដោយអត់ឱន; វាល millisecond ទទួលទាំងចំនួនគត់ និងចំនួនទសភាគ</span><span data-l="en">iOS: tolerant decoding helpers; millisecond fields accept integers or floats.</span></figcaption><pre><code class="lang-swift">extension KeyedDecodingContainer {
+    func value&lt;T: Decodable&gt;(_ key: Key, _ fallback: T) -&gt; T {
+        (try? decodeIfPresent(T.self, forKey: key)) ?? fallback
+    }
+
+    /// Accepts integers or floating point numbers for millisecond fields.
+    func millis(_ key: Key, _ fallback: Int64) -&gt; Int64 {
+        if let v = try? decodeIfPresent(Int64.self, forKey: key) { return v }
+        if let v = try? decodeIfPresent(Double.self, forKey: key) { return Int64(v) }
+        return fallback
+    }
+}</code></pre></figure>
+
+  <p data-l="km">iOS ក៏សម្អាតតម្លៃពេល decode ដែរ៖ <code>trimEndMs</code> ដែលខុសត្រូវបានកំណត់ទៅ <code>durationMs</code>, <code>speed &lt;= 0</code> ត្រូវក្លាយជា <code>1</code> ហើយ transition id ត្រូវបាន canonicalize ពេលផ្ទុក។ key បន្ថែមដែលមានតែលើ iOS (ឧ. <code>revFileName</code> លើ clip, <code>sourceClipID</code> និង <code>bakedSpeed</code> លើ audio) ត្រូវបានចំណាំក្នុងកូដថា Android មិនអើពើ ដែលដំណើរការបានដោយសារការអត់ឱនទាំងសងខាង។</p>
+  <p data-l="en">iOS also sanitises values while decoding: a bad <code>trimEndMs</code> is reset to <code>durationMs</code>, <code>speed &lt;= 0</code> becomes <code>1</code>, and transition ids are canonicalised on load. iOS-only extra keys (for example <code>revFileName</code> on clips and <code>sourceClipID</code> / <code>bakedSpeed</code> on audio items) are marked in the code as ignored by Android, which only works because of the tolerance on both sides.</p>
+
+  <figure class="code"><figcaption><code>ios/Kamkut/Model/Project.swift:104-111</code> <span data-l="km">iOS៖ initializer របស់ clip ជួសជុលតម្លៃមិនអាចទៅរួច ជាជាងបរាជ័យ</span><span data-l="en">iOS: a clip's initialiser repairs impossible values instead of failing.</span></figcaption><pre><code class="lang-swift">id = c.value(.id, UUID().uuidString)
+fileName = c.value(.fileName, "")
+durationMs = c.millis(.durationMs, 0)
+trimStartMs = c.millis(.trimStartMs, 0)
+trimEndMs = c.millis(.trimEndMs, durationMs)
+if trimEndMs &lt;= 0 || trimEndMs &gt; durationMs { trimEndMs = durationMs }
+speed = c.value(.speed, 1.0)
+if speed &lt;= 0 { speed = 1 }</code></pre></figure>
+
+  <h3 id="format-media"><span data-l="km">Media ត្រូវបាន copy ចូលគម្រោង</span><span data-l="en">Media is copied into the project</span></h3>
+  <p data-l="km">នៅពេលនាំចូល ឯកសារត្រូវបាន copy (ឬ move ពី temp ក្នុងករណី PhotosPicker លើ iOS) ចូលថត <code>media/</code> របស់គម្រោង។ ដូច្នេះគម្រោងនៅតែបើកបាន ទោះបីរូបភាព ឬវីដេអូដើមត្រូវបានលុបចេញពី gallery ។ iOS ដាក់ឈ្មោះ <code>&lt;prefix&gt;_&lt;8 តួ hex&gt;.&lt;ext&gt;</code> ឯ Android ដាក់ឈ្មោះ <code>&lt;prefix&gt;_&lt;millis&gt;.&lt;ext&gt;</code>។ រូបភាព layer លើ Android ត្រូវបាន decode តាម EXIF បន្ថយទំហំអតិបរមា 2048 px រួចរក្សាជា PNG ដើម្បីឱ្យវាត្រង់ជានិច្ច។ ពេលលុប clip លើ iOS ឯកសារ media ត្រូវបានលុបតែនៅពេលគ្មានអ្វីយោងវាទៀត។ ការអូសចេញដើម្បីលុបរក្សាឯកសារទុក ដើម្បីឱ្យ Undo ស្តារបាន។</p>
+  <p data-l="en">On import the file is copied (or moved from a temp location, in the case of PhotosPicker on iOS) into the project's <code>media/</code> folder. That is why a project still opens when the original photo or video is gone from the gallery. iOS names files <code>&lt;prefix&gt;_&lt;8 hex chars&gt;.&lt;ext&gt;</code>, Android names them <code>&lt;prefix&gt;_&lt;millis&gt;.&lt;ext&gt;</code>. Android decodes layer images with EXIF orientation, caps them at 2048 px and stores them as PNG so they are always upright. On iOS, deleting a clip only removes its media file once nothing references it; drag-to-delete keeps the files so that Undo can restore the clip.</p>
+
+  <h3 id="format-autosave"><span data-l="km">Autosave និង undo</span><span data-l="en">Autosave and undo</span></h3>
+  <p data-l="km">រាល់ពេល <code>project</code> ផ្លាស់ប្តូរ លើ iOS <code>didSet</code> កត់ត្រា snapshot ចាស់ចូល <code>EditorHistory</code> សម្រេចថាត្រូវ rebuild composition ឬគ្រាន់តែ update parameter រស់ៗ រួចកំណត់ពេលរក្សាទុក 600 ms ក្រោយ (debounce)។ ការសរសេរប្រើ <code>.atomic</code> ។ លើ Android រាល់ <code>edit</code> រក្សាទុកភ្លាមៗលើ <code>Dispatchers.IO</code> (បោះបង់ការរក្សាទុកមុនដែលនៅមិនទាន់ចប់) ដោយសរសេរទៅ <code>project.json.tmp</code> រួចប្តូរឈ្មោះ ដូច្នេះការគាំងកណ្តាលការរក្សាទុកមិនធ្វើឱ្យគម្រោងខូចទេ ហើយ <code>onCleared</code> រក្សាទុកម្តងទៀតជាចុងក្រោយ។</p>
+  <p data-l="en">Whenever <code>project</code> changes on iOS, <code>didSet</code> records the old snapshot in <code>EditorHistory</code>, decides whether the composition must be rebuilt or only live parameters updated, and then schedules a save 600 ms later (a debounce). The write uses <code>.atomic</code>. On Android every <code>edit</code> saves immediately on <code>Dispatchers.IO</code> (cancelling any save still in flight), writing to <code>project.json.tmp</code> and renaming it, so a crash mid-save never corrupts a project; <code>onCleared</code> saves once more at the end.</p>
+
+  <figure class="code"><figcaption><code>ios/Kamkut/Views/EditorModel.swift:105-124</code> <span data-l="km">iOS៖ កន្លែងតែមួយសម្រេច rebuild ឬ update រស់ រួចកំណត់ពេលរក្សាទុក</span><span data-l="en">iOS: one place decides rebuild versus live update, then schedules the save.</span></figcaption><pre><code class="lang-swift">private func projectDidChange(from old: Project) {
+    if old != project { history.record(old: old) }
+    // v3: structural edits rebuild the composition; looks / transforms / effects / background update live.
+    if v3NeedsRebuild(old: old) {
+        rebuild(delay: 0.25)
+    } else if v3LiveChanged(old: old) {
+        liveInstruction?.setProject(project)
+        refreshFrame()
+    }
+    scheduleSave()
+}
+
+private func scheduleSave() {
+    saveTask?.cancel()
+    saveTask = Task {
+        try? await Task.sleep(nanoseconds: 600_000_000)
+        guard !Task.isCancelled else { return }
+        saveNow()
+    }
+}</code></pre></figure>
+
+  <p data-l="km">Undo គឺជា snapshot នៃ Project ទាំងមូល។ ព្រោះ Project ជាតម្លៃ ដូច្នេះការ undo គ្រាន់តែដាក់ Project ចាស់ត្រឡប់មកវិញ ហើយ media ដែលមានទំហំធំមិនត្រូវបាន copy ទេ ព្រោះ snapshot មានតែ model ប៉ុណ្ណោះ។ លើ iOS ការកែប្រែលឿនៗជាប់គ្នា (ដូចអូស slider) បញ្ចូលគ្នាក្នុងជំហានតែមួយ (ក្នុងរយៈ 0.8 វិនាទី) ហើយ <code>begin()</code>/<code>end()</code> ដាក់ក្រុមការសរសេរច្រើនជាជំហានតែមួយ (ដូចអូស trim handle)។ លើ Android កាយវិការប្រើ <code>liveEdit</code> ហើយ <code>endLive</code> កត់ត្រាជំហាន undo តែមួយ។</p>
+  <p data-l="en">Undo is a snapshot of the whole Project. Since Project is a value, undoing just puts an older Project back, and the heavy media files are never copied because a snapshot holds only the model. On iOS, rapid consecutive edits (dragging a slider) coalesce into one step within 0.8 s, and <code>begin()</code> / <code>end()</code> group several writes into a single step (a trim-handle drag). On Android gestures use <code>liveEdit</code> and <code>endLive</code> records exactly one undo step.</p>
+
+  <figure class="code"><figcaption><code>ios/Kamkut/Views/EditorModel+Timeline.swift:20-32</code> <span data-l="km">iOS៖ undo បញ្ចូលគ្នាក្នុង 0.8 វិនាទី ឬដាក់ក្រុមដោយ begin/end</span><span data-l="en">iOS: undo records coalesce within 0.8 s, or are grouped explicitly with begin/end.</span></figcaption><pre><code class="lang-swift">func record(old: Project) {
+    guard !applying else { return }
+    if groupDepth &gt; 0 {
+        if !groupRecorded { push(old); groupRecorded = true }
+        return
+    }
+    let now = Date()
+    if now.timeIntervalSince(lastRecord) &gt; 0.8 || undoStack.isEmpty { push(old) }
+    lastRecord = now
+}
+
+func begin() { groupDepth += 1; if groupDepth == 1 { groupRecorded = false } }
+func end() { groupDepth = max(groupDepth - 1, 0); lastRecord = .distantPast }</code></pre></figure>
+  <figure class="code"><figcaption><code>android/app/src/main/java/com/kamkut/app/ui/EditorViewModel.kt:63-71,115-125</code> <span data-l="km">Android៖ រាល់ edit រុញ Project មុន; កាយវិការប្រើ liveEdit ហើយកត់ត្រាជំហានតែមួយ</span><span data-l="en">Android: every edit pushes the previous Project; gestures use liveEdit and commit one step.</span></figcaption><pre><code class="lang-kotlin">fun edit(transform: (Project) -&gt; Project) {
+    val before = _project.value
+    val after = transform(before).copy(updatedAt = System.currentTimeMillis())
+    if (after == before) return
+    undoStack.addLast(before)
+    if (undoStack.size &gt; 50) undoStack.removeFirst()
+    redoStack.clear()
+    commit(after)
+}
+// …
+fun liveEdit(f: (Project) -&gt; Project) {
+    if (liveOrigin == null) liveOrigin = _project.value
+    _project.value = f(_project.value)
+}
+fun endLive() {
+    val origin = liveOrigin ?: return
+    liveOrigin = null
+    val moved = _project.value
+    _project.value = origin
+    edit { moved }
+}</code></pre></figure>
+</section>
+
+<section id="timeline" aria-labelledby="timeline-h">
+  <h2 id="timeline-h"><span data-l="km">Timeline៖ គណិតវិទ្យា និងកាយវិការបែប CapCut</span><span data-l="en">The timeline: math and CapCut-style gestures</span> <a class="anchor" href="#timeline" aria-label="Link to this section">#</a></h2>
+
+  <h3 id="timeline-math"><span data-l="km">ប្រវែង timeline</span><span data-l="en">Timeline length</span></h3>
+  <p data-l="km">នៅ v1 ប្រវែង timeline គឺ <code>Σ (trimEndMs − trimStartMs) / speed</code>។ នៅ v3 transition បែប overlap ធ្វើឱ្យ clip B ចាប់ផ្តើមមុនពេល A ចប់ ដូច្នេះរូបមន្តក្លាយជា <code>Σ ប្រវែង clip − Σ d</code> ដោយ <code>d</code> ជា overlap របស់ transition នីមួយៗ៖</p>
+  <p data-l="en">In v1 the timeline length is <code>Σ (trimEndMs − trimStartMs) / speed</code>. In v3 overlap transitions make clip B start before A ends, so the formula becomes <code>Σ clip durations − Σ d</code>, where <code>d</code> is the overlap of each transition:</p>
+  <ul>
+    <li><span data-l="km">ប្រវែងលើ timeline របស់ clip = (trimEnd − trimStart) / clamp(speed, 0.1, 10)។ រូបថត និង freeze frame មិនអើពើ speed នៅលើ iOS (ប្រវែងអប្បបរមា 100 ms)</span><span data-l="en">A clip's timeline duration is (trimEnd − trimStart) / clamp(speed, 0.1, 10). On iOS photos and freeze frames ignore speed (minimum 100 ms).</span></li>
+    <li><span data-l="km"><code>d = min(clamp(transitionMs, 100, 1500), dur(A)/2, dur(B)/2)</code> ហើយ <code>d = 0</code> ពេល transition ជា <code>none</code> ឬជា clip ចុងក្រោយ។ Android ក៏កំណត់ <code>d</code> ទៅ 0 ផងដែរ ប្រសិនបើវាតិចជាង 50 ms</span><span data-l="en"><code>d = min(clamp(transitionMs, 100, 1500), dur(A)/2, dur(B)/2)</code>, and <code>d = 0</code> for <code>none</code> or for the last clip. Android additionally treats <code>d</code> below 50 ms as 0.</span></li>
+    <li><span data-l="km">clip i+1 ចាប់ផ្តើមនៅ <code>end(i) − d(i)</code></span><span data-l="en">Clip i+1 starts at <code>end(i) − d(i)</code>.</span></li>
+    <li><span data-l="km">overlay, layer, effect និង audio រក្សាម៉ោងដាច់ខាត (absolute) ដូច្នេះវាមិនរំកិលពេលអ្នកប្តូរ transition។ <code>clampedToTimeline()</code> កាត់អ្វីដែលហួសចុង timeline</span><span data-l="en">Overlays, layers, effects and audio keep absolute times, so they do not shift when you change a transition. <code>clampedToTimeline()</code> trims anything that runs past the end.</span></li>
+  </ul>
+
+  <figure class="code"><figcaption><code>ios/Kamkut/Model/Project.swift:153-155,383-390,393-403,406</code> <span data-l="km">iOS៖ ប្រវែង clip, overlap និងជួរ clip ដែលអ្វីៗផ្សេងទៀតត្រូវរៀបតាម</span><span data-l="en">iOS: clip duration, overlap and the clip ranges that everything else is laid out against.</span></figcaption><pre><code class="lang-swift">var timelineDurationMs: Int64 {
+    isImage ? max(trimmedMs, 100) : Int64((Double(trimmedMs) / min(max(speed, 0.1), 10)).rounded())
+}
+// …
+var transitionOverlapsMs: [Int64] {
+    clips.indices.map { i in
+        guard i + 1 &lt; clips.count, Transitions.canonical(clips[i].transitionOut) != "none" else { return 0 }
+        let a = clips[i].timelineDurationMs, b = clips[i + 1].timelineDurationMs
+        let d = min(min(max(clips[i].transitionMs, 100), 1500), a / 2, b / 2)
+        return max(d, 0)
+    }
+}
+// …
+var clipTimelineRanges: [Range&lt;Int64&gt;] {
+    var out: [Range&lt;Int64&gt;] = []
+    let ov = transitionOverlapsMs
+    var cursor: Int64 = 0
+    for (i, c) in clips.enumerated() {
+        let r = cursor..&lt;(cursor + c.timelineDurationMs)
+        out.append(r)
+        cursor = r.upperBound - ov[i]
+    }
+    return out
+}
+// …
+var durationMs: Int64 { clipTimelineRanges.last?.upperBound ?? 0 }</code></pre></figure>
+  <figure class="code"><figcaption><code>android/app/src/main/java/com/kamkut/app/data/Models.kt:28-38,130</code> <span data-l="km">Android៖ គណិតវិទ្យាដូចគ្នា សរសេរជាផលបូក</span><span data-l="en">Android: the same math, expressed as sums.</span></figcaption><pre><code class="lang-kotlin">/** Effective overlap (ms) of the transition after clip [i] (0 when none / last clip). */
+fun transitionOverlapMs(i: Int): Long {
+    val a = clips.getOrNull(i) ?: return 0
+    val b = clips.getOrNull(i + 1) ?: return 0
+    if (a.transitionOut == "none" || a.transitionOut.isEmpty()) return 0
+    val d = minOf(a.transitionMs.coerceIn(100, 1500), a.timelineDurationMs / 2, b.timelineDurationMs / 2)
+    return if (d &lt; 50) 0 else d
+}
+
+/** Timeline length = sum of clip durations - sum of overlaps. */
+val durationMs: Long get() = clips.sumOf { it.timelineDurationMs } - clips.indices.sumOf { transitionOverlapMs(it) }
+// …
+val timelineDurationMs: Long get() = (trimmedMs / speed.coerceIn(0.1f, 10f)).toLong()</code></pre></figure>
+
+  <p data-l="km">ឧទាហរណ៍គណនា (លេខគំរូ ដើម្បីបង្ហាញរូបមន្ត មិនមែនលទ្ធផលវាស់វែងទេ)៖ clip A = 4000 ms, B = 2000 ms, C = 3000 ms។ A→B មាន dissolve 500 ms ហើយ B→C ស្នើ 1500 ms។ d₁ = min(500, 2000, 1000) = 500។ d₂ = min(1500, 1000, 1500) = 1000 ព្រោះត្រូវបានកំណត់ត្រឹមពាក់កណ្តាលនៃ B។ ប្រវែងសរុប = 9000 − 1500 = 7500 ms ហើយ clip ចាប់ផ្តើមនៅ 0, 3500 និង 4500 ms។</p>
+  <p data-l="en">A worked example (made-up numbers to show the formula, not a measurement): clips A=4000 ms, B=2000 ms, C=3000 ms. A→B has a 500 ms dissolve and B→C asks for 1500 ms. d₁ = min(500, 2000, 1000) = 500. d₂ = min(1500, 1000, 1500) = 1000, capped by half of B. Length = 9000 − 1500 = 7500 ms, and the clips start at 0, 3500 and 4500 ms.</p>
+
+  <h3 id="timeline-edit"><span data-l="km">Trim, split, merge និង speed</span><span data-l="en">Trim, split, merge and speed</span></h3>
+  <p data-l="km"><strong>Trim។</strong> ការអូស handle ផ្លាស់ប្តូរ <code>trimStartMs</code> ឬ <code>trimEndMs</code> ជាបន្តបន្ទាប់។ ចម្ងាយដែលអូសលើ timeline (ms) គុណនឹង speed ក្លាយជាចម្ងាយក្នុង source (ព្រោះ clip ដែលលឿន 2× ប្រើ source ច្រើនជាងក្នុងរយៈពេលដូចគ្នា)។ ប្រវែងអប្បបរមាគឺ 200 ms (<code>minClipMs</code> / <code>MIN_CLIP_MS</code>) ហើយ playhead ដើរតាមគែមដែលកំពុងអូស។ គ្រប់ការអូសទាំងមូលជាជំហាន undo តែមួយ។</p>
+  <p data-l="en"><strong>Trim.</strong> Dragging a handle changes <code>trimStartMs</code> or <code>trimEndMs</code> continuously. The drag distance on the timeline (ms) is multiplied by the speed to get the distance in the source (a 2× clip consumes more source in the same time). The minimum length is 200 ms (<code>minClipMs</code> / <code>MIN_CLIP_MS</code>), the playhead follows the edge being dragged, and the whole drag is one undo step.</p>
+
+  <figure class="code"><figcaption><code>ios/Kamkut/Views/EditorModel+Timeline.swift:87-103</code> <span data-l="km">iOS៖ trim ផ្ទាល់ ដែលបម្លែង millisecond លើ timeline ទៅជា millisecond ក្នុង source តាមរយៈ speed</span><span data-l="en">iOS: a live trim, converting timeline milliseconds to source milliseconds through the speed.</span></figcaption><pre><code class="lang-swift">func trimClip(id: String, edge: TrimEdge, base: (start: Int64, end: Int64), deltaTimelineMs: Double) {
+    guard let i = project.clips.firstIndex(where: { $0.id == id }) else { return }
+    let speed = max(project.clips[i].speed, 0.1)
+    let d = Int64((deltaTimelineMs * speed).rounded())
+    let minSource = Int64((Double(Self.minClipMs) * speed).rounded())
+    switch edge {
+    case .leading:
+        project.clips[i].trimStartMs = min(max(base.start + d, 0), base.end - minSource)
+    case .trailing:
+        project.clips[i].trimEndMs = max(min(base.end + d, project.clips[i].durationMs), base.start + minSource)
+    }
+    let start = Double(project.startMs(ofClipAt: i)) / 1000
+    let len = Double(project.clips[i].timelineDurationMs) / 1000
+    let t = edge == .leading ? start + 0.01 : max(start + len - 0.05, start)
+    currentTime = t
+    player.seek(to: CMTime(seconds: t, preferredTimescale: 600), toleranceBefore: .zero, toleranceAfter: .zero)
+}</code></pre></figure>
+  <figure class="code"><figcaption><code>android/app/src/main/java/com/kamkut/app/ui/EditorViewModelTimeline.kt:5-10</code> <span data-l="km">Android៖ clamp ដូចគ្នា ជា live edit</span><span data-l="en">Android: the same clamp, as a live edit.</span></figcaption><pre><code class="lang-kotlin">/** Live trim of the left edge (source-time ms). Call between [EditorViewModel.liveEdit]/[EditorViewModel.endLive]. */
+fun EditorViewModel.trimClipStartLive(id: String, newStartMs: Long) = liveEdit { p -&gt;
+    p.copy(clips = p.clips.map { c -&gt;
+        if (c.id != id) c else c.copy(trimStartMs = newStartMs.coerceIn(0L, c.trimEndMs - MIN_CLIP_MS))
+    })
+}</code></pre></figure>
+
+  <p data-l="km"><strong>Split។</strong> កន្លែងដាច់ត្រូវបានគណនាពីទីតាំង playhead៖ <code>local = trimStart + (t − clipStart) × speed</code> ហើយទាំងសងខាងត្រូវមានយ៉ាងហោចណាស់ 100 ms បើមិនដូច្នេះទេ កម្មវិធីបង្ហាញសារ។ ពេល clip ពីរត្រួតគ្នាក្នុង transition clip ចូល (incoming) គឺជាអ្នកដែលត្រូវបំបែក។ លើ iOS clip ទីមួយបាត់ transition ចេញ (វាទៅជាកម្មសិទ្ធិរបស់ផ្នែកទីពីរ)។ លើ Android ការគណនារក្សា trim ក្នុងកូអរដោនេ source ដើម ដូច្នេះប្រសិនបើ clip ត្រូវបាន reverse វាគណនាពីចុងវិញ។</p>
+  <p data-l="en"><strong>Split.</strong> The cut point comes from the playhead: <code>local = trimStart + (t − clipStart) × speed</code>, and both halves must keep at least 100 ms or the app shows a message instead. When two clips overlap in a transition, the incoming clip is the one that is split. On iOS the first half loses its outgoing transition (it stays with the second half). On Android trims stay in the original source's coordinates, so for a reversed clip the cut is computed from the end.</p>
+
+  <figure class="code"><figcaption><code>ios/Kamkut/Views/EditorModel.swift:234-250,252</code> <span data-l="km">iOS៖ split នៅ playhead</span><span data-l="en">iOS: split at the playhead.</span></figcaption><pre><code class="lang-swift">func splitAtPlayhead() {
+    let t = currentTimeMs
+    let ranges = project.clipTimelineRanges
+    // While two clips overlap (transition) the incoming clip is the one being split.
+    if let i = ranges.lastIndex(where: { $0.contains(t) }) {
+        let clip = project.clips[i]
+        let local = clip.trimStartMs + Int64(Double(t - ranges[i].lowerBound) * (clip.isImage ? 1 : clip.speed))
+        guard local - clip.trimStartMs &gt;= 100, clip.trimEndMs - local &gt;= 100 else {
+            show("Move the playhead away from the clip edge to split")
+            return
+        }
+        var first = clip
+        var second = clip
+        second.id = UUID().uuidString
+        first.trimEndMs = local
+        first.transitionOut = "none"
+        second.trimStartMs = local
+// …
+project.clips.replaceSubrange(i...i, with: [first, second])</code></pre></figure>
+  <figure class="code"><figcaption><code>android/app/src/main/java/com/kamkut/app/ui/EditorViewModel.kt:190-204</code> <span data-l="km">Android៖ split នៅ playhead រួមទាំងករណី reverse</span><span data-l="en">Android: split at the playhead, with the reversed case.</span></figcaption><pre><code class="lang-kotlin">fun splitAt(timelineMs: Long) {
+    val p = _project.value
+    val starts = p.clipStartsMs()
+    val i = p.clips.indices.lastOrNull { starts[it] &lt;= timelineMs } ?: return
+    val clip = p.clips[i]
+    val off = timelineMs - starts[i]
+    val sourceMs = if (clip.reversed) clip.trimEndMs - (off * clip.speed).toLong() else clip.trimStartMs + (off * clip.speed).toLong()
+    if (sourceMs - clip.trimStartMs &lt; 100 || clip.trimEndMs - sourceMs &lt; 100) {
+        message.value = "Move the playhead inside a clip to split"
+        return
+    }
+    val (left, right) = splitClip(clip, off, sourceMs)
+    edit { it.copy(clips = it.clips.toMutableList().apply { set(i, left); add(i + 1, right) }) }
+    selectedClipId.value = right.id
+}</code></pre></figure>
+
+  <p data-l="km"><strong>Merge។</strong> កម្មវិធីបញ្ចូល clip ទីមួយ និងទីពីរចូលគ្នាតែនៅពេលវាជាបំណែកជាប់គ្នានៃ source តែមួយ (ក្រោយ split) និង speed ដូចគ្នា។ iOS អនុញ្ញាតគម្លាតមិនលើស 50 ms ហើយ Android ទាមទារឱ្យចំណុចស្មើគ្នាពិតប្រាកដ។ បើមិនដូច្នេះទេ ផ្នែកទាំងពីរត្រូវបានបញ្ចូលគ្នាដោយស្វ័យប្រវត្តិពេល export ព្រោះ clip ទាំងអស់ concatenate ជានិច្ច។</p>
+  <p data-l="en"><strong>Merge.</strong> The app joins a clip with the next one only when they are contiguous pieces of the same source (as after a split) with the same speed. iOS allows a gap of up to 50 ms, Android requires the points to be exactly equal. Otherwise the clips are simply joined at export, because all clips always concatenate.</p>
+  <p data-l="km"><strong>Speed។</strong> ជួរគឺ 0.1×–10× (spec v1 មានតែ 0.5/1/1.5/2 ហើយ v3 បានពង្រីក)។ លើ iOS speed ត្រូវបានអនុវត្តដោយ <code>scaleTimeRange</code> លើទាំងវីដេអូ និងសំឡេង ហើយ <code>audioTimePitchAlgorithm = .spectral</code> រក្សា pitch ក្នុង preview។ លើ Android វាជា <code>SpeedProvider</code> ថេរលើ <code>EditedMediaItem</code>។</p>
+  <p data-l="en"><strong>Speed.</strong> The range is 0.1×–10× (the v1 spec's 0.5/1/1.5/2 was widened in v3). On iOS speed is applied with <code>scaleTimeRange</code> on both the video and the audio track, and <code>audioTimePitchAlgorithm = .spectral</code> keeps pitch in the preview. On Android it is a constant <code>SpeedProvider</code> on the <code>EditedMediaItem</code>.</p>
+
+  <h3 id="timeline-gestures"><span data-l="km">កាយវិការ៖ handle, ចុចយូរ, អូសចេញ</span><span data-l="en">Gestures: handles, long-press, drag out</span></h3>
+  <p data-l="km">spec កំណត់ពីរកាយវិការ។ ទី១ clip ដែលបានជ្រើសបង្ហាញ trim handle ពណ៌មាសទទឹង ~14 នៅគែមឆ្វេង និងស្តាំ។ ទី២ ចុចយូរ ~0.35 វិនាទីដើម្បីលើក clip (ពង្រីក 1.05 + haptic) អូសឆ្វេង/ស្តាំដើម្បីតម្រៀប ហើយអូសឡើងលើហួសចម្ងាយកំណត់ ហើយលែងដើម្បីលុប (មានសារ undo)។</p>
+  <p data-l="en">The spec defines two gestures. First, a selected clip shows gold trim handles about 14 wide on its left and right edges. Second, long-press for about 0.35 s to pick a clip up (scale 1.05 plus a haptic), drag left or right to reorder, and drag it up past a threshold and release to delete it (with an undo toast).</p>
+  <p data-l="km"><strong>iOS។</strong> Handle មានតំបន់ប៉ះទទឹង 26 pt ប៉ុន្តែមានតែបន្ទះនៅគែមប៉ុណ្ណោះដែលទទួលការប៉ះ ដូច្នេះការចុចលើតួ bar នៅតែជ្រើស clip ហើយ ScrollView ខាងក្រៅនៅតែ scroll បាន។ ការចុចយូរគឺ <code>LongPressGesture(minimumDuration: 0.35, maximumDistance: 12)</code> ដែល <code>.sequenced(before: DragGesture)</code> ដូច្នេះការអូសចាប់ផ្តើមតែក្រោយពេលចុចយូរជោគជ័យ ហើយមិនជាន់ការ scroll ឡើយ។ ការអូសឡើងលើ 50 pt ឬច្រើនជាងនេះ រួចលែង នឹងហៅ <code>removeClipByDrag</code> ដែលបង្ហាញ toast "Clip removed" ជាមួយប៊ូតុង Undo រយៈពេល 5 វិនាទី។</p>
+  <p data-l="en"><strong>iOS.</strong> A handle is a 26 pt wide hit area, but only that strip at the edge is hit-testable, so tapping the bar body still selects the clip and the surrounding ScrollView still scrolls. The long-press is a <code>LongPressGesture(minimumDuration: 0.35, maximumDistance: 12)</code> <code>.sequenced(before: DragGesture)</code>, so the drag only begins after the long-press succeeds and never fights scrolling. Dragging 50 pt or more upward and releasing calls <code>removeClipByDrag</code>, which shows a "Clip removed" toast with Undo for 5 seconds.</p>
+
+  <figure class="code"><figcaption><code>ios/Kamkut/Views/TimelineGestures.swift:64-67,72-91</code> <span data-l="km">iOS៖ ចុចយូរ រួចអូស។ ការអូសមិនចាប់ផ្តើមទេ លុះត្រាតែចុចយូរជោគជ័យ</span><span data-l="en">iOS: long-press, then drag. The drag never starts unless the long-press succeeded.</span></figcaption><pre><code class="lang-swift">struct LongPressDragReorder: ViewModifier {
+    var onLift: () -&gt; Void
+    var onChange: (CGSize) -&gt; Void
+    var onEnd: (CGSize) -&gt; Void
+// …
+func body(content: Content) -&gt; some View {
+    content.gesture(
+        LongPressGesture(minimumDuration: 0.35, maximumDistance: 12)
+            .sequenced(before: DragGesture(minimumDistance: 0, coordinateSpace: .global))
+            .onChanged { value in
+                guard case .second(true, let drag) = value else { return }
+                if !lifted {
+                    lifted = true
+                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                    onLift()
+                }
+                if let drag { last = drag.translation; onChange(drag.translation) }
+            }
+            .onEnded { _ in
+                let t = last
+                lifted = false; last = .zero
+                onEnd(t)
+            }
+    )
+}</code></pre></figure>
+  <figure class="code"><figcaption><code>ios/Kamkut/Views/MultiTrackTimeline.swift:583-593</code> <span data-l="km">iOS៖ ពេលលែង clip ត្រូវបានទម្លាក់ត្រង់ index គោលដៅ ឬត្រូវលុប</span><span data-l="en">iOS: on release the clip is either dropped at the target index or removed.</span></figcaption><pre><code class="lang-swift">        UISelectionFeedbackGenerator().selectionChanged()
+    }
+},
+onEnd: { t in
+    dragT = t
+    let ranges = model.clipTimelineRanges
+    let target = ranges.indices.contains(index) ? targetIndex(for: index, ranges: ranges, map: map) : index
+    let remove = t.height &lt; -50
+    withAnimation(.snappy(duration: 0.2)) {
+        if remove { model.removeClipByDrag(at: index) } else { model.moveClip(from: index, to: target) }
+        dragIndex = nil</code></pre></figure>
+
+  <p data-l="km"><strong>Android។</strong> ការចុចយូរប្រើ <code>detectDragGesturesAfterLongPress</code> ដែលទុកឱ្យ parent scroll ដោយសេរី រហូតដល់ការចុចយូរកើតឡើង។ Handle មានតំបន់ប៉ះទទឹង 28 dp (មើលឃើញ 14 dp) ដែលលាតចេញក្រៅបន្តិច ដើម្បីងាយចាប់។ ការអូសលុបប្រើ <code>DELETE_DRAG_DP = 60.dp</code> ហើយ trim ក៏ប្រើ <code>liveEdit</code> / <code>endLive</code> ដែរ។ មានភាពខុសគ្នាតូចមួយ៖ spec សរសេរ 60 ប៉ុន្តែ iOS ប្រើ 50 pt។</p>
+  <p data-l="en"><strong>Android.</strong> The long-press uses <code>detectDragGesturesAfterLongPress</code>, which leaves the parent's scrolling alone until the long-press fires. Handles have a 28 dp touch area (14 dp visible) that extends slightly outward so they are easy to grab. Drag-to-delete uses <code>DELETE_DRAG_DP = 60.dp</code>, and trims go through <code>liveEdit</code> / <code>endLive</code> too. One small discrepancy: the spec says 60, while iOS uses 50 pt.</p>
+
+  <figure class="code"><figcaption><code>android/app/src/main/java/com/kamkut/app/ui/TimelineGestures.kt:104-110,116-129</code> <span data-l="km">Android៖ កាយវិការដូចគ្នា ជា Modifier ដែលប្រើឡើងវិញបាន</span><span data-l="en">Android: the same gesture as a reusable Modifier.</span></figcaption><pre><code class="lang-kotlin">fun Modifier.longPressDrag(
+    key: Any?,
+    onLift: () -&gt; Unit,
+    onDrag: (dxPx: Float, dyPx: Float) -&gt; Unit,
+    onDrop: (totalDxPx: Float, totalDyPx: Float) -&gt; Unit,
+    onCancel: () -&gt; Unit = {},
+): Modifier = composed {
+// …
+    pointerInput(key) {
+        var tx = 0f
+        var ty = 0f
+        detectDragGesturesAfterLongPress(
+            onDragStart = { tx = 0f; ty = 0f; haptic.performHapticFeedback(HapticFeedbackType.LongPress); lift.value() },
+            onDragEnd = { drop.value(tx, ty) },
+            onDragCancel = { cancel.value() },
+        ) { change, d -&gt;
+            change.consume()
+            tx += d.x; ty += d.y
+            drag.value(d.x, d.y)
+        }
+    }
+}</code></pre></figure>
+  <figure class="code"><figcaption><code>android/app/src/main/java/com/kamkut/app/ui/MultiTrackTimeline.kt:333-337</code> <span data-l="km">Android៖ លែងលើសកម្រិតគឺលុប clip បើមិនដូច្នោះ កត់ត្រាការតម្រៀបជាជំហាន undo តែមួយ</span><span data-l="en">Android: dropping above the threshold deletes the clip, otherwise it commits the reorder as one undo step.</span></figcaption><pre><code class="lang-kotlin">onDrop = { _, totalDy -&gt;
+    draggingId = null
+    if (totalDy &lt; -deletePx) { vm.endLive(); vm.deleteClip(clip.id); onClipRemoved() } else vm.endLive()
+},
+onCancel = { draggingId = null; vm.endLive() },</code></pre></figure>
+
+  <p data-l="km">លើ iOS ការផ្គូផ្គងពេលវេលា↔ទីតាំង x ស្ថិតក្នុង <code>TimelineMap</code> ដែលជាលីនេអ៊ែរ (<code>x = វិនាទី × pxPerSecond</code>) ក្នុង v3 ព្រោះ clip ត្រួតគ្នាក្នុងពេលវេលា ដូច្នេះ track ទាំងអស់ (layer, text, audio, effect) ប្រើមាត្រដ្ឋានតែមួយ។ លើ Android timeline អាចពង្រីកដោយ <code>pinchZoom</code> ដែលឆ្លើយតបតែពេលមានពីរម្រាមដៃប៉ុណ្ណោះ។</p>
+  <p data-l="en">On iOS the time↔x mapping lives in <code>TimelineMap</code>, which is linear (<code>x = seconds × pxPerSecond</code>) in v3 because clips overlap in time, so every track (layers, text, audio, effects) shares one scale. On Android the timeline zooms with <code>pinchZoom</code>, a modifier that only reacts when two fingers are down.</p>
+</section>
+
+<section id="pipeline-ios" aria-labelledby="pipeline-ios-h">
+  <h2 id="pipeline-ios-h"><span data-l="km">Pipeline render លើ iOS</span><span data-l="en">The rendering pipeline on iOS</span> <a class="anchor" href="#pipeline-ios" aria-label="Link to this section">#</a></h2>
+
+  <p data-l="km">គំនិតកណ្តាលលើ iOS គឺ <code>CompositionBuilder.build</code> បម្លែង Project ទៅជា <code>AVMutableComposition</code> រួចភ្ជាប់ <code>AVVideoComposition</code> ដែលប្រើ compositor ផ្ទាល់ខ្លួន។ README ដើមរបស់ iOS ពណ៌នាអំពី handler របស់ Core Image ប៉ុន្តែកូដបច្ចុប្បន្នបានលើសពីនោះ៖ ឥឡូវនេះរាល់ frame ត្រូវបាន render ដោយ class <code>AVVideoCompositing</code> មួយ ដែល preview និង export ប្រើរួមគ្នា។</p>
+  <p data-l="en">The central idea on iOS: <code>CompositionBuilder.build</code> turns a Project into an <code>AVMutableComposition</code> and attaches an <code>AVVideoComposition</code> that uses a custom compositor. The original iOS README describes a Core Image handler, but the code has since grown past that: every frame is now rendered by one <code>AVVideoCompositing</code> class, shared by the preview and the exporter.</p>
+
+  <ol class="pipeline">
+    <li><span data-l="km">Clip មេឆ្លាស់គ្នារវាង track វីដេអូពីរ (A/B, <code>k = i % 2</code>) និង track សំឡេងពីរ ដើម្បីអាន clip ពីរក្នុងពេលតែមួយក្នុង transition</span><span data-l="en">Main clips alternate between two video tracks (A/B, <code>k = i % 2</code>) and two audio tracks, so two clips can be read at the same time during a transition.</span></li>
+    <li><span data-l="km">Speed = <code>scaleTimeRange</code>។ រូបថត និង freeze frame ប្រើវីដេអូខ្មៅ 1 វិនាទី (160×90, cache) ដែលត្រូវលាតសន្ធឹងទៅប្រវែង clip ដើម្បីផ្តល់ពេលវេលា ហើយ pixel មកពី CIImage</span><span data-l="en">Speed is <code>scaleTimeRange</code>. Photos and freeze frames use a cached 1-second black video (160×90) stretched to the clip's length as a timing source; the pixels come from a CIImage.</span></li>
+    <li><span data-l="km">Reverse ត្រូវបាន render ជាមុនទៅ <code>media/rev_&lt;clipId&gt;.mp4</code> (<code>ReverseRenderer</code>) ហើយ trim ត្រូវបានបកប្រែទៅកូអរដោនេរបស់ឯកសារដែលលេង</span><span data-l="en">Reverse is pre-rendered to <code>media/rev_&lt;clipId&gt;.mp4</code> (<code>ReverseRenderer</code>) and the trims are re-expressed in the played file's coordinates.</span></li>
+    <li><span data-l="km">វាបង្កើត <code>KamkutInstruction</code> មួយសម្រាប់ time slice នីមួយៗ៖ clip តែមួយ ឬ overlap រវាង clip ពីរជាមួយ transition id + progress</span><span data-l="en">It creates one <code>KamkutInstruction</code> per time slice: a single clip, or an overlap of two clips with a transition id and progress.</span></li>
+    <li><span data-l="km"><code>LayerCompositor</code> (<code>AVVideoCompositing</code>) render frame នីមួយៗតាមរយៈ <code>FramePipeline</code>៖ clip → transition → effects → layers → overlays (export)</span><span data-l="en"><code>LayerCompositor</code> (<code>AVVideoCompositing</code>) renders each frame through <code>FramePipeline</code>: clip, transition, effects, layers, then overlays (on export).</span></li>
+    <li><span data-l="km">លទ្ធផលជា BGRA <code>CVPixelBuffer</code> តាមរយៈ <code>CIContext</code> ក្នុង sRGB</span><span data-l="en">The result goes out as a BGRA <code>CVPixelBuffer</code> via a <code>CIContext</code> in sRGB.</span></li>
+  </ol>
+
+  <figure class="code"><figcaption><code>ios/Kamkut/Engine/CompositionBuilder.swift:73,232-242</code> <span data-l="km">iOS៖ ការជ្រើស track A/B និងរបៀបកាត់ instruction ជា clip តែមួយ និង overlap របស់ transition</span><span data-l="en">iOS: the A/B track choice, and how instructions are sliced into single clips and transition overlaps.</span></figcaption><pre><code class="lang-swift">let k = i % 2
+// …
+for i in segments.indices {
+    let isLast = i == segments.count - 1
+    let nextStart = isLast ? ranges[i].upperBound : ranges[i + 1].lowerBound
+    add(ct(prevEnd), isLast ? endT : ct(nextStart), .single(segments[i]))
+    if !isLast, overlaps[i] &gt; 0 {
+        add(ct(ranges[i + 1].lowerBound), ct(ranges[i].upperBound),
+            .transition(a: segments[i], b: segments[i + 1], id: Transitions.canonical(project.clips[i].transitionOut),
+                        start: Double(ranges[i + 1].lowerBound) / 1000, duration: Double(overlaps[i]) / 1000))
+    }
+    prevEnd = ranges[i].upperBound
+}</code></pre></figure>
+  <figure class="code"><figcaption><code>ios/Kamkut/Engine/LayerCompositor.swift:114-126</code> <span data-l="km">iOS៖ FramePipeline ជាអនុគមន៍តែមួយដែលបម្លែង instruction និង frame ប្រភពទៅជា frame ចុងក្រោយ</span><span data-l="en">iOS: FramePipeline, one function that turns the instruction and source frames into the final frame.</span></figcaption><pre><code class="lang-swift">var img: CIImage
+switch ins.slice {
+case .single(let seg):
+    img = ClipRenderer.render(seg: seg, snap: snap, ctx: ctx, time: t, frame: frame)
+case .transition(let a, let b, let id, let start, let dur):
+    let p = dur &gt; 0 ? min(max((t - start) / dur, 0), 1) : 1
+    let ia = ClipRenderer.render(seg: a, snap: snap, ctx: ctx, time: t, frame: frame)
+    let ib = ClipRenderer.render(seg: b, snap: snap, ctx: ctx, time: t, frame: frame)
+    img = TransitionRenderer.apply(id, a: ia, b: ib, progress: p, rect: rect, time: t)
+}
+if !snap.effects.isEmpty {
+    img = EffectsRenderer.apply(snap.effects, ms: ms, time: t, to: img, rect: rect)
+}</code></pre></figure>
+
+  <h3 id="ios-clip"><span data-l="km">Frame មួយរបស់ clip</span><span data-l="en">One clip frame</span></h3>
+  <p data-l="km"><code>ClipRenderer.render</code> បង្កើត frame ទំហំស្មើ canvas ដែលមិនថ្លា (opaque) តាមលំដាប់៖ source → crop → rotate/flip → fit ឬ fill → look (filter/adjust) → scale/offset/keyframes → ដាក់លើផ្ទៃខាងក្រោយ។ ផ្ទៃខាងក្រោយអាចជាពណ៌ខ្មៅ ពណ៌ណាមួយ រូបភាព ឬ blur (យក clip ខ្លួនឯង fill ពេញ canvas រួច Gaussian blur កាំប្រហែល 6% នៃទទឹង canvas គណនានៅទំហំមួយភាគបួន ហើយធ្វើឱ្យងងឹតបន្តិច)។ ពេល clip fill ពេញ canvas ដោយគ្មាន transform ការគូរផ្ទៃខាងក្រោយត្រូវបានរំលង។</p>
+  <p data-l="en"><code>ClipRenderer.render</code> builds a canvas-sized, opaque frame in this order: source, crop, rotate/flip, fit or fill, look (filter and adjust), scale / offset / keyframes, then over the background. The background is black, a colour, an image, or blur (the clip itself filled to the canvas, then Gaussian-blurred with a radius of about 6% of the canvas width, computed at quarter size and slightly darkened). When a clip fills the whole canvas untransformed, drawing the background is skipped.</p>
+
+  <h3 id="ios-metal"><span data-l="km">Metal CIKernel ផ្ទាល់ខ្លួន</span><span data-l="en">Custom Metal CIKernels</span></h3>
+  <p data-l="km">Filter ពណ៌ភាគច្រើនប្រើ Core Image ស្តង់ដារ (<code>CIPhotoEffectMono</code>, <code>CISepiaTone</code>, <code>CIVibrance</code> …)។ ប៉ុន្តែ Vignette និង VHS គឺជា kernel របស់ Metal ដែលសរសេរជា Metal Shading Language ហើយ compile នៅពេលដំណើរការជាមួយ <code>CIKernel.kernels(withMetalString:)</code> ពី string ក្នុង <code>Filters.swift</code> (មិនមែនឯកសារ <code>.metal</code> ក្នុង bundle ទេ)។ ពួកវាជា kernel ប្រភេទ <code>[[stitchable]]</code>។</p>
+  <p data-l="en">Most colour looks use stock Core Image filters (<code>CIPhotoEffectMono</code>, <code>CISepiaTone</code>, <code>CIVibrance</code> and so on). Vignette and VHS, however, are Metal kernels written in the Metal Shading Language and compiled at run time with <code>CIKernel.kernels(withMetalString:)</code> from a string inside <code>Filters.swift</code> (not a <code>.metal</code> file in the bundle). They are <code>[[stitchable]]</code> kernels.</p>
+
+  <figure class="code"><figcaption><code>ios/Kamkut/Engine/Filters.swift:178-184</code> <span data-l="km">Kernel vignette៖ ធ្វើឱ្យងងឹតឆ្ពោះទៅគែម ដោយ smoothstep</span><span data-l="en">The vignette kernel: darken towards the edges with a smoothstep falloff.</span></figcaption><pre><code class="lang-metal">// Darkens the frame towards the edges.
+[[stitchable]] float4 kamkutVignette(coreimage::sample_t s, float2 center, float radius, float strength,
+                                     coreimage::destination dest) {
+    float d = distance(dest.coord(), center) / radius;
+    float v = 1.0 - strength * smoothstep(0.35, 1.15, d);
+    return float4(s.rgb * v, s.a);
+}</code></pre></figure>
+  <figure class="code"><figcaption><code>ios/Kamkut/Engine/Filters.swift:186-198</code> <span data-l="km">Kernel VHS៖ បំបែក RGB រលក scanline និង grain មានចលនា ក្នុង pass តែមួយ</span><span data-l="en">The VHS kernel: wobbling RGB split, scanlines and animated grain, in one pass.</span></figcaption><pre><code class="lang-metal">// Retro VHS look: RGB channel split, scanlines and animated grain.
+[[stitchable]] float4 kamkutVHS(coreimage::sampler src, float time, float shift, coreimage::destination dest) {
+    float2 c = dest.coord();
+    float wobble = shift * (1.0 + 0.5 * sin(time * 3.0 + c.y * 0.02));
+    float r = src.sample(src.transform(c + float2(wobble, 0.0))).r;
+    float4 g = src.sample(src.transform(c));
+    float b = src.sample(src.transform(c - float2(wobble, 0.0))).b;
+    float scan = 0.88 + 0.12 * sin(c.y * 3.14159);
+    float n = fract(sin(dot(c + float2(time * 61.0, time * 17.0), float2(12.9898, 78.233))) * 43758.5453);
+    float3 col = float3(r, g.g, b) * scan + (n - 0.5) * 0.07;
+    col = mix(col, col * float3(1.05, 0.98, 1.08), 0.5);
+    return float4(clamp(col, 0.0, 1.0), g.a);
+}</code></pre></figure>
+
+  <p data-l="km">kernel ត្រូវបានជ្រើសម្តងគត់នៅពេលចាប់ផ្តើម។ នៅលើ Simulator, នៅលើឧបករណ៍ដែល Metal មិនគាំទ្រ dynamic library, ឬបើការ compile បរាជ័យ កម្មវិធីប្រើច្រវាក់ filter របស់ Core Image ដែលស្មើគ្នាជំនួស (gradient រង្វង់គុណនឹងរូបភាព សម្រាប់ vignette និង <code>CIColorMatrix</code> + <code>CIStripesGenerator</code> + <code>CIRandomGenerator</code> សម្រាប់ VHS)។ កូដកត់ហេតុផលទុកថា Simulator "accepts the source but renders a pass-through" (ទទួលកូដ ប៉ុន្តែ render ដោយមិនប្តូរអ្វីសោះ)។</p>
+  <p data-l="en">The kernels are chosen once at startup. On the Simulator, on a device whose Metal lacks dynamic-library support, or if compilation fails, the app uses equivalent stock Core Image chains (a radial-gradient multiply for the vignette; <code>CIColorMatrix</code> plus <code>CIStripesGenerator</code> plus <code>CIRandomGenerator</code> for VHS). The code records the reason: the Simulator "accepts the source but renders a pass-through".</p>
+
+  <figure class="code"><figcaption><code>ios/Kamkut/Engine/Filters.swift:202-220</code> <span data-l="km">iOS៖ compile kernel ម្តងគត់ ឬធ្លាក់ទៅ filter របស់ Core Image</span><span data-l="en">iOS: compile the kernels once, or fall back to Core Image filters.</span></figcaption><pre><code class="lang-swift">private static let metalKernels: (vignette: CIKernel, vhs: CIKernel)? = {
+    #if targetEnvironment(simulator)
+    print("[Filters] Vignette/VHS: using Core Image filter fallback (simulator)")
+    return nil
+    #else
+    guard MTLCreateSystemDefaultDevice()?.supportsDynamicLibraries == true else {
+        print("[Filters] Vignette/VHS: using Core Image filter fallback (no dynamic library support)")
+        return nil
+    }
+    guard let list = try? CIKernel.kernels(withMetalString: metalSource),
+          let v = list.first(where: { $0.name == "kamkutVignette" }),
+          let h = list.first(where: { $0.name == "kamkutVHS" }) else {
+        print("[Filters] Vignette/VHS: using Core Image filter fallback (Metal kernel compile failed)")
+        return nil
+    }
+    print("[Filters] Vignette/VHS: using custom Metal kernels")
+    return (v, h)
+    #endif
+}()</code></pre></figure>
+
+  <p data-l="km">ការកែសម្រួលពណ៌ (<code>adjust</code>) ក៏ជាច្រវាក់ Core Image ដែរ៖ exposure, highlights/shadows, temperature/tint, hue, fade, sharpen, vignette និង grain (noise ចៃដន្យ soft-light blend ផ្លាស់ប្តូរមួយ frame ម្តង)។ <code>filterIntensity</code> លាយ frame ដែលបាន filter ពីលើដើមតាមអាល់ហ្វា។</p>
+  <p data-l="en">Colour adjustments (<code>adjust</code>) are Core Image chains as well: exposure, highlights/shadows, temperature/tint, hue, fade, sharpen, vignette and grain (random noise soft-light blended, different every frame). <code>filterIntensity</code> mixes the filtered frame over the original by alpha.</p>
+
+  <h3 id="ios-transitions"><span data-l="km">Transition</span><span data-l="en">Transitions</span></h3>
+  <p data-l="km">មាន transition ពិតចំនួន 22 (បូក <code>none</code>)។ <code>TransitionRenderer.apply</code> ទទួល frame A និង B ទំហំ canvas ព្រមទាំង progress <code>p</code> ពី 0 ដល់ 1 ដែលត្រូវបានធ្វើឱ្យរលូនដោយ smoothstep (លើកលែង <code>glitch</code> និង <code>pixelate</code> ដែលនៅជាលីនេអ៊ែរ)។ ឧទាហរណ៍៖ slide រំកិល B ពីលើ A ដែលនៅស្ងៀម; wipe ប្រើ gradient ជា mask ជាមួយ <code>CIBlendWithMask</code> (feather 2%); iris ប្រើ radial gradient; <code>wipeClock</code> គូរ mask ជាមុំ; <code>whipLeft/Right</code> គឺ push បូក <code>CIMotionBlur</code>។ Glitch ប្រើ RNG ដែលកំណត់ seed (<code>SeededRNG</code>) ដូច្នេះ frame ដដែលចេញលទ្ធផលដដែលទាំងក្នុង preview និង export។</p>
+  <p data-l="en">There are 22 real transitions (plus <code>none</code>). <code>TransitionRenderer.apply</code> takes the canvas-sized frames A and B and a progress <code>p</code> from 0 to 1, eased with smoothstep (except <code>glitch</code> and <code>pixelate</code>, which stay linear). For example: slides move B over a static A; wipes use a gradient as a mask with <code>CIBlendWithMask</code> (with a 2% feather); iris uses a radial gradient; <code>wipeClock</code> draws an angular mask; <code>whipLeft/Right</code> is a push plus <code>CIMotionBlur</code>. Glitch uses a seeded RNG (<code>SeededRNG</code>) so the same frame renders identically in preview and export.</p>
+
+  <figure class="code"><figcaption><code>ios/Kamkut/Engine/Transitions.swift:97-99,105-117</code> <span data-l="km">iOS៖ transition ខ្លះ។ wipe និង iris ជា mask; zoomIn ពង្រីក A ចេញ ខណៈ B ស្ងប់</span><span data-l="en">iOS: a few transitions. Wipes and iris are masks; zoomIn scales A out while B settles.</span></figcaption><pre><code class="lang-swift">case "wipeLeft":
+    let edge = (1 - p) * (W + 2 * feather) - feather
+    out = mask(gradient(CGPoint(x: edge - feather / 2, y: 0), CGPoint(x: edge + feather / 2, y: 0)))
+// …
+case "iris":
+    let diag = hypot(W, H)
+    let r = p * (diag / 2 + feather)
+    let m = CIFilter(name: "CIRadialGradient", parameters: [
+        "inputCenter": CIVector(x: rect.midX, y: rect.midY),
+        "inputRadius0": max(r - feather, 0), "inputRadius1": max(r, 0.5),
+        "inputColor0": CIColor(red: 1, green: 1, blue: 1, alpha: 1), "inputColor1": CIColor(red: 0, green: 0, blue: 0, alpha: 1),
+    ])!.outputImage!
+    out = mask(m)
+case "zoomIn":
+    out = over(alpha(zoom(a, 1 + 0.6 * p), 1 - p), zoom(b, 1.6 - 0.6 * p))
+case "zoomOut":
+    out = over(alpha(zoom(a, 1 - 0.4 * p), 1 - p), zoom(b, 1.4 - 0.4 * p))</code></pre></figure>
+
+  <p data-l="km">transition ចាស់ <code>fade</code>, <code>flash</code> និង <code>zoom</code> ត្រូវបាន map ពេល decode ទៅ <code>dissolve</code>, <code>dipWhite</code> និង <code>zoomIn</code> ដូចដែល <code>Transitions.canonical</code> ធ្វើ។ ដូច្នេះគម្រោងចាស់នៅតែដំណើរការ។</p>
+  <p data-l="en">The legacy ids <code>fade</code>, <code>flash</code> and <code>zoom</code> are mapped on decode to <code>dissolve</code>, <code>dipWhite</code> and <code>zoomIn</code> by <code>Transitions.canonical</code>, so old projects keep working.</p>
+
+  <h3 id="ios-layers"><span data-l="km">Effects, layers (PiP) និង text</span><span data-l="en">Effects, layers (PiP) and text</span></h3>
+  <p data-l="km"><strong>Effects។</strong> ផ្លូវ effects មាន 16 ប្រភេទ (shake, zoomPulse, rgbSplit, glitch, blur, filmGrain, vhs, strobe, mirror, kaleido, vignettePulse, sepiaFade, invertFlash, letterbox, lightLeak, retro) ហើយត្រូវបានអនុវត្តលើ output របស់ track មេ នៅក្រោម layer និងអត្ថបទ។ <strong>Layers។</strong> វីដេអូ layer នីមួយៗមាន composition track ផ្ទាល់ខ្លួន ឯរូបភាព layer ជា <code>CIImage</code>។ <code>place()</code> អនុវត្តតាមលំដាប់៖ chroma key → scale → mask/ជ្រុងមូល → បង្វិល/ទីតាំង → opacity ហើយ blend ដោយ blend filter របស់ Core Image ដូច្នេះ blend mode (multiply, screen, overlay, darken, lighten, add, softLight) ជា blend ពិតប្រាកដ។ Chroma key ប្រើ <code>CIColorCube</code> 48³ ដែលបង្កើតពីចម្ងាយ Cb/Cr ជាមួយការទប់ស្កាត់ពណ៌លេចធ្លាយ (spill)។ <strong>អត្ថបទ។</strong> ត្រូវបានពន្យល់នៅផ្នែកក្រោយ។</p>
+  <p data-l="en"><strong>Effects.</strong> The effects track has 16 kinds (shake, zoomPulse, rgbSplit, glitch, blur, filmGrain, vhs, strobe, mirror, kaleido, vignettePulse, sepiaFade, invertFlash, letterbox, lightLeak, retro) and is applied to the main track's output, under layers and text. <strong>Layers.</strong> Each video layer gets its own composition track, while image layers are <code>CIImage</code>s. <code>place()</code> applies, in order: chroma key, scale, mask / rounded corners, rotation and position, opacity; layers are blended with Core Image blend filters, so the blend modes (multiply, screen, overlay, darken, lighten, add, softLight) are true blends. The chroma key is a generated 48³ <code>CIColorCube</code> built from Cb/Cr distance with light spill suppression. <strong>Text.</strong> Covered in its own section below.</p>
+
+  <h3 id="ios-match"><span data-l="km">របៀបដែល preview ស្របនឹង export</span><span data-l="en">How the preview matches the export</span></h3>
+  <p data-l="km">ទាំង preview និង export ហៅ <code>CompositionBuilder.build</code> ដូចគ្នា ហើយប្រើ <code>LayerCompositor</code> ដូចគ្នា ដូច្នេះ filter, transition, effect, layer, speed និង audio ដើរកូដតែមួយ។ ភាពខុសគ្នាមានតែបីប៉ុណ្ណោះ៖ (1) preview កសាងនៅទំហំចំហៀងខ្លី 720 ឯ export ប្រើការជ្រើសរបស់អ្នក, (2) preview មិនដាក់ overlay អត្ថបទក្នុង compositor (<code>includeOverlays: false</code>) ទេ ដោយ SwiftUI គូរវាដើម្បីឱ្យអូសបាន ដោយប្រើ <code>OverlayRenderer.raster</code> ដូចគ្នានឹង export ហើយ (3) export កំណត់ frame rate ដែលបានជ្រើស។</p>
+  <p data-l="en">Both the preview and the export call the same <code>CompositionBuilder.build</code> and use the same <code>LayerCompositor</code>, so filters, transitions, effects, layers, speed and audio run the same code. There are only three differences: (1) the preview builds at a 720 short side while export uses your choice, (2) the preview leaves text overlays out of the compositor (<code>includeOverlays: false</code>) and SwiftUI draws them so they can be dragged, using the very same <code>OverlayRenderer.raster</code> that export uses, and (3) export sets the chosen frame rate.</p>
+  <p data-l="km">ដើម្បីឱ្យការកែប្រែមានអារម្មណ៍រហ័ស មិនមែនគ្រប់ការកែប្រែទាំងអស់ទាមទារ rebuild ទេ។ <code>v3NeedsRebuild</code> ឆ្លើយ "បាទ" សម្រាប់ audio, aspect ratio, ឬរចនាសម្ព័ន្ធ clip/layer (rebuild ត្រូវបាន debounce 0.25 វិនាទី)។ ការផ្លាស់ប្តូរ filter, transform, effect និងផ្ទៃខាងក្រោយ (<code>v3LiveChanged</code>) ត្រូវបានរុញចូល <code>RenderContext</code> ដែលការពារដោយ <code>NSLock</code> ដូច្នេះ frame បន្ទាប់ប្រើតម្លៃថ្មី ដោយមិនបង្កើត composition ឡើងវិញ។ ការបោះបង់សំណើ render ដែលហួសសម័យប្រើ "generation counter" ក្នុង compositor។</p>
+  <p data-l="en">To keep edits feeling instant, not every edit needs a rebuild. <code>v3NeedsRebuild</code> answers yes for audio, aspect ratio, or clip/layer structure (rebuilds are debounced by 0.25 s). Changes to looks, transforms, effects and the background (<code>v3LiveChanged</code>) are pushed into a <code>RenderContext</code> guarded by an <code>NSLock</code>, so the next frame uses the new values without building a new composition. Stale render requests are cancelled with a generation counter in the compositor.</p>
+
+  <figure class="code"><figcaption><code>ios/Kamkut/Engine/LayerCompositor.swift:217-236</code> <span data-l="km">iOS៖ compositor។ សំណើហួសសម័យត្រូវបានបោះបង់ដោយប្រៀបធៀប generation counter</span><span data-l="en">iOS: the compositor. Stale requests are cancelled by comparing a generation counter.</span></figcaption><pre><code class="lang-swift">func startRequest(_ request: AVAsynchronousVideoCompositionRequest) {
+    flagLock.lock(); let gen = generation; flagLock.unlock()
+    queue.async { [self] in
+        flagLock.lock(); let stale = gen != generation; flagLock.unlock()
+        if stale { request.finishCancelledRequest(); return }
+        guard let ins = request.videoCompositionInstruction as? KamkutInstruction,
+              let out = request.renderContext.newPixelBuffer() else {
+            request.finish(with: NSError(domain: "kamkut", code: 1))
+            return
+        }
+        let image = autoreleasepool { () -&gt; CIImage in
+            FramePipeline.render(instruction: ins, time: request.compositionTime) { id in
+                request.sourceFrame(byTrackID: id).map { CIImage(cvPixelBuffer: $0) }
+            }
+        }
+        Self.ciContext.render(image, to: out, bounds: CGRect(origin: .zero, size: ins.renderSize),
+                              colorSpace: CGColorSpace(name: CGColorSpace.sRGB))
+        request.finish(withComposedVideoFrame: out)
+    }
+}</code></pre></figure>
+</section>
+
+<section id="pipeline-android" aria-labelledby="pipeline-android-h">
+  <h2 id="pipeline-android-h"><span data-l="km">Pipeline render លើ Android</span><span data-l="en">The rendering pipeline on Android</span> <a class="anchor" href="#pipeline-android" aria-label="Link to this section">#</a></h2>
+
+  <p data-l="km">Android ប្រើគំរូខុសគ្នា។ <code>CompositionBuilder.build</code> បម្លែង Project ទៅជា <code>Composition</code> របស់ Media3 (សំណុំនៃ <code>EditedMediaItemSequence</code>)។ item នីមួយៗមាន <code>Effects(audio processors, video effects)</code> ហើយទាំង Transformer (export) និង <code>CompositionPlayer</code> (preview) អាន composition តែមួយនោះ។ ការងាររូបភាពភាគច្រើនគឺ GLSL។</p>
+  <p data-l="en">Android uses a different model. <code>CompositionBuilder.build</code> turns a Project into a Media3 <code>Composition</code> (a set of <code>EditedMediaItemSequence</code>s). Each item carries <code>Effects(audio processors, video effects)</code>, and both the Media3 Transformer (export) and <code>CompositionPlayer</code> (preview) read that same composition. Most of the visual work is GLSL.</p>
+
+  <ol class="pipeline">
+    <li><span data-l="km">Track មេគឺ sequence តែមួយ។ clip នីមួយៗក្លាយជា <code>EditedMediaItem</code> ដែលមាន clipping (trim) និងល្បឿន (<code>SpeedProvider</code> ថេរ)</span><span data-l="en">The main track is one sequence. Each clip becomes an <code>EditedMediaItem</code> with clipping (the trim) and a speed (a constant <code>SpeedProvider</code>).</span></li>
+    <li><span data-l="km">video effects ក្នុង item = <code>ClipShader</code> ជា GLSL pass តែមួយ (crop → rotate → flip → fit/fill → scale/offset/keyframes → ផ្ទៃខាងក្រោយ → filter → brightness/contrast/saturation → adjust) បន្ទាប់មក lane នៃ effects track</span><span data-l="en">The item's video effects are <code>ClipShader</code>, a single GLSL pass (crop, rotate, flip, fit/fill, scale/offset/keyframes, background, filter, brightness/contrast/saturation, adjust), followed by the lanes of the effects track.</span></li>
+    <li><span data-l="km">Transition overlap ត្រូវបាន render ជាមុនម្តងក្នុងមួយចំណុចកាត់ទៅជា MP4 តូចមួយ ("T segment") ហើយ sequence លេង A-body, T, B-body</span><span data-l="en">Each overlap transition is pre-rendered once per cut into a small cached MP4 (a "T segment"), and the sequence plays A-body, T, B-body.</span></li>
+    <li><span data-l="km">ភ្លេង សំឡេងរៀបរាប់ sfx និង tts នីមួយៗមាន sequence ផ្ទាល់ខ្លួន (មានគម្លាតនៅខាងមុខ)</span><span data-l="en">Music, voiceovers, sfx and tts each get their own sequence (with a leading gap).</span></li>
+    <li><span data-l="km">Layer ជា sequence វីដេអូ ដែលអាចមាន <code>LayerShader</code> (ជ្រុងមូល mask chroma key blend) ហើយ <code>VideoCompositorSettings</code> កំណត់ទីតាំង ទំហំ បង្វិល និងអាល់ហ្វា</span><span data-l="en">Layers are video sequences with a <code>LayerShader</code> (rounded corners, mask, chroma key, blend) and <code>VideoCompositorSettings</code> that set position, scale, rotation and alpha.</span></li>
+    <li><span data-l="km">នៅកម្រិត composition៖ <code>OverlayEffect</code> បង្កប់អត្ថបទ (export ប៉ុណ្ណោះ) ហើយ <code>FrameDropEffect</code> ពេល fps ក្រោម 30</span><span data-l="en">At composition level: an <code>OverlayEffect</code> burns in the text (export only), and a <code>FrameDropEffect</code> is added when fps is below 30.</span></li>
+  </ol>
+
+  <h3 id="android-shaders"><span data-l="km">GLSL shader</span><span data-l="en">GLSL shaders</span></h3>
+  <p data-l="km">កូដ shader របស់ Android ជា GLSL ES 1.00 (<code>texture2D</code>, <code>gl_FragColor</code>, <code>varying</code>) ដែលភ្ជាប់ទៅ <code>GlEffect</code> របស់ Media3 តាមរយៈ <code>GlslEffect</code> ដែលជា wrapper ទូទៅមួយ។ shader ទទួលបាន <code>uTexSampler</code> (frame ចូល) ព្រមទាំង <code>uSrcSize</code>, <code>uOutSize</code>, <code>uTime</code> និងអ្វីៗដែល callback កំណត់ក្នុងមួយ frame។ <code>outSize</code> អនុញ្ញាតឱ្យ shader ប្តូរទំហំ frame ដែល <code>ClipShader</code> ប្រើដើម្បី render ជាទំហំ canvas ពេញ។</p>
+  <p data-l="en">Android's shader code is GLSL ES 1.00 (<code>texture2D</code>, <code>gl_FragColor</code>, <code>varying</code>) plugged into Media3's <code>GlEffect</code> through <code>GlslEffect</code>, one general-purpose wrapper. A shader gets <code>uTexSampler</code> (the input frame) plus <code>uSrcSize</code>, <code>uOutSize</code>, <code>uTime</code> and whatever a per-frame callback sets. <code>outSize</code> lets a shader change the frame size, which <code>ClipShader</code> uses to render at full canvas size.</p>
+
+  <figure class="code"><figcaption><code>android/app/src/main/java/com/kamkut/app/engine/GlslEffect.kt:24-32</code> <span data-l="km">Android៖ wrapper មួយបម្លែង fragment shader ណាក៏បានទៅជា GlEffect របស់ Media3</span><span data-l="en">Android: one wrapper turns any fragment shader into a Media3 GlEffect.</span></figcaption><pre><code class="lang-kotlin">class GlslEffect(
+    private val fragment: String,
+    private val outSize: ((Int, Int) -&gt; Size)? = null,
+    private val aux: (() -&gt; Bitmap?)? = null,
+    private val uniforms: UniformSetter = UniformSetter { _, _, _, _, _, _ -&gt; },
+) : GlEffect {
+    override fun toGlShaderProgram(context: Context, useHdr: Boolean): GlShaderProgram =
+        GlslProgram(fragment, outSize, aux, uniforms, useHdr)
+}</code></pre></figure>
+
+  <p data-l="km">filter ទាំងអស់ដំណើរការក្នុង fragment shader តែមួយ (<code>ClipShader</code>) ដែលជ្រើស filter តាម uniform <code>uFilter</code> (0..9)។ ខាងក្រោមជាផ្នែក VHS៖ <code>vhsColor</code> ធ្វើ chromatic aberration ជាមួយរលក tracking ហើយសាខា filter ចុងក្រោយបន្ថែម scanline និង grain។ Vignette គឺសាខា <code>k &lt; 8.5</code> ដែលប្រើ <code>smoothstep(0.85, 0.25, length(pp))</code>។ សូមចំណាំថា <code>Shaders.kt</code> (<code>ShaderEffect.VIGNETTE</code> / <code>VHS</code>) នៅតែមានក្នុង source ប៉ុន្តែគ្មានអ្វីហៅវាទៀតទេ ព្រោះ <code>ClipShader</code> ជំនួសវា។</p>
+  <p data-l="en">All the filters run in a single fragment shader (<code>ClipShader</code>) that picks the filter with a <code>uFilter</code> uniform (0..9). Below is the VHS part: <code>vhsColor</code> does a chromatic aberration with a wobble, and the last filter branch adds scanlines and grain. The vignette is the <code>k &lt; 8.5</code> branch, using <code>smoothstep(0.85, 0.25, length(pp))</code>. Note that <code>Shaders.kt</code> (<code>ShaderEffect.VIGNETTE</code> / <code>VHS</code>) still exists in the source but nothing calls it any more, since <code>ClipShader</code> superseded it.</p>
+
+  <figure class="code"><figcaption><code>android/app/src/main/java/com/kamkut/app/engine/ClipShader.kt:55-59,140-149</code> <span data-l="km">Android៖ look VHS ក្នុង ClipShader (ទីតាំងឆានែលពណ៌ជាមួយរលក; scanline និង grain)</span><span data-l="en">Android: the VHS look inside ClipShader (colour-channel offset with a tracking wobble; scanlines and grain).</span></figcaption><pre><code class="lang-glsl">vec3 vhsColor(vec2 cuv) {
+  vec2 uv = cuv;
+  uv.x += sin(uv.y * 40.0 + uTime * 6.0) * 0.0015;
+  return vec3(contentColor(uv + vec2(0.004, 0.0)).r, contentColor(uv).g, contentColor(uv - vec2(0.004, 0.0)).b);
+}
+// …
+else if (k &lt; 8.5) {
+  vec2 pp = v - 0.5; pp.x *= uOutSize.x / uOutSize.y;
+  f = col * mix(0.25, 1.05, smoothstep(0.85, 0.25, length(pp)));
+} else {
+  float scan = 0.88 + 0.12 * sin(v.y * uOutSize.y * 1.5);
+  float grain = (rand(v * uOutSize + uTime) - 0.5) * 0.08;
+  f = col * scan + grain;
+  f = mix(f, vec3(lum(f)), 0.15);
+}
+col = mix(col, f, uFilterMix);</code></pre></figure>
+
+  <h3 id="android-transitions"><span data-l="km">Transition៖ T segment ដែល render ជាមុន</span><span data-l="en">Transitions: pre-rendered T segments</span></h3>
+  <p data-l="km">Media3 ចាត់ទុក sequence នីមួយៗជាអង្គភាពឯករាជ្យ ដូច្នេះ overlap នៃ clip ពីរក្នុងពេលតែមួយត្រូវការ composition តូចមួយផ្ទាល់ខ្លួន។ <code>TransitionRenderer</code> សាងសង់ composition ពីរ input (B នៅលើ A) ដោយមាន shader មួយសម្រាប់ម្ខាងៗ ហើយ export វាទៅ <code>cacheDir/trans/T_&lt;hash&gt;.mp4</code>។ key គឺ hash SHA-1 (កាត់ខ្លី) នៃ clip ទាំងពីរ ទំហំ ផ្ទៃខាងក្រោយ និងហត្ថលេខាឯកសារ (ឈ្មោះ:ទំហំ:ម៉ោងកែ)។ បន្ទាប់មកវាសម្អាត T file ចាស់ៗ ដោយរក្សា 40 ថ្មីបំផុត។ ក្នុង shader ទាំងនោះ slide និង push ត្រូវបានធ្វើដោយ overlay settings របស់ compositor (ទីតាំង) ឯអ្វីផ្សេងទៀតធ្វើដោយ shader ដែលសរសេរទាំងពណ៌ និងអាល់ហ្វា (អាល់ហ្វារបស់ B ធ្វើឱ្យ wipe ក្លាយជា wipe ពិតប្រាកដ)។</p>
+  <p data-l="en">Media3 treats each sequence as an independent stage, so an overlap of two clips at the same moment needs a small composition of its own. <code>TransitionRenderer</code> builds a two-input composition (B on top of A) with one shader per side and exports it to <code>cacheDir/trans/T_&lt;hash&gt;.mp4</code>. The key is a truncated SHA-1 hash over both clips, the size, the background and file signatures (name:size:modified time). Afterwards it prunes old T files, keeping the newest 40. Among those shaders, slides and pushes are done with the compositor's overlay settings (position), and everything else with a shader that writes colour plus alpha (B's alpha is what makes a wipe a real wipe).</p>
+
+  <figure class="code"><figcaption><code>android/app/src/main/java/com/kamkut/app/engine/TransitionRenderer.kt:85-99</code> <span data-l="km">Android៖ ពាក់កណ្តាលទាំងពីរនៃចំណុចកាត់ត្រូវបាន render ជាមួយ ramp សំឡេង equal-power និង shader transition ក្នុងមួយ side</span><span data-l="en">Android: the two halves of a cut are rendered with equal-power audio ramps and a per-side transition shader.</span></figcaption><pre><code class="lang-kotlin">val itemA = CompositionBuilder.segment(
+    ctx, a, dA - d, dA, 0, ramp = { t -&gt; AudioDsp.equalPowerOut((t - (dA - d)) / d) },
+    extra = listOf(Transitions.sideEffect(id, 0, d * 1000)), force = true, withFx = false,
+)!!
+val itemB = CompositionBuilder.segment(
+    ctx, b, 0, d, 0, ramp = { t -&gt; AudioDsp.equalPowerIn(t / d) },
+    extra = listOf(Transitions.sideEffect(id, 1, d * 1000)), force = true, withFx = false,
+)!!
+// Compositor paints input 0 last (on top): B on top of A.
+return Composition.Builder(
+    listOf(
+        EditedMediaItemSequence.Builder(itemB).experimentalSetForceAudioTrack(true).build(),
+        EditedMediaItemSequence.Builder(itemA).experimentalSetForceAudioTrack(true).build(),
+    )
+).setVideoCompositorSettings(TransitionCompositorSettings(id, d * 1000, w, h)).build()</code></pre></figure>
+  <figure class="code"><figcaption><code>android/app/src/main/java/com/kamkut/app/engine/Transitions.kt:80-100</code> <span data-l="km">Android៖ dissolve, dip និង wipe ក្នុង fragment shader របស់ transition</span><span data-l="en">Android: dissolve, dips and wipes in the transition fragment shader.</span></figcaption><pre><code class="lang-glsl">if (t &lt; 1.5) {            // dissolve
+  if (B) a = e;
+} else if (t &lt; 3.5) {     // dips
+  vec3 dip = t &lt; 2.5 ? vec3(0.0) : vec3(1.0);
+  float k = B ? clamp(2.0 * p - 1.0, 0.0, 1.0) : clamp(1.0 - 2.0 * p, 0.0, 1.0);
+  k = k * k * (3.0 - 2.0 * k);
+  c.rgb = mix(dip, c.rgb, k);
+  if (B) a = p &gt;= 0.5 ? 1.0 : 0.0;
+} else if (t &lt; 4.5) {     // slide / push: placement only
+} else if (t &lt; 7.5) {     // wipes
+  if (B) {
+    float E = mix(-0.02, 1.02, e);
+    if (t &lt; 5.5) a = smoothstep(-0.01, 0.01, uv.x - (1.0 - E));
+    else if (t &lt; 6.5) a = smoothstep(-0.01, 0.01, E - uv.x);
+    else {
+      vec2 d = (uv - 0.5) * uOutSize;
+      float th = atan(d.x, d.y);
+      if (th &lt; 0.0) th += 6.2831853;
+      a = smoothstep(E + 0.006, E - 0.006, th / 6.2831853);
+    }
+  }</code></pre></figure>
+
+  <p data-l="km">ឥទ្ធិពលដែលអ្នកប្រើអាចសង្កេតឃើញ៖ ពេលអ្នកប្តូរ transition preview បង្ហាញការកាត់ស្រួតត្រង់ទីតាំងដដែល រហូតដល់ T segment ត្រូវបាន render រួច ហើយបន្ទាប់មកប្តូរទៅ transition ពិតដោយស្វ័យប្រវត្តិ។ ស្ថានភាពនេះត្រូវបានបង្ហាញដោយ <code>PreviewController.renderingTransitions</code> ជាមួយ progress ហើយចំណុចកាត់ដែលនៅជិត playhead បំផុតត្រូវបាន render មុន។ ពេល export ជំហាននេះប្រើ 20% ដំបូងនៃ progress។</p>
+  <p data-l="en">A user-visible consequence: when you change a transition the preview shows a hard cut at the same position until the T segment has been rendered, then swaps in the real transition automatically. That state is exposed as <code>PreviewController.renderingTransitions</code> with progress, and the cut nearest the playhead renders first. On export this step accounts for the first 20% of the progress bar.</p>
+
+  <h3 id="android-fx"><span data-l="km">Effects, layers, overlay</span><span data-l="en">Effects, layers and overlays</span></h3>
+  <p data-l="km"><strong>Effects។</strong> ទាំង 16 ប្រភេទជាសាខានៃ fragment shader តែមួយ <code>FxEffects</code> ដែលជ្រើសដោយ <code>uKind</code>។ Effect ដែលត្រួតគ្នាក្នុងពេលវេលាត្រូវបានដាក់ទៅ "lane" ផ្សេងគ្នា (មួយ pass ក្នុងមួយ lane) ដោយក្បួន interval-scheduling ខ្លី។ <strong>Layers។</strong> sequence របស់ layer ត្រូវបានរៀបតាមលំដាប់ដូចដែល compositor របស់ Media3 គូរ input 0 ចុងក្រោយ (នៅលើបំផុត) ដូច្នេះ layer លើបំផុតគឺ input 0 ហើយ track មេជា input ខ្ពស់បំផុត។ ដើម្បីឱ្យ sequence ដែលចាប់ផ្តើមក្រោយអាចត្រូវបាន composite កូដបំពេញគម្លាតដោយបំណែក mute នៃវីដេអូ layer ខ្លួនឯង ហើយ <code>LayerCompositorSettings</code> លាក់វាដោយ alpha 0 នៅខាងក្រៅ <code>[startMs, endMs)</code>។ <strong>Overlay អត្ថបទ។</strong> <code>ProjectOverlay</code> ជា <code>BitmapOverlay</code> មួយគូររាល់ overlay សកម្មលើ bitmap ទំហំ frame ដោយប្រើ <code>TextRenderer</code> ដូចគ្នានឹង preview ហើយ re-render តែនៅពេលរូបអាចផ្លាស់ប្តូរ (ជំនួសគ្នារវាង bitmap ពីរ)។</p>
+  <p data-l="en"><strong>Effects.</strong> All 16 kinds are branches of one fragment shader, <code>FxEffects</code>, selected by <code>uKind</code>. Effects that overlap in time are assigned to separate "lanes" (one pass per lane) by a short interval-scheduling rule. <strong>Layers.</strong> Layer sequences are ordered to suit Media3's compositor, which paints input 0 last (on top): the top layer is input 0 and the main track is the highest input. So that a sequence that starts late can still be composited, the code pads the gap with muted pieces of the layer's own video, and <code>LayerCompositorSettings</code> hides them with alpha 0 outside <code>[startMs, endMs)</code>. <strong>Text overlay.</strong> <code>ProjectOverlay</code> is a <code>BitmapOverlay</code> that draws every active overlay onto a frame-sized bitmap with the same <code>TextRenderer</code> the preview uses, and only re-renders when the picture can change (alternating between two bitmaps).</p>
+
+  <figure class="code"><figcaption><code>android/app/src/main/java/com/kamkut/app/engine/FxEffects.kt:128-147</code> <span data-l="km">Android៖ effect ដែលត្រួតគ្នាត្រូវបានវេចខ្ចប់ក្នុង lane; lane នីមួយៗជា pass GLSL មួយ</span><span data-l="en">Android: overlapping effects are packed into lanes; each lane is one GLSL pass.</span></figcaption><pre><code class="lang-kotlin">fun lanes(effects: List&lt;TrackEffect&gt;, timelineAtItemStartMs: Long, timeBaseUs: Long, itemDurationMs: Long): List&lt;Effect&gt; {
+    val relevant = effects.filter { it.durationMs &gt; 0 &amp;&amp; it.startMs &lt; timelineAtItemStartMs + itemDurationMs &amp;&amp; it.endMs &gt; timelineAtItemStartMs }
+        .sortedBy { it.startMs }
+    if (relevant.isEmpty()) return emptyList()
+    val lanes = mutableListOf&lt;MutableList&lt;TrackEffect&gt;&gt;()
+    for (e in relevant) {
+        val lane = lanes.firstOrNull { it.last().endMs &lt;= e.startMs }
+        if (lane != null) lane += e else lanes += mutableListOf(e)
+    }
+    return lanes.map { lane -&gt;
+        GlslEffect(FRAGMENT) { prog, timeUs, _, _, _, _ -&gt;
+            val tMs = timelineAtItemStartMs + (timeUs - timeBaseUs) / 1000
+            val e = lane.firstOrNull { tMs &gt;= it.startMs &amp;&amp; tMs &lt; it.endMs }
+            prog.f("uKind", if (e == null) 0f else kindCode(e.kind))
+            prog.f("uInt", e?.intensity?.coerceIn(0f, 1f) ?: 0f)
+            prog.f("uProg", if (e == null) 0f else ((tMs - e.startMs).toFloat() / e.durationMs).coerceIn(0f, 1f))
+            prog.f("uTime", tMs / 1000f)
+        }
+    }
+}</code></pre></figure>
+  <figure class="code"><figcaption><code>android/app/src/main/java/com/kamkut/app/engine/CompositionBuilder.kt:128-135</code> <span data-l="km">Android៖ លំដាប់ input ដែល compositor របស់ Media3 រំពឹង</span><span data-l="en">Android: the input order that Media3's compositor expects.</span></figcaption><pre><code class="lang-kotlin">// Media3's compositor paints input 0 last (on top) and the highest input first (bottom).
+// So: top layer = input 0 ... lowest layer, then the main track as the highest video input.
+if (layerSeqs.isNotEmpty()) {
+    val first = project.clips.first()
+    val firstFile = store.mediaFile(project.id, if (first.isStill) first.activeFileName else first.playFileName)
+    val filler = LayerPipeline.fillerItem(first, firstFile)
+    sequences.addAll(0, listOf(EditedMediaItemSequence.Builder(filler).setIsLooping(true).build()) + layerSeqs.asReversed())
+}</code></pre></figure>
+
+  <h3 id="android-preview"><span data-l="km">Preview និងការស្របនឹង export</span><span data-l="en">The preview, and how it matches the export</span></h3>
+  <p data-l="km">Preview គឺ <code>CompositionPlayer</code> លើ composition តែមួយនឹង export សម្រាប់ track មេ (shader, speed, transition, effects, audio) ប៉ុន្តែមានចំណុចខុសគ្នាខ្លះ៖ ចំហៀងខ្លី 540 px ហើយគ្មាន layer និងគ្មាន overlay អត្ថបទក្នុង composition។ Layer វីដេអូនីមួយៗមាន <code>ExoPlayer</code> ផ្ទាល់ខ្លួន ត្រូវបានគូរជាមួយ layer រូបភាពដោយ <code>LayerGlCompositor</code> ជា <code>TextureView</code> EGL ដាក់ពីលើវីដេអូ ដោយប្រើកូដ shader <code>LayerShader</code> ដូចគ្នា និងគណិតវិទ្យា pose/keyframe ដូចគ្នា។ អត្ថបទជា Compose ដែលអូសបាន ដោយប្រើ <code>TextRenderer</code> ដូចគ្នា។ បើ player មានកំហុសពេលមានភ្លេង ឬសំឡេងរៀបរាប់ កម្មវិធីធ្លាក់ទៅ preview ដោយគ្មានសំឡេងបន្ថែម ជាជាងបង្ហាញអ្វីទាំងអស់។</p>
+  <p data-l="en">The preview is a <code>CompositionPlayer</code> on the same composition as the export for the main track (shader, speed, transitions, effects, audio), with a few differences: a 540 px short side, and no layers and no text overlays inside the composition. Each video layer has its own <code>ExoPlayer</code>, drawn together with image layers by <code>LayerGlCompositor</code>, an EGL <code>TextureView</code> stacked above the video, using the same <code>LayerShader</code> code and the same pose / keyframe math. Text is draggable Compose using the same <code>TextRenderer</code>. If the player errors while music or voiceovers are present, the app falls back to a preview without the extra audio rather than showing nothing.</p>
+</section>
+
+<section id="text" aria-labelledby="text-h">
+  <h2 id="text-h"><span data-l="km">ប្រព័ន្ធអត្ថបទ៖ ស្ទីល ចលនា និង font ខ្មែរ</span><span data-l="en">The text system: styles, animation and Khmer fonts</span> <a class="anchor" href="#text" aria-label="Link to this section">#</a></h2>
+
+  <p data-l="km">អត្ថបទ និង emoji sticker ជា overlay ប្រភេទ <code>text</code> ឬ <code>sticker</code>។ គោលការណ៍សំខាន់គឺ <strong>renderer តែមួយ</strong>៖ លើ iOS <code>OverlayRenderer</code> គូរ overlay ទៅជា <code>CGImage</code> ហើយ SwiftUI (preview) និង Core Image (export) ប្រើរូបនោះដូចគ្នា។ លើ Android <code>TextRenderer</code> គូរលើ <code>Canvas</code> ទាំង Compose (preview) និង <code>BitmapOverlay</code> (export)។ គ្រប់ទំហំទាំងអស់ជាប្រភាគនៃ canvas ដូច្នេះលទ្ធផលត្រូវគ្នាទោះ resolution ណាក៏ដោយ។</p>
+  <p data-l="en">Text and emoji stickers are overlays of kind <code>text</code> or <code>sticker</code>. The key principle is <strong>one renderer</strong>: on iOS, <code>OverlayRenderer</code> draws an overlay into a <code>CGImage</code> that SwiftUI (preview) and Core Image (export) both use. On Android, <code>TextRenderer</code> draws onto a <code>Canvas</code> for both Compose (preview) and a <code>BitmapOverlay</code> (export). Every size is a fraction of the canvas, so the result matches at any resolution.</p>
+
+  <h3 id="text-styles"><span data-l="km">ស្ទីលទាំងប្រាំពីរ</span><span data-l="en">The seven styles</span></h3>
+  <p data-l="km">តារាងខាងក្រោមគឺជាអ្វីដែល SPEC កំណត់ ហើយ <code>fs</code> ជាទំហំ font (<code>sizeFraction × កម្ពស់ canvas</code>)។</p>
+  <p data-l="en">The table below is what <code>SPEC.md</code> defines, where <code>fs</code> is the font size (<code>sizeFraction × canvas height</code>).</p>
+
+  <div class="table-wrap">
+  <table>
+    <caption><span data-l="km">ស្ទីលអត្ថបទ (SPEC.md, v2)</span><span data-l="en">Text styles (SPEC.md, v2)</span></caption>
+    <thead><tr><th scope="col"><code>style</code></th><th scope="col"><span data-l="km">ការគូរ</span><span data-l="en">Rendering</span></th></tr></thead>
+    <tbody>
+      <tr><th scope="row"><code>plain</code></th><td><span data-l="km">ពណ៌បំពេញតែប៉ុណ្ណោះ (<code>bold</code> និង <code>background</code> នៅដំណើរការ)</span><span data-l="en">Fill only (<code>bold</code> and <code>background</code> keep working)</span></td></tr>
+      <tr><th scope="row"><code>outline</code></th><td><span data-l="km">stroke ទទឹង <code>0.12×fs</code> ពណ៌ <code>strokeColor</code> នៅពីក្រោយពណ៌បំពេញ</span><span data-l="en">Stroke of width <code>0.12×fs</code> in <code>strokeColor</code> behind the fill</span></td></tr>
+      <tr><th scope="row"><code>shadow</code></th><td><span data-l="km">ស្រមោល offset <code>(0, 0.06×fs)</code>, blur <code>0.12×fs</code>, ខ្មៅ 60%</span><span data-l="en">Drop shadow offset <code>(0, 0.06×fs)</code>, blur <code>0.12×fs</code>, black at 60%</span></td></tr>
+      <tr><th scope="row"><code>box</code></th><td><span data-l="km">ចតុកោណមូល កាំ <code>0.3×fs</code> padding <code>0.35×fs</code> ពណ៌ <code>strokeColor</code> 85% នៅពីក្រោយអត្ថបទ</span><span data-l="en">Rounded rectangle, radius <code>0.3×fs</code>, padding <code>0.35×fs</code>, filled with <code>strokeColor</code> at 85% behind the text</span></td></tr>
+      <tr><th scope="row"><code>neon</code></th><td><span data-l="km">ពណ៌បំពេញ + glow ពីរ pass (blur <code>0.25×fs</code> និង <code>0.6×fs</code>) ក្នុង <code>strokeColor</code></span><span data-l="en">Fill colour plus two glow passes (blur <code>0.25×fs</code> and <code>0.6×fs</code>) in <code>strokeColor</code></span></td></tr>
+      <tr><th scope="row"><code>label</code></th><td><span data-l="km">ដូច box ប៉ុន្តែ <code>strokeColor</code> ពេញ ជ្រុងមុត (កាំ <code>0.12×fs</code>)</span><span data-l="en">Like box, but full-opacity <code>strokeColor</code> and a sharp radius of <code>0.12×fs</code></span></td></tr>
+      <tr><th scope="row"><code>gradient</code></th><td><span data-l="km">gradient បញ្ឈរពី <code>colorHex</code> (ខាងលើ) ទៅ <code>strokeColorHex</code> (ខាងក្រោម)</span><span data-l="en">Vertical gradient from <code>colorHex</code> (top) to <code>strokeColorHex</code> (bottom)</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p data-l="km">លើ iOS ស្ទីលត្រូវបានគូរពី <em>គ្រោងអក្សរ (glyph outline)</em> ដែល CoreText បានរៀបចំរួច ដូច្នេះ stroke, glow និង gradient ដើរតាមរូបរាង glyph ពិតប្រាកដ។ លើ Android វាប្រើ <code>TextPaint</code> ជាមួយ <code>setShadowLayer</code>, <code>BlurMaskFilter</code> និង <code>LinearGradient</code>។</p>
+  <p data-l="en">On iOS the styles are drawn from the <em>glyph outlines</em> that CoreText has already shaped, so strokes, glows and gradients follow the real glyph shapes. On Android they use <code>TextPaint</code> with <code>setShadowLayer</code>, <code>BlurMaskFilter</code> and <code>LinearGradient</code>.</p>
+
+  <figure class="code"><figcaption><code>ios/Kamkut/Engine/OverlayRenderer.swift:201-207,208-213,220-227</code> <span data-l="km">iOS៖ outline, shadow និង neon គូរពីគ្រោង glyph</span><span data-l="en">iOS: outline, shadow and neon drawn from glyph outlines.</span></figcaption><pre><code class="lang-swift">switch o.style {
+case "outline":
+    ctx.addPath(glyphs)
+    ctx.setStrokeColor(strokeC); ctx.setLineWidth(fs * 0.12)
+    ctx.setLineJoin(.round); ctx.setLineCap(.round)
+    ctx.strokePath()
+    fillGlyphs(fill)
+// …
+case "shadow":
+    ctx.saveGState()
+    ctx.setShadow(offset: CGSize(width: 0, height: -fs * 0.06), blur: fs * 0.12,
+                  color: UIColor.black.withAlphaComponent(0.6).cgColor)
+    fillGlyphs(fill)
+    ctx.restoreGState()
+// …
+case "neon":
+    for blur in [fs * 0.6, fs * 0.25] {
+        ctx.saveGState()
+        ctx.setShadow(offset: .zero, blur: blur, color: strokeC)
+        fillGlyphs(strokeC)
+        ctx.restoreGState()
+    }
+    fillGlyphs(fill)</code></pre></figure>
+  <figure class="code"><figcaption><code>android/app/src/main/java/com/kamkut/app/engine/TextRenderer.kt:182-205</code> <span data-l="km">Android៖ ស្ទីលដូចគ្នា ដោយ Paint, shadow layer និង mask filter</span><span data-l="en">Android: the same styles with Paint, shadow layers and mask filters.</span></figcaption><pre><code class="lang-kotlin">} else when (o.style) {
+    "outline" -&gt; {
+        tp.style = Paint.Style.STROKE; tp.strokeWidth = 0.12f * fs; tp.strokeJoin = Paint.Join.ROUND; tp.color = stroke
+        layout.draw(canvas)
+        resetPaint(tp, fill); layout.draw(canvas)
+    }
+    "shadow" -&gt; {
+        tp.setShadowLayer(0.12f * fs, 0f, 0.06f * fs, withAlpha(Color.BLACK, 0.6f))
+        layout.draw(canvas)
+    }
+    "neon" -&gt; {
+        for (blur in floatArrayOf(0.6f, 0.25f)) {
+            resetPaint(tp, stroke)
+            tp.maskFilter = BlurMaskFilter(blur * fs, BlurMaskFilter.Blur.NORMAL)
+            layout.draw(canvas)
+        }
+        resetPaint(tp, fill); layout.draw(canvas)
+    }
+    "gradient" -&gt; {
+        tp.shader = LinearGradient(0f, 0f, 0f, lh, fill, stroke, Shader.TileMode.CLAMP)
+        layout.draw(canvas)
+    }
+    else -&gt; layout.draw(canvas) // plain, box, label
+}</code></pre></figure>
+
+  <aside class="callout">
+    <p data-l="km"><strong>ត្រង់ៗ៖</strong> ស្ទីល gradient មិនដូចគ្នា 100% ទេ។ លើ iOS វាបន្ថែមគ្រោងខ្មៅស្តើង និងស្រមោលទន់ដើម្បីឱ្យអានបាននៅលើរូបភាពណាក៏ដោយ ហើយ gradient គ្របដណ្តប់ជួរ ink ពេញ (រួមទាំងជង់ subscript ខ្មែរ)។ លើ Android វាគ្រាន់តែជា gradient នៃ layout។ ភាពខុសគ្នាបែបនេះកើតឡើងព្រោះកូដទាំងពីរត្រូវបានសរសេរដាច់ដោយឡែកតាម spec។</p>
+    <p data-l="en"><strong>Being honest:</strong> the gradient style is not 100% identical. On iOS it adds a thin dark outline and a soft shadow so it stays legible on any footage, and the gradient spans the full ink bounds (including Khmer subscript stacks). On Android it is only a gradient across the layout. Differences like this exist because the two implementations are written separately against the spec.</p>
+  </aside>
+
+  <h3 id="text-anim"><span data-l="km">ចលនា និងពេលវេលា</span><span data-l="en">Animations and timing</span></h3>
+  <p data-l="km">ចលនាចូល និងចេញប្រើពេល 400 ms នៅចុងនីមួយៗនៃ <code>[startMs, endMs]</code> (<code>animMs = 400</code>)។ <code>fade</code> = opacity 0→1; <code>pop</code> = scale 0.6→1.08→1 + fade; <code>slideUp</code> = ផ្លាស់ទីពីទាបជាងទីតាំងពិត 0.08×កម្ពស់ canvas ឡើងមកទីតាំងពិត + fade; <code>slideDown</code> (ចេញ) ធ្វើបញ្ច្រាស; <code>typewriter</code> = បង្ហាញតួអក្សរតាមលីនេអ៊ែរក្នុងរយៈ <code>min(1000 ms, រយៈពេល/2)</code>។ លើសពីនេះ v3 បន្ថែម <code>animLoop</code> (pulse, wiggle, float, blink) និង keyframe (position, scale, rotation, opacity ជាមួយ easing linear/in/out/inOut ជា cubic)។</p>
+  <p data-l="en">In and out animations take 400 ms at each end of <code>[startMs, endMs]</code> (<code>animMs = 400</code>). <code>fade</code> = opacity 0→1; <code>pop</code> = scale 0.6→1.08→1 plus fade; <code>slideUp</code> = translate +0.08×canvas height back to 0 plus fade; <code>slideDown</code> (out) mirrors it; <code>typewriter</code> = reveal characters linearly over <code>min(1000 ms, duration/2)</code>. On top of that, v3 adds <code>animLoop</code> (pulse, wiggle, float, blink) and keyframes (position, scale, rotation, opacity with linear / in / out / inOut cubic easing).</p>
+
+  <figure class="code"><figcaption><code>ios/Kamkut/Engine/OverlayRenderer.swift:32-52</code> <span data-l="km">iOS៖ ស្ថានភាពចលនាជាអនុគមន៍សុទ្ធនៃពេលវេលា; preview និង export ហៅកូដតែមួយ</span><span data-l="en">iOS: animation state is a pure function of time; preview and export call the same code.</span></figcaption><pre><code class="lang-swift">func popCurve(_ u: Double) -&gt; Double {
+    u &lt; 0.6 ? 0.6 + 0.48 * (u / 0.6) : 1.08 - 0.08 * ((u - 0.6) / 0.4)
+}
+let inT = min(max((t - Double(startMs)) / animMs, 0), 1)
+switch animIn {
+case "fade": p.alpha *= inT
+case "pop": p.scale *= popCurve(inT); p.alpha *= inT
+case "slideUp": p.dy += (1 - inT) * 0.08; p.alpha *= inT
+case "typewriter":
+    let span = max(min(1000, dur / 2), 1)
+    p.reveal = min(max((t - Double(startMs)) / span, 0), 1)
+default: break
+}
+let outT = min(max((Double(endMs) - t) / animMs, 0), 1)
+switch animOut {
+case "fade": p.alpha *= outT
+case "pop": p.scale *= popCurve(outT); p.alpha *= outT
+case "slideDown": p.dy += (1 - outT) * 0.08; p.alpha *= outT
+default: break
+}
+return p</code></pre></figure>
+
+  <div class="table-wrap">
+  <table>
+    <caption><span data-l="km">ចលនា loop (ប៉ារ៉ាម៉ែត្រពិតនៅក្នុងកូដ)</span><span data-l="en">Loop animations (the actual parameters in the code)</span></caption>
+    <thead><tr><th scope="col"><code>animLoop</code></th><th scope="col">iOS</th><th scope="col">Android</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">pulse</th><td>1 + 0.07·sin(2πt/0.9)</td><td>1 + 0.07·sin(2πt/0.9)</td></tr>
+      <tr><th scope="row">wiggle</th><td>±4.5°, <span data-l="km">វដ្ត</span><span data-l="en">period</span> 0.35 s</td><td>±7°, <span data-l="km">វដ្ត</span><span data-l="en">period</span> 0.5 s</td></tr>
+      <tr><th scope="row">float</th><td>0.014·H, <span data-l="km">វដ្ត</span><span data-l="en">period</span> 2.0 s</td><td>0.025·H, <span data-l="km">វដ្ត</span><span data-l="en">period</span> 2.2 s</td></tr>
+      <tr><th scope="row">blink</th><td><span data-l="km">alpha 0.12 ពេល t mod 0.8 s ≥ 0.5</span><span data-l="en">alpha 0.12 when t mod 0.8 s ≥ 0.5</span></td><td><span data-l="km">alpha 0.55 + 0.45·cos(2πt), ទាបបំផុត 0.1</span><span data-l="en">alpha 0.55 + 0.45·cos(2πt), floored at 0.1</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p data-l="km">SPEC មិនកំណត់ប៉ារ៉ាម៉ែត្រ loop ទេ ដូច្នេះវាខុសគ្នារវាងកម្មវិធីទាំងពីរ។ នេះជាឧទាហរណ៍មួយនៃកន្លែងដែល "ដូចគ្នា" មានន័យថា "ដូចតាម spec" ហើយមិនមែន "ដូចគ្នាតាម pixel" ទេ។</p>
+  <p data-l="en">The spec does not pin the loop parameters, so they differ between the apps. It is one example of where "identical" means "identical to the spec", not "identical pixel for pixel".</p>
+
+  <h3 id="text-fonts"><span data-l="km">Font ជាង 50 ក្នុងកម្មវិធី រួមទាំងខ្មែរ</span><span data-l="en">50+ bundled fonts, including Khmer</span></h3>
+  <p data-l="km">កម្មវិធីមាន 51 font ក្នុង <code>shared/fonts/fonts.json</code>៖ 25 ជា <code>"script": "khmer"</code> (ឧ. Angkor, Battambang, Bayon, Bokor, Hanuman, Kantumruy Pro, Koulen, Moul, Moulpali, Noto Sans Khmer, Noto Serif Khmer, Siemreap, Taprom …) និង 26 ជា <code>"latin"</code> (ឧ. Anton, Bebas Neue, Inter, JetBrains Mono, Montserrat, Pacifico, Poppins …)។ license គឺ OFL (មួយចំនួនជា Apache-2.0)។ ទាំងពីរកម្មវិធីបង្កប់ឯកសារ font ទាំងអស់៖ iOS ចុះឈ្មោះជាមួយ <code>CTFontManagerRegisterFontsForURL</code> (ក្នុង scope process) ហើយ Android ផ្ទុកពី <code>assets/fonts/</code> ដោយ <code>Typeface.createFromAsset</code>។ ដោយសារ Android <code>res/font</code> ត្រូវការឈ្មោះអក្សរតូច snake_case, assets ជាជម្រើសប្រសើរជាង។</p>
+  <p data-l="en">The app ships 51 fonts listed in <code>shared/fonts/fonts.json</code>: 25 are <code>"script": "khmer"</code> (for example Angkor, Battambang, Bayon, Bokor, Hanuman, Kantumruy Pro, Koulen, Moul, Moulpali, Noto Sans Khmer, Noto Serif Khmer, Siemreap, Taprom) and 26 are <code>"latin"</code> (for example Anton, Bebas Neue, Inter, JetBrains Mono, Montserrat, Pacifico, Poppins). Licences are OFL (a few are Apache-2.0). Both apps bundle every font file: iOS registers them with <code>CTFontManagerRegisterFontsForURL</code> at process scope, and Android loads them from <code>assets/fonts/</code> with <code>Typeface.createFromAsset</code>. Android's <code>res/font</code> needs lowercase snake-case names, which is why the spec chose assets.</p>
+
+  <figure class="code"><figcaption><code>shared/fonts/fonts.json:1-10</code> <span data-l="km">manifest តែមួយ ដែលកម្មវិធីទាំងពីរបង្កប់; ឧបករណ៍ជ្រើសបង្ហាញឈ្មោះនីមួយៗជាមួយ font របស់វា</span><span data-l="en">One shared manifest, bundled by both apps; the picker shows each name in its own font.</span></figcaption><pre><code class="lang-json">[
+  {
+    "id": "angkor",
+    "name": "Angkor",
+    "script": "khmer",
+    "file": "Angkor-Regular.ttf",
+    "postscript": "Angkor-Regular",
+    "family": "Angkor",
+    "license": "OFL"
+  },</code></pre></figure>
+
+  <p data-l="km"><strong>Variable font។</strong> font ដែលមាន axis ទម្ងន់ (<code>wght</code>) អាចមានទម្ងន់ស្តើងពេលលំនាំដើម ដូច្នេះកម្មវិធី pin វា។ iOS អាន axis ដោយ <code>CTFontCopyVariationAxes</code> រួចកំណត់ 700 ឬ 400 ដោយ clamp ក្នុងជួរ axis។ Android ចាត់ទុកឯកសារដែលមាន <code>_w</code> ក្នុងឈ្មោះ (ឧ. <code>NotoSansKhmer_wdth_wght.ttf</code>) ថាជា variable ហើយប្រើ <code>setFontVariationSettings("'wght' 700")</code>។</p>
+  <p data-l="en"><strong>Variable fonts.</strong> A font with a weight axis (<code>wght</code>) can default to a thin weight, so the app pins it. iOS reads the axes with <code>CTFontCopyVariationAxes</code> and sets 700 or 400 clamped to the axis range. Android treats files with <code>_w</code> in the name (for example <code>NotoSansKhmer_wdth_wght.ttf</code>) as variable and uses <code>setFontVariationSettings("'wght' 700")</code>.</p>
+
+  <figure class="code"><figcaption><code>ios/Kamkut/Engine/FontLibrary.swift:133-141</code> <span data-l="km">iOS៖ pin axis wght នៃ variable font ដោយ clamp ក្នុងជួរ axis</span><span data-l="en">iOS: pin the wght axis of a variable font, clamped to the axis range.</span></figcaption><pre><code class="lang-swift">var f = CTFontCreateWithFontDescriptor(pick, 100, nil)
+if let axes = CTFontCopyVariationAxes(f) as? [[String: Any]],
+   let wght = axes.first(where: { ($0[kCTFontVariationAxisIdentifierKey as String] as? Int) == 0x77676874 }) {
+    let lo = (wght[kCTFontVariationAxisMinimumValueKey as String] as? Double) ?? 400
+    let hi = (wght[kCTFontVariationAxisMaximumValueKey as String] as? Double) ?? 700
+    let v = min(max(bold ? 700 : 400, lo), hi)
+    let attrs: [CFString: Any] = [kCTFontVariationAttribute: [0x77676874: v]]
+    f = CTFontCreateCopyWithAttributes(f, 100, nil, CTFontDescriptorCreateWithAttributes(attrs as CFDictionary))
+}</code></pre></figure>
+  <figure class="code"><figcaption><code>android/app/src/main/java/com/kamkut/app/engine/FontLibrary.kt:108-117</code> <span data-l="km">Android៖ variable font ត្រូវបាន pin ទម្ងន់; font ដែលអានមិនបានធ្លាក់ទៅ font ប្រព័ន្ធ</span><span data-l="en">Android: variable fonts get a pinned weight; unreadable fonts fall back to the system font.</span></figcaption><pre><code class="lang-kotlin">val tf = entry?.let {
+    runCatching {
+        if (it.imported) Typeface.createFromFile(File(userDir(context), it.file))
+        else if (it.variable) {
+            Typeface.Builder(context.assets, "fonts/${it.file}")
+                .setFontVariationSettings("'wght' ${if (bold) 700 else 400}")
+                .build() ?: Typeface.createFromAsset(context.assets, "fonts/${it.file}")
+        } else Typeface.createFromAsset(context.assets, "fonts/${it.file}")
+    }.getOrNull()
+}</code></pre></figure>
+
+  <p data-l="km"><strong>នាំចូល font។</strong> ប៊ូតុង "Import font…" បើកឧបករណ៍ជ្រើសឯកសាររបស់ប្រព័ន្ធ (គ្មានបណ្តាញ)។ ឯកសារ <code>.ttf</code>/<code>.otf</code> ត្រូវបាន copy ទៅ <code>&lt;files&gt;/fonts/&lt;uuid&gt;.&lt;ext&gt;</code> (កម្រិតកម្មវិធី មិនមែនក្នុងគម្រោងទេ) រួចត្រូវបានផ្ទៀងផ្ទាត់ថាវាជា font ពិត (iOS ដោយ <code>CTFontManagerCreateFontDescriptorsFromURL</code>, Android ដោយ <code>Typeface.createFromFile</code>) ហើយបង្ហាញក្រោម "Imported" ជាមួយ id <code>user:&lt;filename&gt;</code>។ ប្រសិនបើ font បាត់ពេលបើកគម្រោងឡើងវិញ overlay រក្សា <code>fontId</code> ហើយធ្លាក់ទៅ font ប្រព័ន្ធ។ ជួរ "Get more fonts" បើក <code>fonts.google.com/?subset=khmer</code> ក្នុង browser របស់ប្រព័ន្ធ (កម្មវិធីខ្លួនឯងមិនធ្វើសំណើសោះ) ហើយបន្ទាប់ពីទាញយកអ្នកនាំចូលដោយដៃ។</p>
+  <p data-l="en"><strong>Font import.</strong> The "Import font…" button opens the system file picker (no network). The <code>.ttf</code> / <code>.otf</code> is copied to <code>&lt;files&gt;/fonts/&lt;uuid&gt;.&lt;ext&gt;</code> (app-wide, not per project) and validated as a real font (iOS with <code>CTFontManagerCreateFontDescriptorsFromURL</code>, Android with <code>Typeface.createFromFile</code>), then listed under "Imported" with the id <code>user:&lt;filename&gt;</code>. If the font is missing when a project reopens, the overlay keeps its <code>fontId</code> and falls back to the system font. The "Get more fonts" row opens <code>fonts.google.com/?subset=khmer</code> in the system browser (the app itself makes no request), and after downloading the user imports the file by hand.</p>
+
+  <h3 id="text-khmer"><span data-l="km">ការ shaping ភាសាខ្មែរ</span><span data-l="en">Khmer shaping</span></h3>
+  <p data-l="km">អក្សរខ្មែរមិនមែនជាតួអក្សរដាច់ដោយឡែកទេ។ ព្យញ្ជនៈ + ជើង (coeng + ព្យញ្ជនៈរង) + ស្រៈ បង្កើតជា <em>grapheme cluster</em> មួយ ហើយ glyph ចុងក្រោយត្រូវបាន shape តាមក្បួនរបស់ font ដែលជួនកាលខ្ពស់ជាង ឬទាបជាងបន្ទាត់ធម្មតា។ កូដបានដោះស្រាយបញ្ហាទាំងនេះដូចខាងក្រោម (ពិតនៅក្នុង source)៖</p>
+  <p data-l="en">Khmer text is not a row of independent characters. A consonant plus a subscript (coeng + subscript consonant) plus vowels forms a single <em>grapheme cluster</em>, and the final glyphs are shaped by the font's rules and are sometimes taller or lower than a normal line. What the code does about it (all of this is in the source):</p>
+  <ul>
+    <li><span data-l="km"><strong>iOS ប្រើ CoreText សម្រាប់ទាំង layout និង outline</strong> (<code>CTFramesetter</code>, <code>CTRunGetGlyphs</code>, <code>CTFontCreatePathForGlyph</code>) ដូច្នេះ cluster និង subscript ត្រូវតែត្រឹមត្រូវ។</span><span data-l="en"><strong>iOS uses CoreText for both layout and outlines</strong> (<code>CTFramesetter</code>, <code>CTRunGetGlyphs</code>, <code>CTFontCreatePathForGlyph</code>), so clusters and subscripts come out right.</span></li>
+    <li><span data-l="km"><strong>Letter spacing ស្ថិតនៅចន្លោះ cluster តែប៉ុណ្ណោះ</strong>៖ kern ត្រូវបានដាក់លើ UTF-16 unit ចុងក្រោយនៃ cluster នីមួយៗ ដូច្នេះព្យញ្ជនៈ + coeng + ជើង + ស្រៈ មិនត្រូវបានទាញចេញពីគ្នាទេ។</span><span data-l="en"><strong>Letter spacing is applied only between clusters:</strong> the kern is attached to the last UTF-16 unit of each cluster, so consonant + coeng + subscript + vowels are never pulled apart.</span></li>
+    <li><span data-l="km"><strong>Typewriter បង្ហាញ cluster ទាំងមូល</strong>៖ iOS រាប់ <code>Character</code> របស់ Swift (grapheme cluster) ហើយ Android ប្រើ <code>BreakIterator.getCharacterInstance()</code> ដូច្នេះជើង និងស្រៈមិនលេចមកមុនព្យញ្ជនៈរបស់វាទេ។</span><span data-l="en"><strong>The typewriter reveals whole clusters:</strong> iOS counts Swift <code>Character</code>s (grapheme clusters) and Android uses <code>BreakIterator.getCharacterInstance()</code>, so a subscript or vowel never appears before its consonant.</span></li>
+    <li><span data-l="km"><strong>gradient តាមកម្ពស់ ink ពិត</strong>៖ លើ iOS gradient លាតពី ink bounds ទាំងមូល (រួមទាំងជង់ខ្មែរ) ហួសគែមទាំងសងខាង ដើម្បីកុំឱ្យមានផ្នែកណាលើស ឬក្រោមប្រអប់បន្ទាត់ដែលមិនបានគូរ។</span><span data-l="en"><strong>The gradient follows the real ink height:</strong> on iOS it spans the glyphs' full ink bounds (Khmer stacks included), extended past both ends so nothing above or below the line box is left undrawn.</span></li>
+    <li><span data-l="km"><strong>Caption និង TTS ស្គាល់ខ្មែរ</strong>៖ ពេលបំបែក caption ជាឃ្លា <code>។</code> (ខណ្ឌ) ត្រូវបានចាត់ទុកជាចុងប្រយោគលើ iOS ហើយ TTS ជ្រើស <code>km-KH</code> ដោយស្វ័យប្រវត្តិ ពេលអត្ថបទមានតួអក្សរក្នុងជួរ U+1780–U+17FF។ ប្រសិនបើឧបករណ៍គ្មានសំឡេងខ្មែរ កម្មវិធីបង្ហាញ "No Khmer voice on this device"។</span><span data-l="en"><strong>Captions and TTS know Khmer:</strong> when captions are split into phrases the Khmer full stop <code>។</code> counts as a sentence end on iOS, and TTS picks <code>km-KH</code> automatically when the text contains characters in U+1780–U+17FF. If the device has no Khmer voice the app says "No Khmer voice on this device".</span></li>
+  </ul>
+
+  <figure class="code"><figcaption><code>ios/Kamkut/Engine/OverlayRenderer.swift:124-138</code> <span data-l="km">iOS៖ ចន្លោះអក្សរត្រូវបានភ្ជាប់រវាង grapheme cluster មិនមែនក្នុង cluster ទេ</span><span data-l="en">iOS: letter spacing is attached between grapheme clusters, never inside one.</span></figcaption><pre><code class="lang-swift">if o.letterSpacing != 0 &amp;&amp; !o.isSticker {
+    // Kern only BETWEEN grapheme clusters: put it on the last UTF-16 unit of each cluster so Khmer
+    // clusters (consonant + coeng + subscript + vowels) are never pulled apart.
+    let kern = o.letterSpacing * fs
+    var loc = 0
+    let chars = Array(text)
+    for (i, ch) in chars.enumerated() {
+        let len = String(ch).utf16.count
+        if i &lt; chars.count - 1 {
+            mstr.addAttribute(NSAttributedString.Key(kCTKernAttributeName as String), value: kern,
+                              range: NSRange(location: loc + len - 1, length: 1))
+        }
+        loc += len
+    }
+}</code></pre></figure>
+  <figure class="code"><figcaption><code>android/app/src/main/java/com/kamkut/app/engine/TextRenderer.kt:220-230</code> <span data-l="km">Android៖ typewriter រាប់តួអក្សរដោយ BreakIterator</span><span data-l="en">Android: the typewriter reveal counts characters with BreakIterator.</span></figcaption><pre><code class="lang-kotlin">private fun revealText(text: String, fraction: Float): String {
+    val bi = BreakIterator.getCharacterInstance()
+    bi.setText(text)
+    var count = 0
+    while (bi.next() != BreakIterator.DONE) count++
+    val n = ceil(count * fraction).toInt().coerceIn(0, count)
+    bi.setText(text)
+    var idx = bi.first()
+    repeat(n) { idx = bi.next() }
+    return if (n == 0) "" else text.substring(0, if (idx == BreakIterator.DONE) text.length else idx)
+}</code></pre></figure>
+
+  <aside class="callout">
+    <p data-l="km"><strong>ដែនកំណត់ដែលស្គាល់៖</strong> លើ Android ចន្លោះអក្សរប្រើ <code>TextPaint.letterSpacing</code> ហើយ shaping ត្រូវបានទុកឱ្យជង់អត្ថបទរបស់ប្រព័ន្ធ។ គ្មានផ្លូវកូដពិសេសសម្រាប់ខ្មែរលើ Android ក្រៅពី <code>BreakIterator</code> សម្រាប់ typewriter ទេ។ ដូច្នេះរូបរាងអក្សរខ្មែរលើ Android អាស្រ័យលើប្រព័ន្ធ និង font។ យើងមិនមានការវាស់វែងប្រៀបធៀបណាមួយដើម្បីផ្សព្វផ្សាយទេ។</p>
+    <p data-l="en"><strong>A known limit:</strong> on Android letter spacing uses <code>TextPaint.letterSpacing</code> and shaping is left to the platform text stack. There is no Khmer-specific code path on Android beyond <code>BreakIterator</code> for the typewriter, so Khmer rendering on Android depends on the platform and the font. We have no measurement to publish comparing the two.</p>
+  </aside>
+</section>
+
+<section id="cutout" aria-labelledby="cutout-h">
+  <h2 id="cutout-h"><span data-l="km">ការលុបផ្ទៃខាងក្រោយ (cutout)</span><span data-l="en">Background removal (cutout)</span> <a class="anchor" href="#cutout" aria-label="Link to this section">#</a></h2>
+
+  <p data-l="km">មុខងារនេះរកមនុស្សក្នុងមួយ frame ៗ ហើយ render <em>clip ថ្មីមួយ</em> ទៅឯកសារ ដែលមនុស្សស្ថិតនៅលើពណ៌រាបស្មើ ឬផ្ទៃខាងក្រោយ blur។ ឯកសារនោះរស់នៅក្នុង <code>media/</code> ហើយ clip ចង្អុលទៅវាតាម <code>cutoutFileName</code> (អ្វីដែលកម្មវិធីលេងនៅពេលនោះគឺ <code>cutoutFileName ?? fileName</code>) ជាមួយ <code>cutoutBackground</code> កត់ត្រាជម្រើស (ពណ៌ hex ឬ <code>"blur"</code>)។ ការលុបចោលគឺគ្រាន់តែសម្អាតតម្លៃ <code>cutoutFileName</code> ហើយលុបឯកសារ។ ការដំណើរការធ្វើលើ clip ប្រភពទាំងមូល ហើយ trim/speed អនុវត្តបន្ទាប់។</p>
+  <p data-l="en">The feature finds the person in each frame and renders <em>a new clip</em> to a file in which the person sits over a flat colour or a blurred background. That file lives in <code>media/</code>, and the clip points to it through <code>cutoutFileName</code> (what the engine plays is then <code>cutoutFileName ?? fileName</code>) with <code>cutoutBackground</code> recording the choice (a hex colour or <code>"blur"</code>). Restoring the original just clears <code>cutoutFileName</code> and deletes the file. The work is done on the whole source clip; trims and speed apply afterwards.</p>
+
+  <h3 id="cutout-ios"><span data-l="km">iOS៖ Vision</span><span data-l="en">iOS: Vision</span></h3>
+  <ol class="pipeline">
+    <li><span data-l="km"><code>AVAssetReader</code> អាន frame BGRA ហើយបង្វិលត្រង់តាម <code>preferredTransform</code></span><span data-l="en"><code>AVAssetReader</code> reads BGRA frames and rotates them upright using <code>preferredTransform</code>.</span></li>
+    <li><span data-l="km"><code>VNGeneratePersonSegmentationRequest</code> (<code>qualityLevel = .balanced</code>, mask ជា <code>OneComponent8</code>) ដំណើរការលើ <em>គ្រប់ frame</em></span><span data-l="en"><code>VNGeneratePersonSegmentationRequest</code> (<code>qualityLevel = .balanced</code>, mask as <code>OneComponent8</code>) runs on <em>every frame</em>.</span></li>
+    <li><span data-l="km">mask ត្រូវបានពង្រីកដោយ affine transform ទៅទំហំ frame ហើយ <code>CIBlendWithMask</code> លាយ frame ដើមលើពណ៌រាបស្មើ ឬ frame ដើម blur (<code>sigma: 22</code>)</span><span data-l="en">The mask is scaled up with an affine transform to the frame size, and <code>CIBlendWithMask</code> blends the original frame over a flat colour or a blurred copy of itself (<code>sigma: 22</code>).</span></li>
+    <li><span data-l="km">លទ្ធផលត្រូវបាន render ទៅ pixel buffer ពី pool របស់ <code>AVAssetWriterInputPixelBufferAdaptor</code> ហើយសរសេរជា H.264 <code>.mov</code> (bitrate = <code>max(w×h×5, 2 Mbps)</code>)</span><span data-l="en">The result is rendered into a pixel buffer from the <code>AVAssetWriterInputPixelBufferAdaptor</code> pool and written as H.264 in a <code>.mov</code> (bitrate = <code>max(w×h×5, 2 Mbps)</code>).</span></li>
+    <li><span data-l="km">សំឡេងដើមត្រូវបាន copy ដោយមិនកែប្រែ (<code>outputSettings: nil</code>)</span><span data-l="en">The original audio is copied through unchanged (<code>outputSettings: nil</code>).</span></li>
+  </ol>
+
+  <figure class="code"><figcaption><code>ios/Kamkut/Engine/BackgroundRemover.swift:102-122</code> <span data-l="km">iOS៖ segment ពង្រីក mask ទៅ frame លាយលើផ្ទៃខាងក្រោយ</span><span data-l="en">iOS: segment, scale the mask to the frame, blend over the background.</span></figcaption><pre><code class="lang-swift">do {
+    try handler.perform([request])
+    maskBuffer = request.results?.first?.pixelBuffer
+} catch {
+    stats.fail(error)
+}
+if let maskBuffer {
+    stats.succeed()
+    var mask = CIImage(cvPixelBuffer: maskBuffer)
+    mask = mask.transformed(by: CGAffineTransform(scaleX: outRect.width / mask.extent.width,
+                                                  y: outRect.height / mask.extent.height))
+    let bg: CIImage
+    if let bgColor {
+        bg = CIImage(color: bgColor).cropped(to: outRect)
+    } else {
+        bg = frame.clampedToExtent().applyingGaussianBlur(sigma: 22).cropped(to: outRect)
+    }
+    result = frame.applyingFilter("CIBlendWithMask", parameters: [
+        kCIInputBackgroundImageKey: bg, kCIInputMaskImageKey: mask,
+    ])
+}</code></pre></figure>
+
+  <p data-l="km">ចំណុចសំខាន់មួយ៖ កម្មវិធីរាប់ចំនួន frame ដែល Vision segment ជោគជ័យ។ បើចំនួននោះស្មើសូន្យ វាបោះបង់ ហើយរាយការណ៍ថា "person segmentation unavailable on this device" ជាជាងសរសេរ clip ដើមដែលមិនបានកែដោយស្ងាត់ៗ។ នៅលើ Simulator កូដ pin request ទៅ CPU ព្រោះ device លំនាំដើមបរាជ័យនៅទីនោះ (គ្មាន Neural Engine)។ README ថាវាដំណើរការប្រហែលពេលវេលាពិតលើ iPhone ថ្មីៗ ហើយអាចបោះបង់បាន។</p>
+  <p data-l="en">One important detail: the app counts how many frames Vision segmented successfully. If it is zero, it aborts and reports "person segmentation unavailable on this device" instead of silently writing the untouched clip. On the Simulator the code pins the request to the CPU because the default device fails there (no Neural Engine). The README says it runs at about real time on recent iPhones, and it can be cancelled.</p>
+
+  <h3 id="cutout-android"><span data-l="km">Android៖ ML Kit Selfie Segmentation</span><span data-l="en">Android: ML Kit Selfie Segmentation</span></h3>
+  <p data-l="km">Android ត្រូវបានសាងសង់ខុសគ្នា។ គ្មាន loop អាន/សរសេរ frame ដោយដៃទេ។ វាប្រើ Transformer ជាមួយ effect បី៖ <code>Presentation</code> បន្ថយទៅចំហៀងខ្លី ≤ 720 (ទំហំជាលេខគូ) បន្ទាប់មកជំហានមួយដែលជំនួស frame មូលដ្ឋានទាំងមូល (<code>RgbMatrix</code> ដែលជំនួសគ្រប់ពណ៌ដោយពណ៌រាបស្មើ ឬ <code>GaussianBlur(25f)</code> សម្រាប់ blur) ហើយចុងក្រោយ <code>OverlayEffect</code> ដែលគូរមនុស្សត្រឡប់មកពីលើវិញ។ <code>CutoutOverlay.getBitmap(presentationTimeUs)</code> ទាញ frame ប្រភពមួយនៅ timestamp នោះដោយ <code>MediaMetadataRetriever.getScaledFrameAtTime(..., 512, 512)</code> ឱ្យ ML Kit (<code>STREAM_MODE</code>) segment ហើយប្រើតម្លៃ float របស់ mask ជា alpha ដោយផ្ទាល់។ ឯកសារលទ្ធផលជា <code>cutout_&lt;millis&gt;.mp4</code> ហើយសំឡេងដើមត្រូវបាន Transformer ដឹកតាមធម្មតា។</p>
+  <p data-l="en">Android is built differently. There is no hand-written read/write frame loop. It uses a Transformer with three effects: <code>Presentation</code> scales down to a short side of at most 720 (even dimensions), then a step that wipes the whole base frame (an <code>RgbMatrix</code> that replaces every colour with the flat colour, or <code>GaussianBlur(25f)</code> for blur), and finally an <code>OverlayEffect</code> that draws the person back on top. <code>CutoutOverlay.getBitmap(presentationTimeUs)</code> pulls one source frame at that timestamp with <code>MediaMetadataRetriever.getScaledFrameAtTime(..., 512, 512)</code>, lets ML Kit (<code>STREAM_MODE</code>) segment it, and uses the float mask values directly as alpha. The output is <code>cutout_&lt;millis&gt;.mp4</code>, and the original audio is carried by the Transformer as usual.</p>
+
+  <figure class="code"><figcaption><code>android/app/src/main/java/com/kamkut/app/engine/BackgroundRemover.kt:47-56</code> <span data-l="km">Android៖ ច្រវាក់ effect។ ធ្វើ frame មូលដ្ឋានឱ្យរាបស្មើ (ឬ blur) រួចដាក់មនុស្សពីលើ</span><span data-l="en">Android: the effect chain. Flatten the base frame to a colour (or blur), then overlay the person.</span></figcaption><pre><code class="lang-kotlin">val scale = minOf(1f, 720f / minOf(srcW, srcH))
+val w = ((srcW * scale).toInt() / 2) * 2
+val h = ((srcH * scale).toInt() / 2) * 2
+
+val cutout = CutoutOverlay(source, w, h)
+val effects = buildList&lt;Effect&gt; {
+    add(Presentation.createForWidthAndHeight(w, h, Presentation.LAYOUT_SCALE_TO_FIT))
+    if (background == "blur") add(GaussianBlur(25f)) else add(solidColor(parseColor(background)))
+    add(OverlayEffect(listOf&lt;TextureOverlay&gt;(cutout)))
+}</code></pre></figure>
+  <figure class="code"><figcaption><code>android/app/src/main/java/com/kamkut/app/engine/BackgroundRemover.kt:91-106</code> <span data-l="km">Android៖ segment frame ដែលបានបន្ថយទំហំដោយ ML Kit ហើយបម្លែង mask ទន់ទៅជាឆានែលអាល់ហ្វា</span><span data-l="en">Android: segment a scaled frame with ML Kit and turn the soft mask into the alpha channel.</span></figcaption><pre><code class="lang-kotlin">val frame = retriever.getScaledFrameAtTime(
+    presentationTimeUs, MediaMetadataRetriever.OPTION_CLOSEST, 512, 512,
+) ?: return out
+val small = frame.copy(Bitmap.Config.ARGB_8888, true)
+val mask = Tasks.await(segmenter.process(InputImage.fromBitmap(small, 0)))
+val buf = mask.buffer.apply { rewind() }.asFloatBuffer()
+val pixels = IntArray(small.width * small.height)
+small.getPixels(pixels, 0, small.width, 0, 0, small.width, small.height)
+// Mask is the same size as the input image.
+for (i in pixels.indices) {
+    val a = (buf.get(i) * 255f).toInt().coerceIn(0, 255)
+    pixels[i] = (pixels[i] and 0x00FFFFFF) or (a shl 24)
+}
+small.setPixels(pixels, 0, small.width, 0, 0, small.width, small.height)
+out.eraseColor(Color.TRANSPARENT)
+Canvas(out).drawBitmap(small, null, Rect(0, 0, width, height), paint)</code></pre></figure>
+
+  <p data-l="km"><strong>Mask refinement។</strong> មិនមានជំហានកែ mask បន្ថែមលើ platform ណាមួយទេ។ ទាំង Vision និង ML Kit ផ្តល់ mask ទន់ (soft) ហើយកូដប្រើវាដោយផ្ទាល់ជា alpha ឬ mask (បន្ទាប់ពីពង្រីកទំហំ) ដូច្នេះគុណភាពគែមរបស់ cutout គឺជាគុណភាពរបស់ model។</p>
+  <p data-l="en"><strong>Mask refinement.</strong> There is no extra mask-refinement step on either platform. Vision and ML Kit both return a soft mask, and the code uses it directly as alpha or mask (after scaling), so the cutout's edge quality is the model's quality.</p>
+
+  <aside class="callout">
+    <p data-l="km"><strong>ការដោះដូរ៖</strong> លើ Android តួមនុស្សត្រូវបានយកពី frame ដែលស្នើក្នុងដែនកំណត់ 512×512 រួចគូរពង្រីកលើ output ដែលមានចំហៀងខ្លីរហូតដល់ 720 ដូច្នេះតួមនុស្សអាចមើលទៅទន់ជាងផ្ទៃខាងក្រោយ។ លើ iOS segmentation ដំណើរការលើ frame ទំហំដើម។ Android ត្រូវបានសាងសង់បែបនេះដើម្បីល្បឿន (comment ក្នុងកូដ៖ "segmentation + per-frame bitmap upload is the bottleneck")។</p>
+    <p data-l="en"><strong>Trade-off:</strong> on Android the person comes from a frame requested within 512×512 bounds and is drawn scaled up over an output of up to 720 short side, so the person can look softer than the background. On iOS segmentation runs on the full-size frame. Android is built this way for speed (the code comment: "segmentation + per-frame bitmap upload is the bottleneck").</p>
+  </aside>
+</section>
+
+<section id="audio" aria-labelledby="audio-h">
+  <h2 id="audio-h"><span data-l="km">សំឡេង៖ កម្រិត ភ្លេង សំឡេងរៀបរាប់ និងការលាយ</span><span data-l="en">Audio: levels, music, voiceover and mixing</span> <a class="anchor" href="#audio" aria-label="Link to this section">#</a></h2>
+
+  <h3 id="audio-levels"><span data-l="km">កម្រិតសំឡេងដើម</span><span data-l="en">Original audio volume</span></h3>
+  <p data-l="km">កម្រិតសំឡេងចុងក្រោយរបស់ clip គឺ <code>clip.volume × project.originalAudioVolume</code> លើទាំងពីរកម្មវិធី។ លើ iOS ប្រសិនបើតម្លៃនេះតូចជាង 0.001 សំឡេងរបស់ clip មិនត្រូវបានបញ្ចូលក្នុង composition ទាល់តែសោះ។ ភ្លេងចាប់ផ្តើមនៅ <code>startMs</code> ជាមួយ <code>trimStartMs</code> ហើយប្រវែងត្រូវបានកាត់ដើម្បីកុំឱ្យហួសចុង timeline។ លំនាំដើម volume ភ្លេងគឺ 1.0 លើ iOS ហើយ 0.6 លើ Android (<code>importMusic</code>)។</p>
+  <p data-l="en">A clip's final level is <code>clip.volume × project.originalAudioVolume</code> on both apps. On iOS, if that value is below 0.001 the clip's audio is not inserted into the composition at all. Music starts at <code>startMs</code> with <code>trimStartMs</code>, and its length is clamped so it never runs past the end of the timeline. The default music volume is 1.0 on iOS and 0.6 on Android (<code>importMusic</code>).</p>
+
+  <h3 id="audio-voice"><span data-l="km">ថតសំឡេងរៀបរាប់ (voiceover)</span><span data-l="en">Recording a voiceover</span></h3>
+  <p data-l="km">iOS ប្រើ <code>AVAudioEngine</code> ជាមួយ tap លើ input node សរសេរត្រង់ទៅ <code>AVAudioFile</code> ជា AAC <code>.m4a</code> (128 kbps)។ ក្នុងពេលថត preview ត្រូវបានបិទសំឡេង (<code>player.isMuted = true</code>) ដើម្បីជៀសវាង feedback ពេលអ្នករៀបរាប់លើវីដេអូ។ Android ប្រើ <code>MediaRecorder</code> (MIC → MPEG-4 → AAC, 128 kbps, 44.1 kHz)។ ទាំងពីរចាប់ផ្តើមនៅ playhead ហើយថតរួចជា audio item ប្រភេទ <code>voiceover</code> ក្នុង <code>media/</code>។ ការថតខ្លីជាង 200 ms លើ iOS ត្រូវបានបដិសេធជា "Recording too short"។</p>
+  <p data-l="en">iOS uses an <code>AVAudioEngine</code> with a tap on the input node writing straight into an <code>AVAudioFile</code> as AAC <code>.m4a</code> (128 kbps). While recording, the preview player is muted (<code>player.isMuted = true</code>) to avoid feedback while you narrate over the video. Android uses <code>MediaRecorder</code> (MIC → MPEG-4 → AAC, 128 kbps, 44.1 kHz). Both start at the playhead and end up as an audio item of kind <code>voiceover</code> in <code>media/</code>. A recording shorter than 200 ms is rejected on iOS as "Recording too short".</p>
+
+  <h3 id="audio-fx"><span data-l="km">Fade, crossfade, voice effect, sfx</span><span data-l="en">Fades, crossfades, voice effects and sound effects</span></h3>
+  <p data-l="km"><strong>Fade និង crossfade។</strong> iOS សរសេរ envelope ចូល <code>AVMutableAudioMix</code> ជា volume ramp រវាងចំណុចបំបែក (breakpoint) រួមទាំង crossfade ប្រភេទ equal-power ដែលយកសំណាក 9 ចំណុច។ Android គណនា gain សម្រាប់ sample នីមួយៗក្នុង <code>GainEnvelopeProcessor</code> ហើយ crossfade របស់ transition ប្រើគូ sin/cos ដូចគ្នានៅក្នុង T segment។</p>
+  <p data-l="en"><strong>Fades and crossfades.</strong> iOS writes the envelope into an <code>AVMutableAudioMix</code> as volume ramps between breakpoints, including an equal-power crossfade sampled at 9 points. Android computes gain per sample in a <code>GainEnvelopeProcessor</code>, and the transition crossfade uses the same sin/cos pair inside the T segment.</p>
+
+  <figure class="code"><figcaption><code>ios/Kamkut/Engine/CompositionBuilder.swift:290-297</code> <span data-l="km">iOS៖ fade ចូល/ចេញ និង crossfade equal-power គណនានៅចំណុចបំបែក</span><span data-l="en">iOS: fade in/out and an equal-power crossfade, evaluated at breakpoints.</span></figcaption><pre><code class="lang-swift">func g(_ t: Double) -&gt; Float {
+    var v = gain
+    if fi &gt; 0, t &lt; s + fi { v *= Float((t - s) / fi) }
+    if fo &gt; 0, t &gt; e - fo { v *= Float((e - t) / fo) }
+    if crossIn &gt; 0, t &lt; s + crossIn { v *= Float(sin((t - s) / crossIn * .pi / 2)) }
+    if crossOut &gt; 0, t &gt; e - crossOut { v *= Float(cos((t - (e - crossOut)) / crossOut * .pi / 2)) }
+    return max(v, 0)
+}</code></pre></figure>
+  <figure class="code"><figcaption><code>android/app/src/main/java/com/kamkut/app/engine/AudioDsp.kt:78-85,175-183</code> <span data-l="km">Android៖ processor gain ក្នុង sample នីមួយៗ និងអនុគមន៍ fade ដែលវាគណនា</span><span data-l="en">Android: a per-sample gain processor, and the fade function it evaluates.</span></figcaption><pre><code class="lang-kotlin">class GainEnvelopeProcessor(private val segOffsetMs: Double, private val gainAt: (Double) -&gt; Float) : PcmProcessor() {
+    override fun isActive() = true
+    override fun frame(s: FloatArray, frame: Long) {
+        val t = segOffsetMs + frame * 1000.0 / sampleRate
+        val g = gainAt(t)
+        for (c in s.indices) s[c] *= g
+    }
+}
+// …
+fun fadeGain(tMs: Double, durMs: Double, fadeIn: Long, fadeOut: Long, volume: Float): Float {
+    var g = volume
+    if (fadeIn &gt; 0 &amp;&amp; tMs &lt; fadeIn) g *= (tMs / fadeIn).toFloat().coerceIn(0f, 1f)
+    if (fadeOut &gt; 0 &amp;&amp; tMs &gt; durMs - fadeOut) g *= ((durMs - tMs) / fadeOut).toFloat().coerceIn(0f, 1f)
+    return g
+}
+
+fun equalPowerIn(p: Double) = sin(PI / 2 * p.coerceIn(0.0, 1.0)).toFloat()
+fun equalPowerOut(p: Double) = cos(PI / 2 * p.coerceIn(0.0, 1.0)).toFloat()</code></pre></figure>
+
+  <p data-l="km"><strong>Voice effect។</strong> មានប្រាំ៖ <code>chipmunk</code> (+7 semitone), <code>deep</code> (−5), <code>robot</code>, <code>echo</code>, <code>radio</code> (band-pass)។ iOS render ជាមុន offline ជាមួយ <code>AVAudioEngine</code> (manual rendering mode) ដោយ <code>AVAudioUnitTimePitch</code> (+700/−500 cent), <code>AVAudioUnitDelay</code>, <code>AVAudioUnitDistortion</code> និង <code>AVAudioUnitEQ</code> ទៅជាឯកសារ cache <code>fx_&lt;id&gt;_&lt;effect&gt;.m4a</code>។ Android ដំណើរការវាតាមពេលវេលាពិតក្នុងច្រវាក់ audio processor របស់ Transformer៖ <code>SonicAudioProcessor</code> សម្រាប់ pitch, ឯ robot (ring modulation 48 Hz), echo (feedback delay) និង radio (biquad high-pass 400 Hz + low-pass 3400 Hz + <code>tanh</code>) គឺជា <code>VoiceFxProcessor</code> ផ្ទាល់ខ្លួន។</p>
+  <p data-l="en"><strong>Voice effects.</strong> There are five: <code>chipmunk</code> (+7 semitones), <code>deep</code> (−5), <code>robot</code>, <code>echo</code>, <code>radio</code> (band-pass). iOS pre-renders offline with <code>AVAudioEngine</code> in manual rendering mode, using <code>AVAudioUnitTimePitch</code> (+700 / −500 cents), <code>AVAudioUnitDelay</code>, <code>AVAudioUnitDistortion</code> and <code>AVAudioUnitEQ</code>, into a cached file <code>fx_&lt;id&gt;_&lt;effect&gt;.m4a</code>. Android runs them in real time in the Transformer's audio-processor chain: <code>SonicAudioProcessor</code> for pitch, and a custom <code>VoiceFxProcessor</code> for robot (48 Hz ring modulation), echo (feedback delay) and radio (high-pass 400 Hz and low-pass 3400 Hz biquads plus <code>tanh</code>).</p>
+  <p data-l="km"><strong>Sound effects និង TTS។</strong> កញ្ចប់ sfx ចំនួន 20 ត្រូវបានបង្កប់ជា <code>.m4a</code> ដែល spec ថាបង្កើតដោយ procedural និងឥតបង់ថ្លៃសិទ្ធិ (royalty-free)។ Text-to-speech ប្រើ <code>AVSpeechSynthesizer.write</code> (iOS) និង <code>TextToSpeech.synthesizeToFile</code> (Android) ជាមួយសំឡេងលើឧបករណ៍ប៉ុណ្ណោះ ហើយបន្ថែមជា audio item ប្រភេទ <code>tts</code>។ ប្រភេទ audio ទាំងប្រាំគឺ <code>music</code>, <code>voiceover</code>, <code>extracted</code>, <code>sfx</code> និង <code>tts</code>។</p>
+  <p data-l="en"><strong>Sound effects and TTS.</strong> A pack of 20 sound effects is bundled as <code>.m4a</code>, which the spec says were generated procedurally and are royalty-free. Text-to-speech uses <code>AVSpeechSynthesizer.write</code> (iOS) and <code>TextToSpeech.synthesizeToFile</code> (Android) with on-device voices only, and adds an audio item of kind <code>tts</code>. The five audio kinds are <code>music</code>, <code>voiceover</code>, <code>extracted</code>, <code>sfx</code> and <code>tts</code>.</p>
+
+  <h3 id="audio-mix"><span data-l="km">ការលាយពេល export</span><span data-l="en">Mixing at export</span></h3>
+  <p data-l="km">លើ iOS សំឡេងទាំងអស់ (clip A/B, ភ្លេង, សំឡេងរៀបរាប់, សំឡេងរបស់ layer) ជា track នៅក្នុង composition ដែលមាន <code>AVAudioMix</code>។ ពេល export <code>AVAssetReaderAudioMixOutput</code> អានវាជា PCM 16-bit 44.1 kHz ស្តេរីអូ ហើយ writer អ៊ិនកូដជា AAC (128 kbps, ឬ 192 kbps ពេល quality ជា High)។ លើ Android audio item នីមួយៗជា sequence ផ្ទាល់ខ្លួនក្នុង composition ដែល Transformer លាយ ហើយ <code>stereoOut()</code> (<code>ChannelMixingAudioProcessor</code>) ធានាថា mono និង stereo ទាំងពីរចេញជា stereo។</p>
+  <p data-l="en">On iOS all the audio (main clips A/B, music, voiceovers, layer audio) are tracks of one composition with an <code>AVAudioMix</code>. At export an <code>AVAssetReaderAudioMixOutput</code> reads it as 16-bit 44.1 kHz stereo PCM and the writer encodes AAC (128 kbps, or 192 kbps at High quality). On Android every audio item is its own sequence in the composition, which the Transformer mixes, and <code>stereoOut()</code> (a <code>ChannelMixingAudioProcessor</code>) guarantees that mono and stereo inputs both come out as stereo.</p>
+</section>
+
+<section id="export" aria-labelledby="export-h">
+  <h2 id="export-h"><span data-l="km">Export៖ encoder, progress និងការរក្សាទុក</span><span data-l="en">Export: encoder settings, progress and saving</span> <a class="anchor" href="#export" aria-label="Link to this section">#</a></h2>
+
+  <p data-l="km">ជម្រើស export មានបួន ហើយត្រូវបានចងចាំក្នុង UserDefaults / SharedPreferences៖ ដំណោះស្រាយ (720p, 1080p, 2K = 1440, 4K = 2160 ជាចំហៀងខ្លី), frame rate (24, 30, 60), គុណភាព (Low / Recommended / High) និង codec (H.264 ឬ HEVC)។ ទំហំ output ជាលេខគូជានិច្ច សម្រាប់ encoder។ អ្នកប្រើឃើញទំហំឯកសារប៉ាន់ស្មានមុនពេល export។</p>
+  <p data-l="en">Export has four options, remembered in UserDefaults / SharedPreferences: resolution (720p, 1080p, 2K = 1440, 4K = 2160, as the short side), frame rate (24, 30, 60), quality (Low / Recommended / High) and codec (H.264 or HEVC). Output dimensions are always even for the encoder. The user sees an estimated file size before exporting.</p>
+
+  <h3 id="export-bitrate"><span data-l="km">Bitrate</span><span data-l="en">Bitrate</span></h3>
+  <p data-l="km">គុណភាពកំណត់ <em>bits per pixel per frame</em>៖ Low 0.07, Recommended 0.12, High 0.2។ Bitrate វីដេអូ = <code>ទទឹង × កម្ពស់ × fps × bpp</code> (យ៉ាងតិច 500 kbps)។ ឧទាហរណ៍គណនាពីរូបមន្ត (មិនមែនការវាស់)៖ 1080×1920 ជា 30 fps ក្នុង Recommended = 2,073,600 × 30 × 0.12 ≈ 7.46 Mbps។ iOS គុណ 0.6 ពេល HEVC (កូដមាន comment ថា "HEVC reaches the same quality with about 60% of the H.264 bits") ហើយ Android រក្សាគោលដៅ bpp ដដែល រួចទុកឱ្យ encoder ប្រើតិចជាង (ការប៉ាន់ស្មានទំហំរបស់វាគុណ 0.8)។</p>
+  <p data-l="en">Quality sets the <em>bits per pixel per frame</em>: Low 0.07, Recommended 0.12, High 0.2. Video bitrate = <code>width × height × fps × bpp</code> (at least 500 kbps). A worked example from the formula (not a measurement): 1080×1920 at 30 fps, Recommended = 2,073,600 × 30 × 0.12 ≈ 7.46 Mbps. iOS multiplies by 0.6 for HEVC (the code comment: "HEVC reaches the same quality with about 60% of the H.264 bits"); Android keeps the same bpp target and lets the encoder undershoot (its size estimate uses a 0.8 factor).</p>
+
+  <figure class="code"><figcaption><code>ios/Kamkut/Engine/Exporter.swift:31-36,114-122</code> <span data-l="km">iOS៖ bitrate ពីគុណភាព បន្ទាប់មកការកំណត់វីដេអូរបស់ AVAssetWriter (H.264 High ឬ HEVC Main, keyframe រាល់ 2 វិនាទី)</span><span data-l="en">iOS: bitrate from the quality setting, then the AVAssetWriter video settings (H.264 High or HEVC Main, keyframe every 2 s).</span></figcaption><pre><code class="lang-swift">var bitsPerPixel: Double { quality == "low" ? 0.07 : quality == "high" ? 0.2 : 0.12 }
+func videoBitrate(for size: CGSize) -&gt; Int {
+    // HEVC reaches the same quality with about 60% of the H.264 bits.
+    let base = Double(size.width * size.height) * Double(fps) * bitsPerPixel
+    return max(Int(base * (codec == "hevc" ? 0.6 : 1)), 500_000)
+}
+// …
+let writer = try AVAssetWriter(outputURL: out, fileType: .mp4)
+let useHEVC = options.codec == "hevc" &amp;&amp; ExportOptions.hevcAvailable
+var compression: [String: Any] = [
+    AVVideoAverageBitRateKey: options.videoBitrate(for: size),
+    AVVideoExpectedSourceFrameRateKey: options.fps,
+    AVVideoMaxKeyFrameIntervalKey: options.fps * 2,
+]
+if useHEVC { compression[AVVideoProfileLevelKey] = kVTProfileLevel_HEVC_Main_AutoLevel as String }
+else { compression[AVVideoProfileLevelKey] = AVVideoProfileLevelH264HighAutoLevel }</code></pre></figure>
+  <figure class="code"><figcaption><code>android/app/src/main/java/com/kamkut/app/engine/ExportOptions.kt:16-18</code> <span data-l="km">Android៖ រូបមន្ត bits-per-pixel ដូចគ្នា clamp រវាង 500 kbps និង 200 Mbps</span><span data-l="en">Android: the same bits-per-pixel formula, clamped between 500 kbps and 200 Mbps.</span></figcaption><pre><code class="lang-kotlin">val bitsPerPixel: Float get() = when (quality) { "low" -&gt; 0.07f; "high" -&gt; 0.2f; else -&gt; 0.12f }
+
+fun bitrate(w: Int, h: Int): Int = (w.toDouble() * h * fps * bitsPerPixel).coerceIn(500_000.0, 200_000_000.0).toInt()</code></pre></figure>
+  <figure class="code"><figcaption><code>android/app/src/main/java/com/kamkut/app/engine/Exporter.kt:40-53</code> <span data-l="km">Android៖ Transformer ត្រូវបានប្រាប់ codec, encoder សម្រាប់ portrait និង bitrate ដែលស្នើ ដោយអនុញ្ញាតឱ្យធ្លាក់ទៅ fallback</span><span data-l="en">Android: the Transformer is told the codec, a portrait-safe encoder and a requested bitrate, with fallback allowed.</span></figcaption><pre><code class="lang-kotlin">val builder = Transformer.Builder(context)
+    .setVideoMimeType(if (options.codec == "hevc") MimeTypes.VIDEO_H265 else MimeTypes.VIDEO_H264)
+    .setAudioMimeType(MimeTypes.AUDIO_AAC)
+    .setPortraitEncodingEnabled(true)
+if (size != null) {
+    builder.setEncoderFactory(
+        DefaultEncoderFactory.Builder(context)
+            .setRequestedVideoEncoderSettings(
+                VideoEncoderSettings.Builder().setBitrate(options.bitrate(size.first, size.second)).setiFrameIntervalSeconds(1f).build()
+            )
+            .setEnableFallback(true)
+            .build()
+    )
+}</code></pre></figure>
+
+  <h3 id="export-flow"><span data-l="km">លំហូរ progress និងការបោះបង់</span><span data-l="en">Progress and cancellation</span></h3>
+  <p data-l="km"><strong>iOS។</strong> <code>Exporter</code> បង្កើត composition (<code>includeOverlays: true</code>) ហើយអាន frame ដែលបាន render ពី <code>AVAssetReaderVideoCompositionOutput</code> ទៅ <code>AVAssetWriter</code> ដោយ <code>requestMediaDataWhenReady</code>។ Progress គឺ timestamp នៃ frame ចុងក្រោយ ÷ ប្រវែងសរុប កំណត់ត្រឹម 0.99 រហូតដល់បញ្ចប់ពិតប្រាកដ។ ការបោះបង់កំណត់ <code>CancelFlag</code> ដែល loop ពិនិត្យរាល់ frame ហើយបន្ទាប់មកបិទ reader/writer និងលុបឯកសារដែលសរសេរមិនទាន់ចប់។ <strong>Android។</strong> <code>ExportPipeline</code> render T segment (0–20% នៃ progress) បន្ទាប់មកបង្កើត composition និងរត់ <code>Transformer</code>។ progress ត្រូវបាន poll រាល់ 200 ms ហើយការបោះបង់ coroutine ហៅ <code>transformer.cancel()</code>។ មុន export Android កំណត់ codec និង resolution ទៅអ្វីដែល encoder របស់ឧបករណ៍គាំទ្រ (<code>MediaCodecList</code>) ហើយកត់ត្រាសារ ឧ. "limited to 1080p by this device"។</p>
+  <p data-l="en"><strong>iOS.</strong> <code>Exporter</code> builds the composition (<code>includeOverlays: true</code>) and pulls rendered frames from an <code>AVAssetReaderVideoCompositionOutput</code> into an <code>AVAssetWriter</code> with <code>requestMediaDataWhenReady</code>. Progress is the last frame's timestamp divided by the total length, capped at 0.99 until genuinely finished. Cancelling sets a <code>CancelFlag</code> that the loop checks on every frame, then the reader and writer are shut down and the half-written file is deleted. <strong>Android.</strong> <code>ExportPipeline</code> renders the T segments (0–20% of progress), then builds the composition and runs the <code>Transformer</code>. Progress is polled every 200 ms and cancelling the coroutine calls <code>transformer.cancel()</code>. Before exporting, Android clamps codec and resolution to what the device's encoders support (<code>MediaCodecList</code>) and reports a note, for example "limited to 1080p by this device".</p>
+  <p data-l="km">HEVC ត្រូវបានផ្តល់ជូនតែនៅពេលឧបករណ៍គាំទ្រ (iOS៖ មាន export preset HEVC ក្នុងបញ្ជី; Android៖ មាន encoder <code>video/hevc</code>)។ បើមិនដូច្នេះទេ វាធ្លាក់ត្រឡប់ទៅ H.264។ ជម្រើស 60 fps ត្រូវបានប្រើក្នុងការគណនា bitrate និងកំណត់ <code>frameDuration</code> របស់ composition លើ iOS; លើ Android កូដបន្ថែម <code>FrameDropEffect</code> តែពេល fps ក្រោម 30 ប៉ុណ្ណោះ។</p>
+  <p data-l="en">HEVC is offered only when the device supports it (iOS: an HEVC export preset is listed; Android: a <code>video/hevc</code> encoder exists), otherwise it falls back to H.264. The frame-rate choice feeds the bitrate formula and sets the composition's <code>frameDuration</code> on iOS; on Android the code adds a <code>FrameDropEffect</code> only when fps is below 30.</p>
+
+  <h3 id="export-save"><span data-l="km">រក្សាទុកទៅ Photos / MediaStore</span><span data-l="en">Saving to Photos or MediaStore</span></h3>
+  <p data-l="km">iOS ស្នើការអនុញ្ញាតតែ <em>បន្ថែម</em> (<code>.addOnly</code>) ហើយបង្កើត <code>PHAssetCreationRequest</code>។ ឯកសារមានឈ្មោះ <code>KamKut_&lt;ឈ្មោះ&gt;_&lt;yyyyMMdd_HHmmss&gt;.mp4</code>។ បន្ទាប់ពី export រួចអ្នកអាច Share ផងដែរ (<code>ShareLink</code>) ដើម្បីរក្សាទុកក្នុង Files ជាដើម។ Android ចម្លងទៅ <code>Movies/KamKut</code> ក្នុង MediaStore ដោយប្រើ <code>IS_PENDING</code> ដើម្បីកុំឱ្យ app ផ្សេងឃើញឯកសារមិនទាន់ចប់ ហើយលើ API 28 (មុន scoped storage) វាចម្លងត្រង់ទៅថត <code>Movies/KamKut</code> រួចស្កេនដោយ <code>MediaScannerConnection</code>។</p>
+  <p data-l="en">iOS asks for add-only permission (<code>.addOnly</code>) and creates a <code>PHAssetCreationRequest</code>. Files are named <code>KamKut_&lt;name&gt;_&lt;yyyyMMdd_HHmmss&gt;.mp4</code>. After exporting you can also Share (<code>ShareLink</code>), for example to save into Files. Android copies into <code>Movies/KamKut</code> in MediaStore using <code>IS_PENDING</code> so other apps never see a half-written file, and on API 28 (before scoped storage) it copies straight into the <code>Movies/KamKut</code> folder and scans it with <code>MediaScannerConnection</code>.</p>
+
+  <figure class="code"><figcaption><code>ios/Kamkut/Engine/Exporter.swift:191-200</code> <span data-l="km">iOS៖ ការចូលដំណើរការ photo library បែបបន្ថែមតែប៉ុណ្ណោះ</span><span data-l="en">iOS: add-only access to the photo library.</span></figcaption><pre><code class="lang-swift">enum PhotoSaver {
+    static func save(videoAt url: URL) async throws {
+        let status = await PHPhotoLibrary.requestAuthorization(for: .addOnly)
+        guard status == .authorized || status == .limited else { throw KamkutError.photosDenied }
+        try await PHPhotoLibrary.shared().performChanges {
+            let request = PHAssetCreationRequest.forAsset()
+            request.addResource(with: .video, fileURL: url, options: nil)
+        }
+    }
+}</code></pre></figure>
+  <figure class="code"><figcaption><code>android/app/src/main/java/com/kamkut/app/engine/Exporter.kt:88-110</code> <span data-l="km">Android៖ MediaStore ជាមួយ IS_PENDING ចម្លងពីឯកសារ cache</span><span data-l="en">Android: MediaStore with IS_PENDING, copying from the cache file.</span></figcaption><pre><code class="lang-kotlin">suspend fun saveToGallery(context: Context, file: File, displayName: String) = withContext(Dispatchers.IO) {
+    if (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.Q) {
+        val resolver = context.contentResolver
+        val values = ContentValues().apply {
+            put(MediaStore.Video.Media.DISPLAY_NAME, "$displayName.mp4")
+            put(MediaStore.Video.Media.MIME_TYPE, "video/mp4")
+            put(MediaStore.Video.Media.RELATIVE_PATH, "${Environment.DIRECTORY_MOVIES}/KamKut")
+            put(MediaStore.Video.Media.IS_PENDING, 1)
+        }
+        val uri = resolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values)
+            ?: error("Could not create gallery entry")
+        resolver.openOutputStream(uri)!!.use { out -&gt; file.inputStream().use { it.copyTo(out) } }
+        values.clear()
+        values.put(MediaStore.Video.Media.IS_PENDING, 0)
+        resolver.update(uri, values, null, null)
+    } else {
+        @Suppress("DEPRECATION")
+        val dir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES), "KamKut").apply { mkdirs() }
+        val dest = File(dir, "$displayName.mp4")
+        file.copyTo(dest, overwrite = true)
+        MediaScannerConnection.scanFile(context, arrayOf(dest.absolutePath), arrayOf("video/mp4"), null)
+    }
+}</code></pre></figure>
+</section>
+
+<section id="design" aria-labelledby="design-h">
+  <h2 id="design-h"><span data-l="km">ប្រព័ន្ធរចនា៖ token, JetBrains Mono និង theme</span><span data-l="en">The design system: tokens, JetBrains Mono and theming</span> <a class="anchor" href="#design" aria-label="Link to this section">#</a></h2>
+
+  <p data-l="km">UI របស់ KamKut ត្រូវគ្នានឹង kamsophy.com៖ ផ្ទៃខាងក្រោយខ្មៅកក់ក្តៅ អក្សរពណ៌ក្រែម ពណ៌សង្កត់ពណ៌មាស កាំជ្រុង 12/16 និង "kicker" ពណ៌មាសអក្សរធំ។ អត្ថបទ UI ទាំងអស់ប្រើ JetBrains Mono ដែលបង្កប់ក្នុងកម្មវិធី (គ្មាន font ដែលទាញយក) ហើយ license គឺ SIL OFL 1.1។ ក្នុង SPEC មាន token ពីរសំណុំ (dark និង light) ហើយកម្មវិធីទាំងពីរប្រើតម្លៃដូចគ្នា៖</p>
+  <p data-l="en">KamKut's UI matches kamsophy.com: a warm near-black background, cream text, a gold accent, 12/16 corner radii and uppercase gold "kickers". All UI text is JetBrains Mono, bundled in the app (no downloaded fonts), licensed SIL OFL 1.1. The spec defines two token sets (dark and light) and both apps use the same values:</p>
+
+  <div class="table-wrap">
+  <table>
+    <caption><span data-l="km">Token theme (SPEC.md, v2)</span><span data-l="en">Theme tokens (SPEC.md, v2)</span></caption>
+    <thead><tr><th scope="col">token</th><th scope="col">dark</th><th scope="col">light</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">bg</th><td><code>#0F0F10</code></td><td><code>#FCFAF4</code></td></tr>
+      <tr><th scope="row">panel</th><td><code>#161617</code></td><td><code>#FFFDF8</code></td></tr>
+      <tr><th scope="row">card</th><td><code>#1F1F21</code></td><td><code>#F2E7D1</code></td></tr>
+      <tr><th scope="row">border</th><td><code>#2C2B29</code></td><td><code>#E4D9C4</code></td></tr>
+      <tr><th scope="row">ink (cream)</th><td><code>#F3F0E8</code></td><td><code>#281812</code></td></tr>
+      <tr><th scope="row">muted</th><td><code>#9B968B</code></td><td><code>#706768</code></td></tr>
+      <tr><th scope="row">accent (gold)</th><td><code>#E9B23A</code></td><td><code>#BC8C37</code></td></tr>
+      <tr><th scope="row">onAccent</th><td><code>#1A120C</code></td><td><code>#181009</code></td></tr>
+      <tr><th scope="row">destructive</th><td><code>#FF6B5E</code></td><td><code>#C2410C</code></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p data-l="km"><strong>iOS។</strong> <code>Theme.dyn(dark, light)</code> បង្កើត <code>UIColor</code> ថាមវន្តដែលជ្រើសតម្លៃតាម <code>userInterfaceStyle</code>។ ការកំណត់ appearance (System / Light / Dark) ត្រូវបានរក្សាក្នុង <code>@AppStorage("appearance")</code> ហើយ <code>AppearanceApplier</code> កំណត់ <code>overrideUserInterfaceStyle</code> លើ UIWindow ផ្ទាល់ ព្រោះ (ដូចដែល comment ក្នុងកូដនិយាយ) <code>preferredColorScheme(nil)</code> មិន revert ទៅ scheme ប្រព័ន្ធឡើងវិញទេ។ ឯ <code>Theme.registerFonts()</code> ចុះឈ្មោះឯកសារ <code>.ttf</code> ទាំងអស់នៅពេលចាប់ផ្តើម ហើយកំណត់ font ដល់ navigation bar និង segmented control។ <strong>Android។</strong> <code>KamkutColors</code> ជា data class ដែលមាន <code>DarkKamkutColors</code> និង <code>LightKamkutColors</code> ផ្តល់តាម <code>CompositionLocal</code> (<code>LocalKamkutColors</code>) ហើយ <code>KamkutTheme(appearance)</code> ផ្គូផ្គង Material 3 <code>colorScheme</code>។ <code>MonoFamily</code> មាន 4 ទម្ងន់ពី <code>res/font/jetbrains_mono_*.ttf</code> ហើយ Typography ទាំងអស់ប្រើវា។ Android មាន token បន្ថែម <code>accentText</code> (ក្នុង light គឺ <code>#8A6422</code> ងងឹតជាងពណ៌មាស) សម្រាប់ពណ៌មាសជាអក្សរ។ Preview canvas នៅខ្មៅទាំង light និង dark។</p>
+  <p data-l="en"><strong>iOS.</strong> <code>Theme.dyn(dark, light)</code> builds a dynamic <code>UIColor</code> that picks a value by <code>userInterfaceStyle</code>. The appearance setting (System / Light / Dark) is stored in <code>@AppStorage("appearance")</code>, and <code>AppearanceApplier</code> sets <code>overrideUserInterfaceStyle</code> on the UIWindows directly because (as the code comment says) <code>preferredColorScheme(nil)</code> does not revert to the system scheme. <code>Theme.registerFonts()</code> registers every bundled <code>.ttf</code> at launch and styles the navigation bar and segmented controls. <strong>Android.</strong> <code>KamkutColors</code> is a data class with <code>DarkKamkutColors</code> and <code>LightKamkutColors</code>, provided through a <code>CompositionLocal</code> (<code>LocalKamkutColors</code>), and <code>KamkutTheme(appearance)</code> maps them onto a Material 3 <code>colorScheme</code>. <code>MonoFamily</code> has four weights from <code>res/font/jetbrains_mono_*.ttf</code> and every Typography style uses it. Android has one extra token, <code>accentText</code> (in light mode <code>#8A6422</code>, darker than the gold) for gold used as text. The preview canvas stays black in both modes.</p>
+
+  <figure class="code"><figcaption><code>ios/Kamkut/Model/Helpers.swift:32-38</code> <span data-l="km">iOS៖ ពណ៌ថាមវន្តដែលជ្រើសតាម interface style</span><span data-l="en">iOS: dynamic colours chosen by interface style.</span></figcaption><pre><code class="lang-swift">static func dyn(_ dark: String, _ light: String) -&gt; UIColor {
+    UIColor { $0.userInterfaceStyle == .dark ? UIColor(hex: dark) : UIColor(hex: light) }
+}
+static let uiAccent = dyn("#E9B23A", "#BC8C37")
+static let uiOnAccent = dyn("#1A120C", "#181009")
+static let uiInk = dyn("#F3F0E8", "#281812")
+static let uiBg = dyn("#0F0F10", "#FCFAF4")</code></pre></figure>
+  <figure class="code"><figcaption><code>android/app/src/main/java/com/kamkut/app/ui/Theme.kt:53-57</code> <span data-l="km">Android៖ palette ដូចគ្នាជាទិន្នន័យសាមញ្ញ ផ្តល់ចុះតាមដើម Compose</span><span data-l="en">Android: the same palette as plain data, provided down the Compose tree.</span></figcaption><pre><code class="lang-kotlin">val DarkKamkutColors = KamkutColors(
+    bg = Color(0xFF0F0F10), surface1 = Color(0xFF161617), surface2 = Color(0xFF1F1F21), border = Color(0xFF2C2B29),
+    cream = Color(0xFFF3F0E8), muted = Color(0xFF9B968B), accent = Color(0xFFE9B23A), accentText = Color(0xFFE9B23A), onAccent = Color(0xFF1A120C),
+    destructive = Color(0xFFFF6B5E), isDark = true,
+)</code></pre></figure>
+</section>
+
+<section id="limits" aria-labelledby="limits-h">
+  <h2 id="limits-h"><span data-l="km">ការធ្វើតេស្ត ដែនកំណត់ និងការដោះដូរដោយស្មោះត្រង់</span><span data-l="en">Testing, limits and honest trade-offs</span> <a class="anchor" href="#limits" aria-label="Link to this section">#</a></h2>
+
+  <h3 id="limits-testing"><span data-l="km">របៀបដែលវាត្រូវបានផ្ទៀងផ្ទាត់</span><span data-l="en">How it is verified</span></h3>
+  <p data-l="km">repository នេះមិនមានសំណុំ unit test ស្វ័យប្រវត្តិទេ។ ជំនួសវិញ កម្មវិធីទាំងពីរមាន harness សម្រាប់ debug ដែលរត់ pipeline ពិតប្រាកដ។ លើ iOS <code>DebugHooks.swift</code> (មានតែក្នុង build <code>DEBUG</code> ប៉ុណ្ណោះ គ្មានក្នុង release) ទទួល launch argument ដូចជា <code>-kamkutExportTest</code>, <code>-kamkutFrames</code> (render PNG តាម compositor ដូចគ្នា), <code>-kamkutCaptionTest</code>, <code>-kamkutTtsTest</code>, <code>-kamkutActions</code> (សកម្មភាព EditorModel ជាស្គ្រីប) និង <code>-kamkutLocales</code> ហើយចេញលទ្ធផលទៅ <code>kk_debug.log</code>។ លើ Android មាន <code>DebugExportActivity</code> និង <code>DebugPreviewActivity</code> (នៅក្នុង source set <code>debug</code> ប៉ុណ្ណោះ) ដែល export គម្រោងដោយគ្មាន UI និងថតរូបអេក្រង់ preview ពិតដោយ <code>PixelCopy</code> តាម <code>adb</code>។ នេះមានន័យថា គុណភាពផ្អែកលើការផ្ទៀងផ្ទាត់ដោយដៃ និងស្គ្រីប ជាជាងការធ្វើតេស្តស្វ័យប្រវត្តិ។ យើងនិយាយដោយត្រង់ពីរឿងនេះ។</p>
+  <p data-l="en">The repository has no automated unit-test suite. Instead, both apps carry debug harnesses that run the real pipeline. On iOS, <code>DebugHooks.swift</code> (compiled only in <code>DEBUG</code>, never in release) reads launch arguments such as <code>-kamkutExportTest</code>, <code>-kamkutFrames</code> (renders PNGs through the same compositor), <code>-kamkutCaptionTest</code>, <code>-kamkutTtsTest</code>, <code>-kamkutActions</code> (scripted EditorModel actions) and <code>-kamkutLocales</code>, and writes to <code>kk_debug.log</code>. On Android there are <code>DebugExportActivity</code> and <code>DebugPreviewActivity</code> (in the <code>debug</code> source set only) that export a project headlessly and screenshot the real preview with <code>PixelCopy</code> over <code>adb</code>. In other words, quality rests on manual and scripted verification rather than automated tests, and we would rather say so plainly.</p>
+
+  <h3 id="limits-list"><span data-l="km">ដែនកំណត់ និងការដោះដូរ</span><span data-l="en">Limits and trade-offs</span></h3>
+  <ul>
+    <li><span data-l="km"><strong>Simulator មិនអាចធ្វើ Vision segmentation បាន។</strong> ការកាត់ផ្ទៃខាងក្រោយត្រូវតែសាកល្បងលើឧបករណ៍ពិត (ឬ macOS)។ កូដបង្ខំ CPU លើ Simulator ហើយបរាជ័យយ៉ាងច្បាស់ លុះត្រាតែគ្មាន frame ណាមួយបាន segment។ Simulator ក៏មិនមាន camera roll វីដេអូលំនាំដើមដែរ (អូសឯកសារវីដេអូទៅលើបង្អួច Simulator)។</span><span data-l="en"><strong>The Simulator cannot run Vision segmentation.</strong> Background removal has to be tested on a real device (or macOS). The code forces the CPU on the Simulator and fails loudly unless at least one frame was segmented. The Simulator also has no camera-roll videos by default (drag a video file onto the Simulator window).</span></li>
+    <li><span data-l="km"><strong>Metal kernel មិនដំណើរការលើ Simulator។</strong> Vignette និង VHS ប្រើច្រវាក់ Core Image ដែលស្មើគ្នាជំនួស ដូច្នេះរូបរាងស្រដៀងគ្នា ប៉ុន្តែមិនដូចគ្នាទាំងស្រុងទេ។</span><span data-l="en"><strong>Metal kernels do not run on the Simulator.</strong> Vignette and VHS use equivalent Core Image chains there, so the look is similar but not identical.</span></li>
+    <li><span data-l="km"><strong>"ដូចគ្នា" មានន័យថាស្របតាម spec មិនមែនដូចគ្នាតាម pixel ទេ។</strong> Filter ពណ៌ត្រូវបានសរសេរដាច់ដោយឡែក (Core Image photo effect លើ iOS ធៀបនឹងគណិតវិទ្យា matrix ក្នុង GLSL លើ Android) ចលនា loop និង gradient មានប៉ារ៉ាម៉ែត្រខុសគ្នា preview ប្រើ resolution ទាបជាង export (720 លើ iOS, 540 លើ Android)។</span><span data-l="en"><strong>"Identical" means identical to the spec, not pixel for pixel.</strong> Colour filters are written separately (Core Image photo effects on iOS, matrix math in GLSL on Android), loop animations and the gradient style have different parameters, and the preview renders at a lower resolution than the export (720 on iOS, 540 on Android).</span></li>
+    <li><span data-l="km"><strong>Blend mode លើ Android ជាការប៉ាន់ស្មាន។</strong> compositor របស់ Media3 គ្រាន់តែលាយ alpha ដូច្នេះ multiply/darken ត្រូវបាន map ទៅ "ខ្មៅដែលមាន alpha = 1 − luminance" ហើយ screen/lighten/add ទៅ "alpha = ភាពភ្លឺ"។ កូដនិយាយថាវាត្រឹមត្រូវសម្រាប់ footage ងងឹត ឬភ្លឺ ហើយប៉ាន់ស្មានក្នុងករណីផ្សេង។ iOS ប្រើ blend filter ពិតរបស់ Core Image។</span><span data-l="en"><strong>Blend modes on Android are approximations.</strong> Media3's compositor only alpha-blends, so multiply/darken are mapped to "black with alpha = 1 − luminance" and screen/lighten/add to "alpha = brightness". The code says this is exact for dark- or light-backed footage and approximate otherwise. iOS uses real Core Image blend filters.</span></li>
+    <li><span data-l="km"><strong>Transition លើ Android ត្រូវការ render ជាមុន។</strong> ពេលអ្នកប្តូរ transition នឹងមានរយៈពេលខ្លីដែល preview បង្ហាញការកាត់ស្រួត។ លើ iOS transition ជាពេលវេលាពិត។</span><span data-l="en"><strong>Transitions on Android need a pre-render.</strong> After you change a transition there is a short window in which the preview shows a hard cut. On iOS transitions are real-time.</span></li>
+    <li><span data-l="km"><strong>Cutout លើ Android មានគុណភាពទាបជាង</strong> ដូចដែលបានពន្យល់ខាងលើ (frame សម្រាប់ segmentation ≤ 512 ហើយការ render ចំហៀងខ្លី ≤ 720)។ ដំណើរការរបស់ iOS ប្រហែលពេលវេលាពិតលើ iPhone ថ្មីៗ (ទៅតាម README)។</span><span data-l="en"><strong>Cutout on Android is lower fidelity</strong>, as explained above (segmentation frame within 512, working short side at most 720). iOS processing takes about real time on recent iPhones, according to the README.</span></li>
+    <li><span data-l="km"><strong>Captions ត្រូវការ recogniser លើឧបករណ៍។</strong> iOS ប្រើ <code>requiresOnDeviceRecognition</code> ហើយ Android ត្រូវការ API 33+ និង <code>isOnDeviceRecognitionAvailable</code> (SPEC សរសេរ API 31+ ប៉ុន្តែកូដតម្រូវ 33)។ ខ្មែរត្រូវបានបង្ហាញជាជម្រើសបិទ ពេលឧបករណ៍មិនមាន ហើយកម្មវិធីមិនធ្លាក់ទៅប្រើបណ្តាញជាដាច់ខាត។</span><span data-l="en"><strong>Captions need an on-device recogniser.</strong> iOS uses <code>requiresOnDeviceRecognition</code>; Android needs API 33+ and <code>isOnDeviceRecognitionAvailable</code> (the spec says API 31+, the code requires 33). Khmer is shown as a disabled option when the device lacks it, and the app never falls back to the network.</span></li>
+    <li><span data-l="km"><strong>HEVC និង 4K អាស្រ័យលើឧបករណ៍។</strong> Android កាត់ resolution និង codec ទៅអ្វីដែល encoder គាំទ្រ ហើយ iOS បង្ហាញ HEVC តែនៅពេលមាន preset។</span><span data-l="en"><strong>HEVC and 4K depend on the device.</strong> Android clamps resolution and codec to what its encoders support, and iOS offers HEVC only when a preset exists.</span></li>
+    <li><span data-l="km"><strong>Reverse ត្រូវ render ជាមុនម្តង។</strong> ទាំងពីរបង្កើតច្បាប់ចម្លងបញ្ច្រាស (<code>rev_*.mp4</code>) ហើយ cache។ iOS អាន frame ថយក្រោយជាចំណែកតូចៗដើម្បីកំណត់ memory ហើយ Android អ៊ិនកូដ H.264 all-intra រួចរៀបបញ្ច្រាសដោយមិនចាំបាច់ decode ម្តងទៀត។</span><span data-l="en"><strong>Reverse needs a one-time pre-render.</strong> Both build a reversed copy (<code>rev_*.mp4</code>) and cache it. iOS reads frames backwards in small chunks to bound memory; Android encodes an all-intra H.264 stream and then muxes it in reverse, with no second decode.</span></li>
+    <li><span data-l="km"><strong>Undo ជា snapshot ទាំង Project។</strong> សាមញ្ញ និងទុកចិត្តបាន ប៉ុន្តែ memory កើនតាមទំហំ model (មិនមែន media) ហើយមានដែនកំណត់ 60 (iOS) និង 50 (Android) ជំហាន។</span><span data-l="en"><strong>Undo is a whole-Project snapshot.</strong> It is simple and robust, but memory grows with the model's size (not the media), and depth is capped at 60 (iOS) and 50 (Android) steps.</span></li>
+    <li><span data-l="km"><strong>README មួយចំនួនហួសសម័យ។</strong> README របស់ iOS ពណ៌នាអំពី <code>AVAssetExportSession</code> និង Core Image handler ប៉ុន្តែកូដបច្ចុប្បន្នប្រើ reader/writer និង compositor ផ្ទាល់ខ្លួន ហើយ README របស់ Android នៅតែនិយាយអំពី <code>Shaders.kt</code> ដែលបច្ចុប្បន្នគ្មានអ្វីប្រើ។ ទំព័រនេះអនុវត្តតាមកូដ។</span><span data-l="en"><strong>Some READMEs are out of date.</strong> The iOS README describes <code>AVAssetExportSession</code> and a Core Image handler, but the code now uses a reader/writer and a custom compositor, and the Android README still lists <code>Shaders.kt</code>, which nothing uses any more. This page follows the code.</span></li>
+  </ul>
+</section>
+
+
+  </article>
+</div>
+<div class="cta-row"><a class="btn btn--gold" href="index.html"><span data-l="km">← ត្រឡប់ទៅទំព័រដើម</span><span data-l="en">← Back to home</span></a><a class="btn btn--ghost" href="privacy.html"><span data-l="km">ឯកជនភាព</span><span data-l="en">Privacy</span></a></div>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <div>
+      <a class="brand" href="index.html"><img src="assets/brand/kamkut-logo-192.webp" width="34" height="34" alt="">KamKut</a>
+      <p class="muted"><span data-l="km">កម្មវិធីកាត់តវីដេអូ ឥតគិតថ្លៃ ប្រើបានដោយគ្មានអ៊ីនធឺណិត សម្រាប់មនុស្សគ្រប់គ្នា។</span><span data-l="en">Free, offline video editing for everyone.</span></p>
+      <a class="spons" href="https://kamsophy.com" target="_blank" rel="noopener"><img src="assets/brand/kamsophy-logo-256.png" width="26" height="26" alt=""><span><span data-l="km">ឧបត្ថម្ភដោយ</span><span data-l="en">Sponsored By</span> <b>KamSophy</b></span></a>
+    </div>
+    <nav aria-label="Footer"><a href="how-its-built.html"><span data-l="km">របៀបដែលយើងបង្កើត</span><span data-l="en">How It's Built</span></a><a href="privacy.html"><span data-l="km">ឯកជនភាព</span><span data-l="en">Privacy</span></a><a href="terms.html"><span data-l="km">លក្ខខណ្ឌ</span><span data-l="en">Terms</span></a><a href="support.html"><span data-l="km">ជំនួយ</span><span data-l="en">Support</span></a><a href="licenses.html"><span data-l="km">អាជ្ញាប័ណ្ណ</span><span data-l="en">Licenses</span></a></nav>
+    <p class="copy">&copy; 2026 KamKut. <span data-l="km">គ្មានអ៊ីនធឺណិត។ គ្មានគណនី។ គ្មានការតាមដាន។</span><span data-l="en">Fully offline. No accounts. No tracking.</span></p>
+  </div>
+</footer>
+</body>
+</html>

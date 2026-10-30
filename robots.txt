@@ -1,0 +1,5 @@
+# NOTE: https://uddom1234.github.io/kamkut-site (GitHub Pages) is the base URL; update if you move to your own domain.
+User-agent: *
+Allow: /
+
+Sitemap: https://uddom1234.github.io/kamkut-site/sitemap.xml

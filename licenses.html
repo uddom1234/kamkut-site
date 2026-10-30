@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="km" data-lang="km">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script>(function(){var d=document.documentElement,t,l;try{var q=new URLSearchParams(location.search);t=q.get("theme")||localStorage.getItem("kk-theme");l=q.get("lang")||localStorage.getItem("kk-lang")}catch(e){}if(t!=="light"&&t!=="dark")t=window.matchMedia&&matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";if(l!=="en"&&l!=="km")l="km";d.setAttribute("data-theme",t);d.setAttribute("data-lang",l);d.setAttribute("lang",l);d.classList.add("js")})()</script>
+<title>Open-source and font licences | KamKut</title>
+<meta name="description" content="Licences for the fonts and open-source components bundled in KamKut: SIL Open Font License 1.1, Apache 2.0, and platform libraries.">
+<meta name="theme-color" content="#0F0F10">
+<meta name="color-scheme" content="dark light">
+<!-- NOTE: https://uddom1234.github.io/kamkut-site (GitHub Pages) is the base URL. Replace in canonical and sitemap.xml if you move to your own domain. -->
+<link rel="canonical" href="https://uddom1234.github.io/kamkut-site/licenses.html">
+<link rel="icon" type="image/png" href="assets/brand/favicon.png">
+<link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
+<link rel="stylesheet" href="assets/css/site.css">
+
+<script defer src="assets/js/site.js"></script>
+<style>.doc pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;max-height:480px}</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav" id="top">
+  <div class="wrap nav__in">
+    <a class="brand" href="index.html"><img src="assets/brand/kamkut-logo-192.webp" width="34" height="34" alt="">KamKut</a>
+    <nav class="nav__links" aria-label="Primary"><a href="index.html#features"><span data-l="km">លក្ខណៈពិសេស</span><span data-l="en">Features</span></a><a href="index.html#platforms"><span data-l="km">វេទិកា</span><span data-l="en">Platforms</span></a><a href="how-its-built.html"><span data-l="km">របៀបដែលយើងបង្កើត</span><span data-l="en">How It's Built</span></a><a href="privacy.html"><span data-l="km">ឯកជនភាព</span><span data-l="en">Privacy</span></a></nav>
+    <div class="nav__tools">
+      <a class="spons" href="https://kamsophy.com" target="_blank" rel="noopener"><img src="assets/brand/kamsophy-logo-256.png" width="26" height="26" alt=""><span><span class="sp__pre"><span data-l="km">ឧបត្ថម្ភដោយ</span><span data-l="en">Sponsored By</span> </span><b>KamSophy</b></span></a>
+      <button class="tbtn" id="lang-toggle" type="button" aria-label="ប្តូរទៅភាសាអង់គ្លេស" data-aria-km="ប្តូរទៅភាសាអង់គ្លេស" data-aria-en="Switch to Khmer"><span data-l="km">EN</span><span data-l="en">ខ្មែរ</span></button>
+      <button class="tbtn" id="theme-toggle" type="button" aria-label="ប្តូរពន្លឺ ភ្លឺ/ងងឹត" data-aria-km="ប្តូរពន្លឺ ភ្លឺ/ងងឹត" data-aria-en="Toggle light and dark theme"><svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+      <button class="tbtn tbtn--menu" id="menu-toggle" type="button" aria-expanded="false" aria-controls="nav-panel" aria-label="Menu" data-aria-km="ម៉ឺនុយ" data-aria-en="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+    <div class="nav__panel" id="nav-panel"><a href="index.html#features"><span data-l="km">លក្ខណៈពិសេស</span><span data-l="en">Features</span></a><a href="index.html#platforms"><span data-l="km">វេទិកា</span><span data-l="en">Platforms</span></a><a href="how-its-built.html"><span data-l="km">របៀបដែលយើងបង្កើត</span><span data-l="en">How It's Built</span></a><a href="privacy.html"><span data-l="km">ឯកជនភាព</span><span data-l="en">Privacy</span></a></div>
+  </div>
+</header>
+
+<main id="main" class="doc">
+<header>
+  <h1><span data-l="km">អាជ្ញាប័ណ្ណប្រភពបើកចំហ និងពុម្ពអក្សរ</span><span data-l="en">Open-source and font licences</span></h1>
+  <p class="meta" data-l="km">KamKut ភ្ជាប់មកជាមួយពុម្ពអក្សរប្រភពបើកចំហ ហើយប្រើបណ្ណាល័យរបស់វេទិកា។ សេចក្តីជូនដំណឹងរបស់ពួកវាត្រូវបានផ្តល់នៅទីនេះ។</p>
+<p class="meta" data-l="en">KamKut bundles open-source fonts and uses platform libraries. Their notices are reproduced here.</p>
+<p class="meta" data-l="km">ចំណាំ៖ អត្ថបទអាជ្ញាប័ណ្ណពេញលេញខាងក្រោម (SIL Open Font License 1.1 និង Apache License 2.0) ត្រូវបានផ្តល់ជាភាសាអង់គ្លេសដើម ដើម្បីរក្សាភាពត្រឹមត្រូវផ្លូវច្បាប់។</p>
+<p class="meta" data-l="en">Note: the full licence texts below (SIL Open Font License 1.1 and Apache License 2.0) are reproduced in their original English.</p>
+</header>
+
+<nav class="toc" aria-labelledby="toc-h">
+  <p class="toc__title" id="toc-h"><span data-l="km">នៅលើទំព័រនេះ</span><span data-l="en">On this page</span></p>
+  <ol>
+    <li><a href="#summary"><span data-l="km">សេចក្តីសង្ខេប</span><span data-l="en">Summary</span></a></li>
+    <li><a href="#fonts"><span data-l="km">ពុម្ពអក្សរដែលភ្ជាប់មកជាមួយ</span><span data-l="en">Bundled fonts</span></a></li>
+    <li><a href="#jetbrains"><span data-l="km">JetBrains Mono (គេហទំព័រ)</span><span data-l="en">JetBrains Mono (website)</span></a></li>
+    <li><a href="#platform"><span data-l="km">ក្របខ័ណ្ឌ និងបណ្ណាល័យរបស់វេទិកា</span><span data-l="en">Platform frameworks and libraries</span></a></li>
+    <li><a href="#ofl">SIL Open Font License 1.1</a></li>
+    <li><a href="#apache">Apache License 2.0</a></li>
+  </ol>
+</nav>
+
+<section id="summary" aria-labelledby="summary-h">
+<div class="callout">
+  <span class="callout__title" id="summary-h"><span data-l="km">សរុបខ្លីៗ</span><span data-l="en">In short</span></span>
+  <p data-l="km">KamKut មានពុម្ពអក្សរ ៥១។ ៤៧ ស្ថិតក្រោម SIL Open Font License 1.1 ហើយ ៤ ស្ថិតក្រោម Apache License 2.0។ អ្នកអាចប្រើអត្ថបទដែលបង្ហាញដោយពុម្ពអក្សរទាំងនេះក្នុងវីដេអូរបស់អ្នក រួមទាំងវីដេអូពាណិជ្ជកម្មផងដែរ។ សំណួរ៖ <a href="mailto:hello@kamsophy.com">hello@kamsophy.com</a>។</p>
+<p data-l="en">KamKut includes 51 fonts. 47 are under the SIL Open Font License 1.1 and 4 are under the Apache License 2.0. You may use text rendered with these fonts in your own videos, including commercial ones. Questions: <a href="mailto:hello@kamsophy.com">hello@kamsophy.com</a><!-- TODO: confirm contact email -->.</p>
+</div>
+</section>
+
+<section id="fonts" aria-labelledby="fonts-h">
+<h2 id="fonts-h"><span data-l="km">ពុម្ពអក្សរដែលភ្ជាប់មកជាមួយ</span><span data-l="en">Bundled fonts</span></h2>
+<p data-l="km">បន្ទាត់កម្មសិទ្ធិបញ្ញា (copyright) ត្រូវបានយកចេញពីឯកសារអាជ្ញាប័ណ្ណដែលភ្ជាប់មកជាមួយពុម្ពអក្សរនីមួយៗ។ ឈ្មោះពុម្ពអក្សរដែលបានបម្រុងទុក (Reserved Font Names) ដែលអាចអនុវត្តបាន ត្រូវបានចែងក្នុងឯកសារទាំងនោះ ហើយត្រូវបានគោរព។</p>
+<p data-l="en">Copyright lines are taken from the licence file shipped with each font. Reserved Font Names, where applicable, are stated in those files and are respected.</p>
+<div class="table-wrap">
+<table>
+  <thead><tr><th><span data-l="km">ពុម្ពអក្សរ</span><span data-l="en">Font</span></th><th><span data-l="km">អក្សរ</span><span data-l="en">Script</span></th><th><span data-l="km">អាជ្ញាប័ណ្ណ</span><span data-l="en">Licence</span></th><th><span data-l="km">កម្មសិទ្ធិបញ្ញា</span><span data-l="en">Copyright</span></th></tr></thead>
+  <tbody>
+<tr><td>Angkor</td><td><span data-l="km">ខ្មែរ</span><span data-l="en">Khmer</span></td><td>SIL OFL 1.1</td><td>Copyright 2020 The Angkor Project Authors (https://github.com/danhhong/Angkor)</td></tr>
+<tr><td>Battambang</td><td><span data-l="km">ខ្មែរ</span><span data-l="en">Khmer</span></td><td>SIL OFL 1.1</td><td>Copyright 2019 The Battambang Project Authors (https://github.com/danhhong/Battambang)</td></tr>
+<tr><td>Bayon</td><td><span data-l="km">ខ្មែរ</span><span data-l="en">Khmer</span></td><td>SIL OFL 1.1</td><td>Copyright 2019 The Bayon Project Authors (https://github.com/danhhong/Bayon)</td></tr>
+<tr><td>Bokor</td><td><span data-l="km">ខ្មែរ</span><span data-l="en">Khmer</span></td><td>SIL OFL 1.1</td><td>Copyright 2020 The Bokor Project Authors (https://github.com/danhhong/Bokor)</td></tr>
+<tr><td>Chenla</td><td><span data-l="km">ខ្មែរ</span><span data-l="en">Khmer</span></td><td>SIL OFL 1.1</td><td>Copyright (c) 2010, Danh Hong (khmertype.blogspot.com), with Reserved Font Name Chenla.</td></tr>
+<tr><td>Content</td><td><span data-l="km">ខ្មែរ</span><span data-l="en">Khmer</span></td><td>SIL OFL 1.1</td><td>Copyright (c) 2010, Danh Hong (khmertype.blogspot.com), with Reserved Font Name Content.</td></tr>
+<tr><td>Dangrek</td><td><span data-l="km">ខ្មែរ</span><span data-l="en">Khmer</span></td><td>SIL OFL 1.1</td><td>Copyright 2020 The Dangrek Project Authors (https://github.com/danhhong/Dangrek)</td></tr>
+<tr><td>Fasthand</td><td><span data-l="km">ខ្មែរ</span><span data-l="en">Khmer</span></td><td>SIL OFL 1.1</td><td>Copyright 2020 The Fasthand Project Authors (https://github.com/danhhong/Fasthand)</td></tr>
+<tr><td>Freehand</td><td><span data-l="km">ខ្មែរ</span><span data-l="en">Khmer</span></td><td>SIL OFL 1.1</td><td>Copyright 2020 The Freehand Project Authors (https://github.com/danhhong/Freehand)</td></tr>
+<tr><td>Hanuman</td><td><span data-l="km">ខ្មែរ</span><span data-l="en">Khmer</span></td><td>SIL OFL 1.1</td><td>Copyright 2019 The Hanuman Project Authors (https://github.com/danhhong/Hanuman)</td></tr>
+<tr><td>Kantumruy Pro</td><td><span data-l="km">ខ្មែរ</span><span data-l="en">Khmer</span></td><td>SIL OFL 1.1</td><td>Copyright 2022 The Kantumruy Pro Project Authors (https://github.com/googlefonts/kantumruy)</td></tr>
+<tr><td>Kdam Thmor Pro</td><td><span data-l="km">ខ្មែរ</span><span data-l="en">Khmer</span></td><td>SIL OFL 1.1</td><td>Copyright 2022 The Kdam Thmor Project Authors (https://www.github.com/sovichet/kdam-thmor-pro)</td></tr>
+<tr><td>Khmer</td><td><span data-l="km">ខ្មែរ</span><span data-l="en">Khmer</span></td><td>SIL OFL 1.1</td><td>Copyright (c) 2010, Danh Hong (khmertype.blogspot.com), with Reserved Font Name Khmer.</td></tr>
+<tr><td>Koulen</td><td><span data-l="km">ខ្មែរ</span><span data-l="en">Khmer</span></td><td>SIL OFL 1.1</td><td>Copyright 2019 The Koulen Project Authors (https://github.com/danhhong/Koulen)</td></tr>
+<tr><td>Metal</td><td><span data-l="km">ខ្មែរ</span><span data-l="en">Khmer</span></td><td>SIL OFL 1.1</td><td>Copyright 2020 The Metal Project Authors (https://github.com/danhhong/Metal)</td></tr>
+<tr><td>Moul</td><td><span data-l="km">ខ្មែរ</span><span data-l="en">Khmer</span></td><td>SIL OFL 1.1</td><td>Copyright 2020 The Moul Project Authors (https://github.com/danhhong/Moul)</td></tr>
+<tr><td>Moulpali</td><td><span data-l="km">ខ្មែរ</span><span data-l="en">Khmer</span></td><td>SIL OFL 1.1</td><td>Copyright 2019 The Moulpali Project Authors (https://github.com/danhhong/Moulpali)</td></tr>
+<tr><td>Nokora</td><td><span data-l="km">ខ្មែរ</span><span data-l="en">Khmer</span></td><td>SIL OFL 1.1</td><td>Copyright 2019 The Nokora Project Authors (https://github.com/danhhong/Nokora)</td></tr>
+<tr><td>Noto Sans Khmer</td><td><span data-l="km">ខ្មែរ</span><span data-l="en">Khmer</span></td><td>SIL OFL 1.1</td><td>Copyright 2022 The Noto Project Authors (https://github.com/notofonts/khmer)</td></tr>
+<tr><td>Noto Serif Khmer</td><td><span data-l="km">ខ្មែរ</span><span data-l="en">Khmer</span></td><td>SIL OFL 1.1</td><td>Copyright 2022 The Noto Project Authors (https://github.com/notofonts/khmer)</td></tr>
+<tr><td>Odor Mean Chey</td><td><span data-l="km">ខ្មែរ</span><span data-l="en">Khmer</span></td><td>SIL OFL 1.1</td><td>Copyright 2020 The Odor Mean Chey Project Authors (https://github.com/danhhong/OdorMeanChey)</td></tr>
+<tr><td>Preahvihear</td><td><span data-l="km">ខ្មែរ</span><span data-l="en">Khmer</span></td><td>SIL OFL 1.1</td><td>Copyright 2019 The Preahvihear Project Authors (https://github.com/danhhong/Preahvihear)</td></tr>
+<tr><td>Siemreap</td><td><span data-l="km">ខ្មែរ</span><span data-l="en">Khmer</span></td><td>SIL OFL 1.1</td><td>Copyright (c) 2010, Danh Hong (khmertype.blogspot.com), with Reserved Font Name Siemreap.</td></tr>
+<tr><td>Suwannaphum</td><td><span data-l="km">ខ្មែរ</span><span data-l="en">Khmer</span></td><td>SIL OFL 1.1</td><td>Copyright 2019 The Suwannaphum Project Authors (https://github.com/danhhong/Suwannaphum)</td></tr>
+<tr><td>Taprom</td><td><span data-l="km">ខ្មែរ</span><span data-l="en">Khmer</span></td><td>SIL OFL 1.1</td><td>Copyright 2019 The Taprom Project Authors (https://github.com/danhhong/Taprom)</td></tr>
+<tr><td>Abril Fatface</td><td><span data-l="km">ឡាតាំង</span><span data-l="en">Latin</span></td><td>SIL OFL 1.1</td><td>Copyright (c) 2011, TypeTogether (www.type-together.com), with Reserved Font Names &quot;Abril&quot; and &quot;Abril Fatface&quot;</td></tr>
+<tr><td>Anton</td><td><span data-l="km">ឡាតាំង</span><span data-l="en">Latin</span></td><td>SIL OFL 1.1</td><td>Copyright 2020 The Anton Project Authors (https://github.com/googlefonts/AntonFont.git)</td></tr>
+<tr><td>Archivo Black</td><td><span data-l="km">ឡាតាំង</span><span data-l="en">Latin</span></td><td>SIL OFL 1.1</td><td>Copyright 2017 The Archivo Black Project Authors (https://github.com/Omnibus-Type/ArchivoBlack)</td></tr>
+<tr><td>Bangers</td><td><span data-l="km">ឡាតាំង</span><span data-l="en">Latin</span></td><td>SIL OFL 1.1</td><td>Copyright 2010 The Bangers Project Authors (https://github.com/googlefonts/bangers)</td></tr>
+<tr><td>Bebas Neue</td><td><span data-l="km">ឡាតាំង</span><span data-l="en">Latin</span></td><td>SIL OFL 1.1</td><td>Copyright © 2010 by Dharma Type.</td></tr>
+<tr><td>Caveat</td><td><span data-l="km">ឡាតាំង</span><span data-l="en">Latin</span></td><td>SIL OFL 1.1</td><td>Copyright 2014 The Caveat Project Authors (https://github.com/googlefonts/caveat)</td></tr>
+<tr><td>Comfortaa</td><td><span data-l="km">ឡាតាំង</span><span data-l="en">Latin</span></td><td>SIL OFL 1.1</td><td>Copyright 2011 The Comfortaa Project Authors (https://github.com/alexeiva/comfortaa), with Reserved Font Name &quot;Comfortaa&quot;.</td></tr>
+<tr><td>Dancing Script</td><td><span data-l="km">ឡាតាំង</span><span data-l="en">Latin</span></td><td>SIL OFL 1.1</td><td>Copyright 2016 The Dancing Script Project Authors (https://github.com/googlefonts/DancingScript), with Reserved Font Name &#x27;Dancing Script&#x27;.</td></tr>
+<tr><td>Fredoka</td><td><span data-l="km">ឡាតាំង</span><span data-l="en">Latin</span></td><td>SIL OFL 1.1</td><td>Copyright 2016 The Fredoka Project Authors (https://github.com/hafontia/Fredoka-One)</td></tr>
+<tr><td>Inter</td><td><span data-l="km">ឡាតាំង</span><span data-l="en">Latin</span></td><td>SIL OFL 1.1</td><td>Copyright 2020 The Inter Project Authors (https://github.com/rsms/inter)</td></tr>
+<tr><td>JetBrains Mono</td><td><span data-l="km">ឡាតាំង</span><span data-l="en">Latin</span></td><td>SIL OFL 1.1</td><td>Copyright 2020 The JetBrains Mono Project Authors (https://github.com/JetBrains/JetBrainsMono)</td></tr>
+<tr><td>Lilita One</td><td><span data-l="km">ឡាតាំង</span><span data-l="en">Latin</span></td><td>SIL OFL 1.1</td><td>Copyright (c) 2011 Juan Montoreano (juan@remolacha.biz), with Reserved Font Name Lilita</td></tr>
+<tr><td>Lobster</td><td><span data-l="km">ឡាតាំង</span><span data-l="en">Latin</span></td><td>SIL OFL 1.1</td><td>Copyright 2010 The Lobster Project Authors (https://github.com/impallari/The-Lobster-Font), with Reserved Font Name &quot;Lobster&quot;.</td></tr>
+<tr><td>Luckiest Guy</td><td><span data-l="km">ឡាតាំង</span><span data-l="en">Latin</span></td><td>Apache License 2.0</td><td><span data-l="km">កម្មសិទ្ធិបញ្ញាស្ថិតនៅអ្នកនិពន្ធពុម្ពអក្សរ។ សូមមើលទំព័រ Google Fonts សម្រាប់ក្រុមពុម្ពអក្សរនេះ។</span><span data-l="en">Copyright held by the font&rsquo;s authors; see the Google Fonts page for this family.</span></td></tr>
+<tr><td>Montserrat</td><td><span data-l="km">ឡាតាំង</span><span data-l="en">Latin</span></td><td>SIL OFL 1.1</td><td>Copyright 2024 The Montserrat.Git Project Authors (https://github.com/JulietaUla/Montserrat.git)</td></tr>
+<tr><td>Oswald</td><td><span data-l="km">ឡាតាំង</span><span data-l="en">Latin</span></td><td>SIL OFL 1.1</td><td>Copyright 2016 The Oswald Project Authors (https://github.com/googlefonts/OswaldFont)</td></tr>
+<tr><td>Pacifico</td><td><span data-l="km">ឡាតាំង</span><span data-l="en">Latin</span></td><td>SIL OFL 1.1</td><td>Copyright 2018 The Pacifico Project Authors (https://github.com/googlefonts/Pacifico)</td></tr>
+<tr><td>Permanent Marker</td><td><span data-l="km">ឡាតាំង</span><span data-l="en">Latin</span></td><td>Apache License 2.0</td><td><span data-l="km">កម្មសិទ្ធិបញ្ញាស្ថិតនៅអ្នកនិពន្ធពុម្ពអក្សរ។ សូមមើលទំព័រ Google Fonts សម្រាប់ក្រុមពុម្ពអក្សរនេះ។</span><span data-l="en">Copyright held by the font&rsquo;s authors; see the Google Fonts page for this family.</span></td></tr>
+<tr><td>Playfair Display</td><td><span data-l="km">ឡាតាំង</span><span data-l="en">Latin</span></td><td>SIL OFL 1.1</td><td>Copyright 2017 The Playfair Display Project Authors (https://github.com/clauseggers/Playfair-Display), with Reserved Font Name &quot;Playfair Display&quot;</td></tr>
+<tr><td>Poppins</td><td><span data-l="km">ឡាតាំង</span><span data-l="en">Latin</span></td><td>SIL OFL 1.1</td><td>Copyright 2020 The Poppins Project Authors (https://github.com/itfoundry/Poppins)</td></tr>
+<tr><td>Press Start 2P</td><td><span data-l="km">ឡាតាំង</span><span data-l="en">Latin</span></td><td>SIL OFL 1.1</td><td>Copyright 2012 The Press Start 2P Project Authors (cody@zone38.net), with Reserved Font Name &quot;Press Start 2P&quot;.</td></tr>
+<tr><td>Righteous</td><td><span data-l="km">ឡាតាំង</span><span data-l="en">Latin</span></td><td>SIL OFL 1.1</td><td>Copyright (c) 2011 by Brian J. Bonislawsky DBA Astigmatic (AOETI) (astigma@astigmatic.com), with Reserved Font Names &quot;Righteous&quot;</td></tr>
+<tr><td>Roboto Slab</td><td><span data-l="km">ឡាតាំង</span><span data-l="en">Latin</span></td><td>Apache License 2.0</td><td><span data-l="km">កម្មសិទ្ធិបញ្ញាស្ថិតនៅអ្នកនិពន្ធពុម្ពអក្សរ។ សូមមើលទំព័រ Google Fonts សម្រាប់ក្រុមពុម្ពអក្សរនេះ។</span><span data-l="en">Copyright held by the font&rsquo;s authors; see the Google Fonts page for this family.</span></td></tr>
+<tr><td>Satisfy</td><td><span data-l="km">ឡាតាំង</span><span data-l="en">Latin</span></td><td>Apache License 2.0</td><td><span data-l="km">កម្មសិទ្ធិបញ្ញាស្ថិតនៅអ្នកនិពន្ធពុម្ពអក្សរ។ សូមមើលទំព័រ Google Fonts សម្រាប់ក្រុមពុម្ពអក្សរនេះ។</span><span data-l="en">Copyright held by the font&rsquo;s authors; see the Google Fonts page for this family.</span></td></tr>
+<tr><td>Shrikhand</td><td><span data-l="km">ឡាតាំង</span><span data-l="en">Latin</span></td><td>SIL OFL 1.1</td><td>Copyright (c) 2015 Jonny Pinhorn (jonpinhorn.typedesign@gmail.com)</td></tr>
+<tr><td>Space Grotesk</td><td><span data-l="km">ឡាតាំង</span><span data-l="en">Latin</span></td><td>SIL OFL 1.1</td><td>Copyright 2020 The Space Grotesk Project Authors (https://github.com/floriankarsten/space-grotesk)</td></tr>
+  </tbody>
+</table>
+</div>
+</section>
+
+<section id="jetbrains" aria-labelledby="jetbrains-h">
+<h2 id="jetbrains-h"><span data-l="km">JetBrains Mono (គេហទំព័រ)</span><span data-l="en">JetBrains Mono (website)</span></h2>
+<p data-l="km">គេហទំព័រនេះប្រើពុម្ពអក្សរ JetBrains Mono កម្មសិទ្ធិបញ្ញា 2020 The JetBrains Mono Project Authors (<a href="https://github.com/JetBrains/JetBrainsMono" rel="noopener">github.com/JetBrains/JetBrainsMono</a>) ដែលមានអាជ្ញាប័ណ្ណ SIL Open Font License 1.1 ខាងក្រោម។ គេហទំព័រក៏ប្រើ Bayon, Dangrek, Koulen និង Moul ពីតារាងខាងលើដែរ។ ពុម្ពអក្សរត្រូវបានផ្តល់ពីគេហទំព័រនេះផ្ទាល់ មិនមែនពីភាគីទីបីទេ។</p>
+<p data-l="en">This website is set in JetBrains Mono, copyright 2020 The JetBrains Mono Project Authors (<a href="https://github.com/JetBrains/JetBrainsMono" rel="noopener">github.com/JetBrains/JetBrainsMono</a>), licensed under the SIL Open Font License 1.1 below. The site also uses Bayon, Dangrek, Koulen and Moul from the table above. Fonts are served from this site, not from a third party.</p>
+</section>
+
+<section id="platform" aria-labelledby="platform-h">
+<h2 id="platform-h"><span data-l="km">ក្របខ័ណ្ឌ និងបណ្ណាល័យរបស់វេទិកា</span><span data-l="en">Platform frameworks and libraries</span></h2>
+<ul>
+  <li><span data-l="km"><strong>iOS។</strong> KamKut ត្រូវបានបង្កើតដោយប្រើក្របខ័ណ្ឌប្រព័ន្ធរបស់ Apple (ដូចជា SwiftUI, AVFoundation, Photos និង Vision) ដោយប្រើក្រោមអាជ្ញាប័ណ្ណ Apple Developer Program។ មិនមានកញ្ចប់ Swift របស់ភាគីទីបីទេ។</span><span data-l="en"><strong>iOS.</strong> KamKut is built with Apple&rsquo;s system frameworks (such as SwiftUI, AVFoundation, Photos and Vision), used under the Apple Developer Program licence. No third-party Swift packages are included.</span></li>
+  <li><span data-l="km"><strong>Android។</strong> បង្កើតដោយ AndroidX, Jetpack Compose និង Media3 ដែលមានអាជ្ញាប័ណ្ណ <a href="#apache">Apache License 2.0</a> បូកជាមួយ Kotlin និងបណ្ណាល័យពាក់ព័ន្ធក្រោមអាជ្ញាប័ណ្ណដូចគ្នា។</span><span data-l="en"><strong>Android.</strong> Built with AndroidX, Jetpack Compose and Media3, which are licensed under the <a href="#apache">Apache License 2.0</a>, plus Kotlin and related libraries under the same licence.</span></li>
+  <li><span data-l="km"><strong>ការដកផ្ទៃខាងក្រោយលើ Android។</strong> ម៉ូដែល Selfie Segmentation ពី Google ML Kit ត្រូវបានភ្ជាប់មកក្នុងកម្មវិធី ហើយប្រើក្រោម <a href="https://developers.google.com/ml-kit/terms" rel="noopener">លក្ខខណ្ឌសេវាកម្ម ML Kit</a>។ វាដំណើរការលើឧបករណ៍ ហើយកម្មវិធីគ្មានការអនុញ្ញាតប្រើអ៊ីនធឺណិតទេ។</span><span data-l="en"><strong>Background removal on Android.</strong> The Selfie Segmentation model from Google ML Kit is bundled inside the app and used under the <a href="https://developers.google.com/ml-kit/terms" rel="noopener">ML Kit Terms of Service</a>. It runs on the device; the app has no internet permission.</span></li>
+</ul>
+<!-- TODO: regenerate this list from the final Gradle dependency report before release -->
+</section>
+
+<section id="ofl" aria-labelledby="ofl-h">
+<h2 id="ofl-h">SIL Open Font License 1.1</h2>
+<p data-l="km">អាជ្ញាប័ណ្ណនេះអនុវត្តចំពោះគ្រប់ពុម្ពអក្សរដែលសម្គាល់ថា &ldquo;SIL OFL 1.1&rdquo; ខាងលើ ដែលនីមួយៗមានម្ចាស់កម្មសិទ្ធិបញ្ញាផ្ទាល់ខ្លួនដូចដែលបានរាយ។ អត្ថបទអាជ្ញាប័ណ្ណត្រូវបានផ្តល់ម្តងនៅទីនេះជាភាសាអង់គ្លេសដើម ហើយក៏មានតាម <a href="https://openfontlicense.org" rel="noopener">openfontlicense.org</a> ផងដែរ។</p>
+<p data-l="en">This licence applies to every font marked &ldquo;SIL OFL 1.1&rdquo; above, each with its own copyright holder as listed. It is reproduced once here and is also available at <a href="https://openfontlicense.org" rel="noopener">openfontlicense.org</a>.</p>
+<pre tabindex="0"><code>SIL OPEN FONT LICENSE Version 1.1 - 26 February 2007
+-----------------------------------------------------------
+
+PREAMBLE
+The goals of the Open Font License (OFL) are to stimulate worldwide
+development of collaborative font projects, to support the font creation
+efforts of academic and linguistic communities, and to provide a free and
+open framework in which fonts may be shared and improved in partnership
+with others.
+
+The OFL allows the licensed fonts to be used, studied, modified and
+redistributed freely as long as they are not sold by themselves. The
+fonts, including any derivative works, can be bundled, embedded, 
+redistributed and/or sold with any software provided that any reserved
+names are not used by derivative works. The fonts and derivatives,
+however, cannot be released under any other type of license. The
+requirement for fonts to remain under this license does not apply
+to any document created using the fonts or their derivatives.
+
+DEFINITIONS
+&quot;Font Software&quot; refers to the set of files released by the Copyright
+Holder(s) under this license and clearly marked as such. This may
+include source files, build scripts and documentation.
+
+&quot;Reserved Font Name&quot; refers to any names specified as such after the
+copyright statement(s).
+
+&quot;Original Version&quot; refers to the collection of Font Software components as
+distributed by the Copyright Holder(s).
+
+&quot;Modified Version&quot; refers to any derivative made by adding to, deleting,
+or substituting -- in part or in whole -- any of the components of the
+Original Version, by changing formats or by porting the Font Software to a
+new environment.
+
+&quot;Author&quot; refers to any designer, engineer, programmer, technical
+writer or other person who contributed to the Font Software.
+
+PERMISSION &amp; CONDITIONS
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of the Font Software, to use, study, copy, merge, embed, modify,
+redistribute, and sell modified and unmodified copies of the Font
+Software, subject to the following conditions:
+
+1) Neither the Font Software nor any of its individual components,
+in Original or Modified Versions, may be sold by itself.
+
+2) Original or Modified Versions of the Font Software may be bundled,
+redistributed and/or sold with any software, provided that each copy
+contains the above copyright notice and this license. These can be
+included either as stand-alone text files, human-readable headers or
+in the appropriate machine-readable metadata fields within text or
+binary files as long as those fields can be easily viewed by the user.
+
+3) No Modified Version of the Font Software may use the Reserved Font
+Name(s) unless explicit written permission is granted by the corresponding
+Copyright Holder. This restriction only applies to the primary font name as
+presented to the users.
+
+4) The name(s) of the Copyright Holder(s) or the Author(s) of the Font
+Software shall not be used to promote, endorse or advertise any
+Modified Version, except to acknowledge the contribution(s) of the
+Copyright Holder(s) and the Author(s) or with their explicit written
+permission.
+
+5) The Font Software, modified or unmodified, in part or in whole,
+must be distributed entirely under this license, and must not be
+distributed under any other license. The requirement for fonts to
+remain under this license does not apply to any document created
+using the Font Software.
+
+TERMINATION
+This license becomes null and void if any of the above conditions are
+not met.
+
+DISCLAIMER
+THE FONT SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT
+OF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE
+COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+INCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL
+DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM
+OTHER DEALINGS IN THE FONT SOFTWARE.</code></pre>
+</section>
+
+<section id="apache" aria-labelledby="apache-h">
+<h2 id="apache-h">Apache License 2.0</h2>
+<p data-l="km">អនុវត្តចំពោះពុម្ពអក្សរ Apache-2.0 ខាងលើ និងចំពោះ AndroidX, Jetpack Compose និង Media3។ អត្ថបទអាជ្ញាប័ណ្ណត្រូវបានផ្តល់ជាភាសាអង់គ្លេសដើម។</p>
+<p data-l="en">Applies to the Apache-2.0 fonts above and to AndroidX, Jetpack Compose and Media3.</p>
+<pre tabindex="0"><code>Apache License
+                           Version 2.0, January 2004
+                        http://www.apache.org/licenses/
+
+   TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
+
+   1. Definitions.
+
+      &quot;License&quot; shall mean the terms and conditions for use, reproduction,
+      and distribution as defined by Sections 1 through 9 of this document.
+
+      &quot;Licensor&quot; shall mean the copyright owner or entity authorized by
+      the copyright owner that is granting the License.
+
+      &quot;Legal Entity&quot; shall mean the union of the acting entity and all
+      other entities that control, are controlled by, or are under common
+      control with that entity. For the purposes of this definition,
+      &quot;control&quot; means (i) the power, direct or indirect, to cause the
+      direction or management of such entity, whether by contract or
+      otherwise, or (ii) ownership of fifty percent (50%) or more of the
+      outstanding shares, or (iii) beneficial ownership of such entity.
+
+      &quot;You&quot; (or &quot;Your&quot;) shall mean an individual or Legal Entity
+      exercising permissions granted by this License.
+
+      &quot;Source&quot; form shall mean the preferred form for making modifications,
+      including but not limited to software source code, documentation
+      source, and configuration files.
+
+      &quot;Object&quot; form shall mean any form resulting from mechanical
+      transformation or translation of a Source form, including but
+      not limited to compiled object code, generated documentation,
+      and conversions to other media types.
+
+      &quot;Work&quot; shall mean the work of authorship, whether in Source or
+      Object form, made available under the License, as indicated by a
+      copyright notice that is included in or attached to the work
+      (an example is provided in the Appendix below).
+
+      &quot;Derivative Works&quot; shall mean any work, whether in Source or Object
+      form, that is based on (or derived from) the Work and for which the
+      editorial revisions, annotations, elaborations, or other modifications
+      represent, as a whole, an original work of authorship. For the purposes
+      of this License, Derivative Works shall not include works that remain
+      separable from, or merely link (or bind by name) to the interfaces of,
+      the Work and Derivative Works thereof.
+
+      &quot;Contribution&quot; shall mean any work of authorship, including
+      the original version of the Work and any modifications or additions
+      to that Work or Derivative Works thereof, that is intentionally
+      submitted to Licensor for inclusion in the Work by the copyright owner
+      or by an individual or Legal Entity authorized to submit on behalf of
+      the copyright owner. For the purposes of this definition, &quot;submitted&quot;
+      means any form of electronic, verbal, or written communication sent
+      to the Licensor or its representatives, including but not limited to
+      communication on electronic mailing lists, source code control systems,
+      and issue tracking systems that are managed by, or on behalf of, the
+      Licensor for the purpose of discussing and improving the Work, but
+      excluding communication that is conspicuously marked or otherwise
+      designated in writing by the copyright owner as &quot;Not a Contribution.&quot;
+
+      &quot;Contributor&quot; shall mean Licensor and any individual or Legal Entity
+      on behalf of whom a Contribution has been received by Licensor and
+      subsequently incorporated within the Work.
+
+   2. Grant of Copyright License. Subject to the terms and conditions of
+      this License, each Contributor hereby grants to You a perpetual,
+      worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+      copyright license to reproduce, prepare Derivative Works of,
+      publicly display, publicly perform, sublicense, and distribute the
+      Work and such Derivative Works in Source or Object form.
+
+   3. Grant of Patent License. Subject to the terms and conditions of
+      this License, each Contributor hereby grants to You a perpetual,
+      worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+      (except as stated in this section) patent license to make, have made,
+      use, offer to sell, sell, import, and otherwise transfer the Work,
+      where such license applies only to those patent claims licensable
+      by such Contributor that are necessarily infringed by their
+      Contribution(s) alone or by combination of their Contribution(s)
+      with the Work to which such Contribution(s) was submitted. If You
+      institute patent litigation against any entity (including a
+      cross-claim or counterclaim in a lawsuit) alleging that the Work
+      or a Contribution incorporated within the Work constitutes direct
+      or contributory patent infringement, then any patent licenses
+      granted to You under this License for that Work shall terminate
+      as of the date such litigation is filed.
+
+   4. Redistribution. You may reproduce and distribute copies of the
+      Work or Derivative Works thereof in any medium, with or without
+      modifications, and in Source or Object form, provided that You
+      meet the following conditions:
+
+      (a) You must give any other recipients of the Work or
+          Derivative Works a copy of this License; and
+
+      (b) You must cause any modified files to carry prominent notices
+          stating that You changed the files; and
+
+      (c) You must retain, in the Source form of any Derivative Works
+          that You distribute, all copyright, patent, trademark, and
+          attribution notices from the Source form of the Work,
+          excluding those notices that do not pertain to any part of
+          the Derivative Works; and
+
+      (d) If the Work includes a &quot;NOTICE&quot; text file as part of its
+          distribution, then any Derivative Works that You distribute must
+          include a readable copy of the attribution notices contained
+          within such NOTICE file, excluding those notices that do not
+          pertain to any part of the Derivative Works, in at least one
+          of the following places: within a NOTICE text file distributed
+          as part of the Derivative Works; within the Source form or
+          documentation, if provided along with the Derivative Works; or,
+          within a display generated by the Derivative Works, if and
+          wherever such third-party notices normally appear. The contents
+          of the NOTICE file are for informational purposes only and
+          do not modify the License. You may add Your own attribution
+          notices within Derivative Works that You distribute, alongside
+          or as an addendum to the NOTICE text from the Work, provided
+          that such additional attribution notices cannot be construed
+          as modifying the License.
+
+      You may add Your own copyright statement to Your modifications and
+      may provide additional or different license terms and conditions
+      for use, reproduction, or distribution of Your modifications, or
+      for any such Derivative Works as a whole, provided Your use,
+      reproduction, and distribution of the Work otherwise complies with
+      the conditions stated in this License.
+
+   5. Submission of Contributions. Unless You explicitly state otherwise,
+      any Contribution intentionally submitted for inclusion in the Work
+      by You to the Licensor shall be under the terms and conditions of
+      this License, without any additional terms or conditions.
+      Notwithstanding the above, nothing herein shall supersede or modify
+      the terms of any separate license agreement you may have executed
+      with Licensor regarding such Contributions.
+
+   6. Trademarks. This License does not grant permission to use the trade
+      names, trademarks, service marks, or product names of the Licensor,
+      except as required for reasonable and customary use in describing the
+      origin of the Work and reproducing the content of the NOTICE file.
+
+   7. Disclaimer of Warranty. Unless required by applicable law or
+      agreed to in writing, Licensor provides the Work (and each
+      Contributor provides its Contributions) on an &quot;AS IS&quot; BASIS,
+      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+      implied, including, without limitation, any warranties or conditions
+      of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A
+      PARTICULAR PURPOSE. You are solely responsible for determining the
+      appropriateness of using or redistributing the Work and assume any
+      risks associated with Your exercise of permissions under this License.
+
+   8. Limitation of Liability. In no event and under no legal theory,
+      whether in tort (including negligence), contract, or otherwise,
+      unless required by applicable law (such as deliberate and grossly
+      negligent acts) or agreed to in writing, shall any Contributor be
+      liable to You for damages, including any direct, indirect, special,
+      incidental, or consequential damages of any character arising as a
+      result of this License or out of the use or inability to use the
+      Work (including but not limited to damages for loss of goodwill,
+      work stoppage, computer failure or malfunction, or any and all
+      other commercial damages or losses), even if such Contributor
+      has been advised of the possibility of such damages.
+
+   9. Accepting Warranty or Additional Liability. While redistributing
+      the Work or Derivative Works thereof, You may choose to offer,
+      and charge a fee for, acceptance of support, warranty, indemnity,
+      or other liability obligations and/or rights consistent with this
+      License. However, in accepting such obligations, You may act only
+      on Your own behalf and on Your sole responsibility, not on behalf
+      of any other Contributor, and only if You agree to indemnify,
+      defend, and hold each Contributor harmless for any liability
+      incurred by, or claims asserted against, such Contributor by reason
+      of your accepting any such warranty or additional liability.
+
+   END OF TERMS AND CONDITIONS
+
+   APPENDIX: How to apply the Apache License to your work.
+
+      To apply the Apache License to your work, attach the following
+      boilerplate notice, with the fields enclosed by brackets &quot;[]&quot;
+      replaced with your own identifying information. (Don&#x27;t include
+      the brackets!)  The text should be enclosed in the appropriate
+      comment syntax for the file format. We also recommend that a
+      file or class name and description of purpose be included on the
+      same &quot;printed page&quot; as the copyright notice for easier
+      identification within third-party archives.
+
+   Copyright [yyyy] [name of copyright owner]
+
+   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.</code></pre>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <div>
+      <a class="brand" href="index.html"><img src="assets/brand/kamkut-logo-192.webp" width="34" height="34" alt="">KamKut</a>
+      <p class="muted"><span data-l="km">កម្មវិធីកាត់តវីដេអូ ឥតគិតថ្លៃ ប្រើបានដោយគ្មានអ៊ីនធឺណិត សម្រាប់មនុស្សគ្រប់គ្នា។</span><span data-l="en">Free, offline video editing for everyone.</span></p>
+      <a class="spons" href="https://kamsophy.com" target="_blank" rel="noopener"><img src="assets/brand/kamsophy-logo-256.png" width="26" height="26" alt=""><span><span data-l="km">ឧបត្ថម្ភដោយ</span><span data-l="en">Sponsored By</span> <b>KamSophy</b></span></a>
+    </div>
+    <nav aria-label="Footer"><a href="how-its-built.html"><span data-l="km">របៀបដែលយើងបង្កើត</span><span data-l="en">How It's Built</span></a><a href="privacy.html"><span data-l="km">ឯកជនភាព</span><span data-l="en">Privacy</span></a><a href="terms.html"><span data-l="km">លក្ខខណ្ឌ</span><span data-l="en">Terms</span></a><a href="support.html"><span data-l="km">ជំនួយ</span><span data-l="en">Support</span></a><a href="licenses.html"><span data-l="km">អាជ្ញាប័ណ្ណ</span><span data-l="en">Licenses</span></a></nav>
+    <p class="copy">&copy; 2026 KamKut. <span data-l="km">គ្មានអ៊ីនធឺណិត។ គ្មានគណនី។ គ្មានការតាមដាន។</span><span data-l="en">Fully offline. No accounts. No tracking.</span></p>
+  </div>
+</footer>
+</body>
+</html>
